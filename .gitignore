@@ -1,0 +1,19 @@
+# Ignore project data
+data/
+
+# Ignore each project's local environment
+conda-env/
+venv/
+
+# Ignore python compiled bytecode
+__pycache__/
+*.pyc
+
+# Ignore the silly .DS_Store files
+.DS_Store
+
+# Ignore Jupyter's checkpoint notebooks
+.ipynb_checkpoints/
+
+# Ignore vim's .swp files
+.*.swp
