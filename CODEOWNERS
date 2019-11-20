@@ -9,7 +9,7 @@
 
 # We can also add codeowners for specific file patterns
 # Each team member will be the owner of their own notebooks
-AC.*ipynb 
+AC.*ipynb @ajcheon
 SJ.*ipynb @steph-jung
 CP.*ipynb @collinprather
 MS.*ipynb @msarmi9
