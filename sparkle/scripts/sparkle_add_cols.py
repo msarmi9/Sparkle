@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-get_ipython().system(' pwd | pbcopy')
-
-
 import os
 import glob
 import pandas as pd
