@@ -8,6 +8,7 @@ jobs:
     runs-on: [ubuntu-latest, macos-latest]
     steps:
     - name: Hello world
+      uses: actions/hello-world-javascript-action@v1
       with:
         who-to-greet:  "Fyodor"
     - name: Print a greeting
