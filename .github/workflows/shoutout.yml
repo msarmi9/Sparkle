@@ -7,6 +7,9 @@ jobs:
   greeting:
     runs-on: [ubuntu-latest, macos-latest]
     steps:
+    - name: Hello world
+      with:
+        who-to-greet:  "Fyodor"
     - name: Print a greeting
       env:
         GREETING: Hi, there! My name is
