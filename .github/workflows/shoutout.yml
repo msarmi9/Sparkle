@@ -1,7 +1,7 @@
 # This workflow is a test to see if we can write a working workflow
 # Author: Matt Sarmiento <msarmiento3@usfca.edu>
 
-name: Shoutout
+name: shout-out 
 on: [fork, watch]
 jobs: 
   greeting:
