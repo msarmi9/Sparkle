@@ -5,7 +5,7 @@ name: shout-out
 on: [fork, watch]
 jobs: 
   greeting:
-    runs-on: [ubuntu-latest, macos-latest]
+    runs-on: ubuntu-latest
     steps:
     - name: Hello world
       uses: actions/hello-world-javascript-action@v1
