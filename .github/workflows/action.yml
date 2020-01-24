@@ -1,0 +1,36 @@
+name: CI
+
+on: push
+
+jobs:
+  run:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      
+    - name: Checkout master
+      uses: actions/checkout@v2
+      
+    - name: Conda setup
+      uses: s-weigand/setup-conda@v1.0.2
+      with:
+        update-conda: true
+        conda-channels: conda-forge, anaconda
+    
+    - name: Update environment
+    - run: | 
+        conda env update -f ./environment.yml
+        which python  # Check python
+        conda list    # and packages
+        
+    - name: Generate coverage report
+      run: |
+        pytest --cov=./ --cov-report=xml
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v1.0.5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./coverage.xml
+        name: codecov-umbrella
+        fail_ci_if_error: true 
