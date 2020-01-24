@@ -19,8 +19,9 @@ jobs:
     
     - name: Update environment
       run: | 
-        conda env update -f ./environment.yml
-        which python  # Check python
+        conda env create -n sparkle -f ./environment.yml
+        conda activate -n sparkle
+        which python  # Check for correct env
         conda list    # and packages
         
     - name: Generate coverage report
