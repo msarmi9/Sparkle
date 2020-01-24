@@ -1,7 +1,7 @@
 import boto3
 from collections import defaultdict
 
-# # here for testing purposes.. perhaps better way
+# here for testing purposes
 session = boto3.session.Session(profile_name='sparkle')
 s3_client = session.client('s3')
 

@@ -5,7 +5,7 @@ import pytest
 from botocore.stub import Stubber
 from sparkle.utils.aws import s3_client
 
-## note: this assumes that aws profile is configured correctly!
+# note: this assumes that aws profile is configured correctly!
 
 @pytest.fixture(autouse=True)
 def s3_stub():
