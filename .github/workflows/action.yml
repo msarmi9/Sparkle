@@ -4,7 +4,7 @@ on: push
 
 jobs:
   run:
-    name: Tests
+    name: Codecov
     runs-on: ubuntu-latest
     steps:
       
@@ -18,7 +18,7 @@ jobs:
         conda-channels: conda-forge, anaconda
     
     - name: Update environment
-    - run: | 
+      run: | 
         conda env update -f ./environment.yml
         which python  # Check python
         conda list    # and packages
