@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var isActive = false // UI changes when this variable changes
+    @State private var isRecording: Bool = false // UI changes when this variable changes
 
     var body: some View {
         VStack {
@@ -24,13 +24,36 @@ struct ContentView: View {
 
             Spacer()
                 .frame(height: 25)
+            
+            Button(action: {
+                self.isRecording.toggle()
+            }) {
+                isRecording ? Text("Stop Recording"): Text("Start Recording")
+                
+            }
+            
+            if isRecording {
+                HStack {
+                    Image(systemName: "play.fill")
+                        .font(.headline).foregroundColor(.green)
+                        Text("Recording Data")
+                    }
+                }
+            
+            else {
+                HStack {
+                Image(systemName: "stop.fill")
+                    .font(.headline).foregroundColor(.red)
+                    Text("Recording Data")
+                }
+
+            }
 
             HStack {
                 Image(systemName: "antenna.radiowaves.left.and.right")
                     .font(.headline)
                 // maybe want to use a button here..
-                NavigationLink(destination: SensorView(),
-                               isActive: $isActive){
+                NavigationLink(destination: SensorView()){
                     Text("See sensors")
                 }
             }
