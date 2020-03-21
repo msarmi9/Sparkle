@@ -10,52 +10,95 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var isRecording: Bool = false // UI changes when this variable changes
+    @State private var currentTime: TimeInterval = 0.0
 
     var body: some View {
         VStack {
-            HStack {
-                Image(systemName: "star.fill")
-
-                Text("Sparkle")
-                    .font(.system(size: 32)).italic()
-
-                Image(systemName: "star.fill")
-            }
-
-            Spacer()
-                .frame(height: 25)
-            
-            Button(action: {
-                self.isRecording.toggle()
-            }) {
-                isRecording ? Text("Stop Recording"): Text("Start Recording")
-                
-            }
-            
+            Title()
+            Spacer().frame(height: 25)
+            RecordingButton(isRecording: $isRecording)
             if isRecording {
-                HStack {
-                    Image(systemName: "play.fill")
-                        .font(.headline).foregroundColor(.green)
-                        Text("Recording Data")
-                    }
+                RecordingStatus(isRecording: $isRecording)
+                Text("\(currentTime)")
+                // resume @ 21 mins in WWDC19 Data Flow video
+                // for now, viewing WWDC19 Combine in practice
+            }
+            SeeSensors()
+        }
+    }
+}
+
+struct Title: View {
+    var body: some View {
+        HStack {
+            Image(systemName: "star.fill")
+
+            Text("Sparkle")
+                .font(.system(size: 32)).italic()
+
+            Image(systemName: "star.fill")
+        }
+    }
+}
+
+struct RecordingButton: View {
+    @Binding var isRecording: Bool
+    var body: some View {
+        Button(action: {
+            withAnimation{ self.isRecording.toggle() }
+        }) {
+            isRecording ? Text("Stop Recording"): Text("Start Recording")
+            
+        }
+    }
+}
+
+struct RecordingStatus: View {
+    @Binding var isRecording: Bool
+    var body: some View {
+        VStack {
+            if isRecording {
+                RecordingYes(isRecording: $isRecording)
                 }
             
             else {
-                HStack {
-                Image(systemName: "stop.fill")
-                    .font(.headline).foregroundColor(.red)
-                    Text("Recording Data")
-                }
+                RecordingNo(isRecording: $isRecording)
 
             }
+        }
+    }
+}
 
-            HStack {
-                Image(systemName: "antenna.radiowaves.left.and.right")
-                    .font(.headline)
-                // maybe want to use a button here..
-                NavigationLink(destination: SensorView()){
-                    Text("See sensors")
-                }
+struct RecordingYes: View {
+    @Binding var isRecording: Bool
+    var body: some View {
+        HStack {
+        Image(systemName: "play.fill")
+            .font(.headline).foregroundColor(.green)
+            Text("Recording Data")
+        }
+    }
+}
+
+struct RecordingNo: View {
+    @Binding var isRecording: Bool
+    var body: some View {
+        HStack {
+        Image(systemName: "stop.fill")
+            .font(.headline).foregroundColor(.red)
+            Text("Recording Data")
+        }
+    }
+}
+
+struct SeeSensors: View {
+    var body: some View {
+        HStack {
+            Image(systemName: "antenna.radiowaves.left.and.right")
+                .font(.headline)
+            // maybe want to use a button here..
+            NavigationLink(destination: SensorView()){
+                Text("See sensors")
             }
         }
     }
