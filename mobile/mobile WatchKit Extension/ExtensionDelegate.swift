@@ -8,6 +8,8 @@
 
 import WatchKit
 
+let sensorView = SensorView(motion: MotionManager())
+
 class ExtensionDelegate: NSObject, WKExtensionDelegate {
 
     func applicationDidFinishLaunching() {

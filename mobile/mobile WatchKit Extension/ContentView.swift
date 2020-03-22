@@ -97,7 +97,7 @@ struct SeeSensors: View {
             Image(systemName: "antenna.radiowaves.left.and.right")
                 .font(.headline)
             // maybe want to use a button here..
-            NavigationLink(destination: SensorView()){
+            NavigationLink(destination: SensorView(motion: MotionManager())){
                 Text("See sensors")
             }
         }
