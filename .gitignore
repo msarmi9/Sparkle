@@ -7,6 +7,7 @@ data/
 # Ignore each project's local environment
 conda-env/
 venv/
+sparkle-ve/
 
 # Ignore python compiled bytecode
 __pycache__/
