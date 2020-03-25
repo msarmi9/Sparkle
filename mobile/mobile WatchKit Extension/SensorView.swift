@@ -12,19 +12,6 @@ import Combine
 import Foundation
 import os.log
 
-// Sensors (not sure if this is necessary)
-struct Sensor: Identifiable {
-    var id = UUID()
-    var name: String
-    var image: String
-    // can add more properties
-}
-
-let Sensors: [Sensor] = [
-    Sensor(name: "Accelerometer", image: "speedometer"),
-    Sensor(name: "Gyroscope", image: "crop.rotate"),
-    Sensor(name: "Decibels", image: "airplayaudio")]
-
 
 // init sensor data collection
 // https://developer.apple.com/documentation/coremotion/getting_processed_device-motion_data
@@ -43,9 +30,17 @@ class MotionManager: ObservableObject {
     @Published
     var z: Double = 0.0
     
+    // read here about growing the size of an array: https://developer.apple.com/documentation/swift/array
+    // for now saving as an array of arrays - potentially just make it a long string in future?
+    var sensorArr = [[Double]]()
+    
     init() {
         self.motionManager = CMMotionManager()
-        self.motionManager.deviceMotionUpdateInterval = 1.0/60
+    }
+    
+    func startUpdates(Hz: TimeInterval) {
+        NSLog("starting updates")
+        self.motionManager.deviceMotionUpdateInterval = Hz
         self.motionManager.startDeviceMotionUpdates(to: .main) { (sensorData, error) in
             guard error == nil else {
                 print(error!)
@@ -55,9 +50,21 @@ class MotionManager: ObservableObject {
                 self.x = sensor.userAcceleration.x
                 self.y = sensor.userAcceleration.y
                 self.z = sensor.userAcceleration.z
+                
+                // appending to arr
+                NSLog(String(sensor.timestamp))
+                self.sensorArr.append([sensor.userAcceleration.x,                          sensor.userAcceleration.y,
+                                       sensor.userAcceleration.z])
+                
             }
         }
     }
+    
+    func stopUpdates() {
+        NSLog("Stopping Updates")
+        self.motionManager.stopDeviceMotionUpdates()
+    }
+//    func toCSV()
 }
 
 
@@ -68,10 +75,20 @@ struct SensorView: View {
 
     var body: some View {
         VStack {
+            Button(action: {
+                self.motion.startUpdates(Hz: 1.0/20)
+            }) {
+                Text("Start Recording!")
+            }
+            Button(action: {
+                self.motion.stopUpdates()
+            }) {
+                Text("Stop Recording!")
+            }
             Text("Accelerometer data")
-            Text("X: \(motion.x)")
-            Text("Y: \(motion.y)")
-            Text("Z: \(motion.z)")
+            Text("X: \(self.motion.x)")
+            Text("Y: \(self.motion.y)")
+            Text("Z: \(self.motion.z)")
         }
     }
 }

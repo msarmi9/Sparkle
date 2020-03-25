@@ -2,11 +2,14 @@
 //  AppDelegate.swift
 //  mobile
 //
-//  Created by Collin Prather on 3/20/20.
+//  Created by Collin Prather on 3/24/20.
 //  Copyright © 2020 Collin Prather. All rights reserved.
 //
 
 import UIKit
+import Amplify
+import AWSMobileClient
+import AmplifyPlugins
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +18,28 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        return true
+        AWSMobileClient.default().initialize { (userState, error) in
+                guard error == nil else {
+                    print("Error initializing AWSMobileClient. Error: \(error!.localizedDescription)")
+                    return
+                }
+                print("AWSMobileClient initialized, userstate: \(userState)")
+                
+            self.configureAmplifyWithStorage()
+                
+            }
+            return true
+        }
+    
+    func configureAmplifyWithStorage() {
+        let storagePlugin = AWSS3StoragePlugin()
+        do {
+            try Amplify.add(plugin: storagePlugin)
+            try Amplify.configure()
+            print("Amplify configured with storage plugin")
+        } catch {
+            print("Failed to initialize Amplify with \(error)")
+        }
     }
 
     // MARK: UISceneSession Lifecycle
