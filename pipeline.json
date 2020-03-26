@@ -31,7 +31,7 @@
                             "Repo": "2020-product-analytics-group-project-sparkle",
                             "PollForSourceChanges": "true",
                             "Branch": "master",
-                            "OAuthToken": "554436457fb75ed0eed768d1a8ecafe52cc5844b"
+                            "OAuthToken": "<your OAuth token>"
                         }
                     }
                 ]
