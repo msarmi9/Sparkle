@@ -22,7 +22,7 @@ import Amplify
 
 
 class MotionManager: ObservableObject {
-    // currently just holds sensor data in memory.. may need to save to a file
+    // currently just holds sensor data in memory.. may need to save to a file - maybe use Codable?
     private var motionManager: CMMotionManager
     
     @Published
@@ -32,9 +32,8 @@ class MotionManager: ObservableObject {
     @Published
     var z: Double = 0.0
     
-    // read here about growing the size of an array: https://developer.apple.com/documentation/swift/array
-    // for now saving as an array of arrays - potentially just make it a long string in future?
-    var sensorString: String = "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z\n"
+    let header = "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z\n"
+    var sensorString: String = ""
     
     init() {
         self.motionManager = CMMotionManager()
@@ -55,7 +54,7 @@ class MotionManager: ObservableObject {
                 
                 // appending to arr
                 NSLog(String(sensor.timestamp))
-                self.sensorString = self.sensorString +
+                self.sensorString = self.header +
                                     "\(sensor.userAcceleration.x)," +
                                     "\(sensor.userAcceleration.y)," +
                                     "\(sensor.userAcceleration.z)," +
@@ -73,6 +72,7 @@ class MotionManager: ObservableObject {
         NSLog("\(self.sensorString)")
         uploadData(dataString: self.sensorString)
         self.motionManager.stopDeviceMotionUpdates()
+        self.sensorString = ""
     }
 //    func toCSV()
 }
