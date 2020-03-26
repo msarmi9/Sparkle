@@ -9,18 +9,23 @@ import time
 
 application = Flask(__name__)
 
+
 def read_s3_obj(bucket_name, output_file):
     try:
         s3 = boto3.resource('s3')
         obj = s3.Object(bucket_name, output_file)
         body = obj.get()['Body'].read().decode('utf-8')
         return body
-    except:
+    except BaseException:
         return ""
+
 
 @application.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', message='Get ready to Sparkle and shine and fly!!')
+    return render_template(
+        'index.html',
+        message='Get ready to Sparkle and shine and fly!!')
+
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
