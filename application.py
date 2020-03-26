@@ -1,7 +1,6 @@
 import datetime
 from flask import Flask
 from flask import render_template, render_template_string, redirect
-import simplejson
 import urllib.request
 import boto3
 import time
@@ -11,6 +10,9 @@ application = Flask(__name__)
 
 
 def read_s3_obj(bucket_name, output_file):
+    """
+    reads from an s3 bucket.
+    """
     try:
         s3 = boto3.resource('s3')
         obj = s3.Object(bucket_name, output_file)
@@ -22,6 +24,9 @@ def read_s3_obj(bucket_name, output_file):
 
 @application.route('/', methods=['GET', 'POST'])
 def index():
+    """
+    Renders the index.html web page.
+    """
     return render_template(
         'index.html',
         message='Get ready to Sparkle and shine and fly!!')
