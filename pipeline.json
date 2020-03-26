@@ -1,0 +1,69 @@
+{
+    "pipeline": {
+        "name": "Sparkle_web_automated",
+        "version": 1,
+        "roleArn": "arn:aws:iam::678524477173:role/service-role/AWSCodePipelineServiceRole-us-west-2-Sparkle_web_works",
+        "artifactStore": {
+            "type": "S3",
+            "location": "codepipeline-us-west-2-666860716781"
+        },
+        "stages": [
+            {
+                "name": "Source",
+                "actions": [
+                    {
+                        "name" : "GitHubSource",
+                        "inputArtifacts": [],
+                        "actionTypeId": {
+                            "version": "1",
+                            "owner": "ThirdParty",
+                            "category": "Source",
+                            "provider": "GitHub"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "runOrder": 1,
+                        "configuration": {
+                            "Owner": "MSDS698",
+                            "Repo": "2020-product-analytics-group-project-sparkle",
+                            "PollForSourceChanges": "true",
+                            "Branch": "master",
+                            "OAuthToken": "554436457fb75ed0eed768d1a8ecafe52cc5844b"
+                        }
+                    }
+                ]
+            },
+
+            {
+              "name": "Deploy",
+              "actions": [
+                {
+                  "inputArtifacts": [
+                    {
+                      "name": "SourceArtifact"
+                    }
+                  ],
+                  "name": "CodeDeploy",
+                  "actionTypeId": {
+                    "category": "Deploy",
+                    "owner": "AWS",
+                    "version": "1",
+                    "provider": "ElasticBeanstalk"
+                  },
+                  "outputArtifacts": [
+
+                        ],
+                  "configuration": {
+                    "ApplicationName": "Sparkle_web_automated",
+                    "EnvironmentName": "Sparkle-web-automated-env"
+                  },
+                  "runOrder": 2
+                }
+              ]
+            }
+        ]
+    }
+}
