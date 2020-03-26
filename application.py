@@ -6,7 +6,6 @@ import urllib.request
 import boto3
 import time
 
-from user_definition import *
 
 application = Flask(__name__)
 
@@ -21,7 +20,7 @@ def read_s3_obj(bucket_name, output_file):
 
 @application.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', message='Welcome to Sparkle!')
+    return render_template('index.html', message='Get ready to Sparkle!')
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
