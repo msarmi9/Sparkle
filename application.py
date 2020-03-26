@@ -20,7 +20,7 @@ def read_s3_obj(bucket_name, output_file):
 
 @application.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html', message='Get ready to Sparkle!')
+    return render_template('index.html', message='Get ready to Sparkle and shine!!')
 
 if __name__ == '__main__':
     application.jinja_env.auto_reload = True
