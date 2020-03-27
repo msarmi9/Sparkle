@@ -2,7 +2,7 @@
     "pipeline": {
         "name": "Sparkle_web_automated",
         "version": 1,
-        "roleArn": "arn:aws:iam::374226464461:role/service-role/AWSCodePipelineServiceRole-us-west- 2-MSDS603 Week1",
+        "roleArn": "arn:aws:iam::374226464461:role/service-role/AWSCodePipelineServiceRole-us-west-2-MSDS603_Week1",
         "artifactStore": {
             "type": "S3",
             "location": "codepipeline-msds603-week1"
@@ -31,7 +31,7 @@
                             "Repo": "2020-product-analytics-group-project-sparkle",
                             "PollForSourceChanges": "true",
                             "Branch": "master",
-                            "OAuthToken": "554436457fb75ed0eed768d1a8ecafe52cc5844b"
+                            "OAuthToken": "e848c44a93bb7ae532fbc780b4a539d73c5cc241"
                         }
                     }
                 ]
