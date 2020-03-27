@@ -2,6 +2,8 @@
 # platform :ios, '9.0'
 
 target 'mobile' do
+  platform :ios, '13.2'
+
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -11,6 +13,8 @@ target 'mobile' do
 end
 
 target 'mobile WatchKit App' do
+  platform :watchos, '6.1'
+
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
@@ -19,6 +23,8 @@ target 'mobile WatchKit App' do
 end
 
 target 'mobile WatchKit Extension' do
+  platform :watchos, '6.1'
+
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
