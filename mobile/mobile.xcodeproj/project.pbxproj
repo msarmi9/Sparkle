@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4C33A74D258934E54E81E3B7 /* Pods_mobile_WatchKit_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 825DA59184DCDBE49AD53B7D /* Pods_mobile_WatchKit_App.framework */; };
 		875A34ED2364B42E815D2F59 /* Pods_mobile_WatchKit_Extension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8094EA3CBFA2EA5E200C28E1 /* Pods_mobile_WatchKit_Extension.framework */; };
-		A634FDFC8064805F18543F04 /* Pods_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C15C60F46FA27F1125FEDAD /* Pods_mobile.framework */; };
 		D6080E52242AAB5F0037C8C4 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6080E51242AAB5F0037C8C4 /* AppDelegate.swift */; };
 		D6080E54242AAB5F0037C8C4 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6080E53242AAB5F0037C8C4 /* SceneDelegate.swift */; };
 		D6080E56242AAB5F0037C8C4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6080E55242AAB5F0037C8C4 /* ContentView.swift */; };
@@ -31,6 +30,8 @@
 		D6080E97242AABE80037C8C4 /* SensorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6080E96242AABE80037C8C4 /* SensorView.swift */; };
 		D60AE26E242B97C000E27E46 /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = D60AE26C242B97C000E27E46 /* awsconfiguration.json */; };
 		D60AE26F242B97C000E27E46 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = D60AE26D242B97C000E27E46 /* amplifyconfiguration.json */; };
+		D65641D2242E34B40054BCD3 /* Pods_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C15C60F46FA27F1125FEDAD /* Pods_mobile.framework */; };
+		D65641D3242E34B40054BCD3 /* Pods_mobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0C15C60F46FA27F1125FEDAD /* Pods_mobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,17 @@
 				D6080E63242AAB610037C8C4 /* mobile WatchKit App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D65641D4242E34B40054BCD3 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				D65641D3242E34B40054BCD3 /* Pods_mobile.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -126,7 +138,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A634FDFC8064805F18543F04 /* Pods_mobile.framework in Frameworks */,
+				D65641D2242E34B40054BCD3 /* Pods_mobile.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -259,6 +271,7 @@
 				D6080E4C242AAB5F0037C8C4 /* Resources */,
 				D6080E92242AAB620037C8C4 /* Embed Watch Content */,
 				5764F34ABFA47DE8E67E93F7 /* [CP] Embed Pods Frameworks */,
+				D65641D4242E34B40054BCD3 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

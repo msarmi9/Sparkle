@@ -100,3 +100,18 @@ Some next steps:
 ```
 
 11. And finally `$ amplify push` which will create `amplifyconfiguration.json` and `awsconfiguration.json`
+
+12. Now install [`cocoapods`](https://guides.cocoapods.org/using/getting-started.html), which is a dependency manager for xcode projects. On the off-chance that you've been using cocoapods recently, you **need to** clear your pods cache (this has been such a headache)! `$ rm -rf "${HOME}/Library/Caches/CocoaPods" && rm -rf "`pwd`/Pods/"`.
+
+13. Now install all the projects' dependencies (as listed in the `Podfile`) with `$ pod install --repo-update`. This may take a moment. It generates the `Podfile.lock` and the `Pods/` directory.
+
+14. Now, open up the project, specifically using the `.xcworkspace` file. In other words, type the following on the commandline: `$ open mobile.xcworkspace` (this assumes you have xcode installed)
+
+15. For this portion, we have to drag our aws config files into xcode manually.
+
+* Open the finder of your project and drag the `amplifyconfiguration.json` and `awsconfiguration.json` over to the Xcode window, under the workspace.
+* Enable Copy items if needed if not already enabled
+* For “Added folders”, have Create groups selected.
+* For “Add to targets”, make sure the app target is checked off.
+
+16. Now, you should be good to go to build and run the apps in xcode! 
