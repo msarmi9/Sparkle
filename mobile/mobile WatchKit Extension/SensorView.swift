@@ -8,9 +8,7 @@
 
 import SwiftUI
 import CoreMotion
-import Combine
-import Foundation
-import os.log
+import WatchConnectivity
 
 
 // init sensor data collection
@@ -30,12 +28,12 @@ class MotionManager: ObservableObject {
     @Published
     var z: Double = 0.0
     
-    // read here about growing the size of an array: https://developer.apple.com/documentation/swift/array
-    // for now saving as an array of arrays - potentially just make it a long string in future?
-    var sensorArr = [[Double]]()
+    let header = "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z\n"
+    var sensorString: String = ""
     
     init() {
         self.motionManager = CMMotionManager()
+        sensorString = self.header
     }
     
     func startUpdates(Hz: TimeInterval) {
@@ -53,19 +51,42 @@ class MotionManager: ObservableObject {
                 
                 // appending to arr
                 NSLog(String(sensor.timestamp))
-                self.sensorArr.append([sensor.userAcceleration.x,                          sensor.userAcceleration.y,
-                                       sensor.userAcceleration.z])
+                self.sensorString = self.sensorString +
+                                    "\(sensor.userAcceleration.x)," +
+                                    "\(sensor.userAcceleration.y)," +
+                                    "\(sensor.userAcceleration.z)," +
+                                    "\(sensor.rotationRate.x)," +
+                                    "\(sensor.rotationRate.y)," +
+                                    "\(sensor.rotationRate.z)" +
+                                    "\n"
                 
             }
         }
     }
     
+    func sendMessage(sensorData: [String: String]) {
+        // 2
+        guard WCSession.default.isReachable else { return }
+
+        // 3
+        WCSession.default.sendMessage(
+            sensorData,
+            replyHandler: { reply in print(reply) },
+            errorHandler: { e in
+                print("Error sending the message: \(e.localizedDescription)")
+        })
+    }
+    
     func stopUpdates() {
         NSLog("Stopping Updates")
-        self.motionManager.stopDeviceMotionUpdates()
+        NSLog("\(self.sensorString)")
+        self.motionManager.stopDeviceMotionUpdates()  // stopping updates
+        // maybe call self.sendMessage(sensorData: ["sensorString", self.sensorString])
+        self.sensorString = self.header
     }
-//    func toCSV()
 }
+
+
 
 
 // View
@@ -74,21 +95,27 @@ struct SensorView: View {
     var motion: MotionManager
 
     var body: some View {
-        VStack {
-            Button(action: {
-                self.motion.startUpdates(Hz: 1.0/20)
-            }) {
-                Text("Start Recording!")
+        ScrollView {
+            VStack {
+                Button(action: {
+                    self.motion.startUpdates(Hz: 1.0/5)
+                }) {
+                    Text("Start Recording!")
+                }
+                Button(action: {
+                    self.motion.stopUpdates()
+                    // we'll want to send the sensorString in message, this is for test
+                    self.motion.sendMessage(sensorData: ["x": "\(self.motion.x)",
+                        "y": "\(self.motion.y)",
+                        "z": "\(self.motion.z)"])
+                }) {
+                    Text("Stop Recording!")
+                }
+                Text("Accelerometer data")
+                Text("X: \(self.motion.x)")
+                Text("Y: \(self.motion.y)")
+                Text("Z: \(self.motion.z)")
             }
-            Button(action: {
-                self.motion.stopUpdates()
-            }) {
-                Text("Stop Recording!")
-            }
-            Text("Accelerometer data")
-            Text("X: \(self.motion.x)")
-            Text("Y: \(self.motion.y)")
-            Text("Z: \(self.motion.z)")
         }
     }
 }

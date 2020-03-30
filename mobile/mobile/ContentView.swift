@@ -9,73 +9,12 @@
 import SwiftUI
 import CoreMotion
 import Combine
-import Foundation
-import os.log
 import Amplify
+import WatchConnectivity
+// https://jasonzurita.com/bare-minimum-for-apple-watch-communication/
+// https://forums.developer.apple.com/thread/125664
+// https://gist.github.com/filsv/55febaea46b6d15d6309a7da7296ec3a
 
-
-// init sensor data collection
-// https://developer.apple.com/documentation/coremotion/getting_processed_device-motion_data
-// https://github.com/hsiaoer/MotionTracking/blob/master/MotionTracking%20WatchKit%20Extension/MotionManager.swift
-// 2017 core motion keynote https://developer.apple.com/videos/play/wwdc2017/704/
-
-
-
-class MotionManager: ObservableObject {
-    // currently just holds sensor data in memory.. may need to save to a file - maybe use Codable?
-    private var motionManager: CMMotionManager
-    
-    @Published
-    var x: Double = 0.0
-    @Published
-    var y: Double = 0.0
-    @Published
-    var z: Double = 0.0
-    
-    let header = "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z\n"
-    var sensorString: String = ""
-    
-    init() {
-        self.motionManager = CMMotionManager()
-    }
-    
-    func startUpdates(Hz: TimeInterval) {
-        NSLog("starting updates")
-        self.motionManager.deviceMotionUpdateInterval = Hz
-        self.motionManager.startDeviceMotionUpdates(to: .main) { (sensorData, error) in
-            guard error == nil else {
-                print(error!)
-                return
-            }
-            if let sensor = sensorData {
-                self.x = sensor.userAcceleration.x
-                self.y = sensor.userAcceleration.y
-                self.z = sensor.userAcceleration.z
-                
-                // appending to arr
-                NSLog(String(sensor.timestamp))
-                self.sensorString = self.header +
-                                    "\(sensor.userAcceleration.x)," +
-                                    "\(sensor.userAcceleration.y)," +
-                                    "\(sensor.userAcceleration.z)," +
-                                    "\(sensor.rotationRate.x)," +
-                                    "\(sensor.rotationRate.y)," +
-                                    "\(sensor.rotationRate.z)" +
-                                    "\n"
-                
-            }
-        }
-    }
-    
-    func stopUpdates() {
-        NSLog("Stopping Updates")
-        NSLog("\(self.sensorString)")
-        uploadData(dataString: self.sensorString)
-        self.motionManager.stopDeviceMotionUpdates()
-        self.sensorString = ""
-    }
-//    func toCSV()
-}
 
 func uploadData(dataString: String) {
     let data = dataString.data(using: .utf8)!
@@ -95,35 +34,101 @@ func uploadData(dataString: String) {
 }
 
 
+// watch connectivity stuff
+
+//class SensorData: ObservableObject {
+//    @Published
+//    var x: String = "0.0"
+//    @Published
+//    var y: String = "0.0"
+//    @Published
+//    var z: String = "0.0"
+//}
+
+// NSObject is a base class for ObjC objects
+final class ReceivingEntity: NSObject, ObservableObject {
+    @Published
+    var x: String = "0.0"
+    @Published
+    var y: String = "0.0"
+    @Published
+    var z: String = "0.0"
+    
+    override init() {
+        super.init()
+        if WCSession.isSupported() {
+            let session = WCSession.default
+            session.delegate = self
+            session.activate()
+        }
+    }
+}
+
+extension ReceivingEntity: WCSessionDelegate {
+    
+    public func session(_: WCSession, activationDidCompleteWith _: WCSessionActivationState, error: Error?) {
+        if let e = error {
+            print("Completed activation with error: \(e.localizedDescription)")
+        } else {
+            print("Completed activation!")
+        }
+    }
+
+    public func sessionDidBecomeInactive(_: WCSession) { print("session did become inactive") }
+    public func sessionDidDeactivate(_: WCSession) { print("session did deactivate") }
+
+    // 4
+    public func session(_: WCSession,
+                        didReceiveMessage message: [String: Any],
+                        replyHandler: @escaping ([String: Any]) -> Void) {
+        print("message received! - \(message)")
+
+        // 5
+        guard let m = message as? [String: String] else {
+            // 6
+            replyHandler([
+                "response": "poorly formed message",
+                "originalMessage": message,
+            ])
+            return
+        }
+
+        // 7
+        replyHandler([
+            "response": "properly formed message!",
+            "originalMessage": m,
+        ])
+
+        // 8
+        DispatchQueue.main.async {
+            // make sure to put on the main queue to update UI!
+            self.x = String(m["x"] ?? "nil")
+            self.y = String(m["y"] ?? "nil")
+            self.z = String(m["z"] ?? "nil")
+        }
+    }
+}
+
+
 // View
 struct ContentView: View {
     @ObservedObject
-    var motion: MotionManager
+    var reception: ReceivingEntity
 
     var body: some View {
         VStack {
-            Button(action: {
-                self.motion.startUpdates(Hz: 1.0/20)
-            }) {
-                Text("Start Recording!")
-            }
+            
             Spacer().frame(height: 25)
-            Button(action: {
-                self.motion.stopUpdates()
-            }) {
-                Text("Stop Recording!")
-            }
-            Spacer().frame(height: 25)
-            Text("Accelerometer data")
-            Text("X: \(self.motion.x)")
-            Text("Y: \(self.motion.y)")
-            Text("Z: \(self.motion.z)")
+            Text("Watch Accelerometer data")
+            Text("X: \(self.reception.x)")
+            Text("Y: \(self.reception.y)")
+            Text("Z: \(self.reception.z)")
         }
     }
 }
 
 struct SensorView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(motion: MotionManager())
+        ContentView(reception: ReceivingEntity())
     }
 }
