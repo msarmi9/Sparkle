@@ -32,6 +32,7 @@
 		D60AE26F242B97C000E27E46 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = D60AE26D242B97C000E27E46 /* amplifyconfiguration.json */; };
 		D65641D2242E34B40054BCD3 /* Pods_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C15C60F46FA27F1125FEDAD /* Pods_mobile.framework */; };
 		D65641D3242E34B40054BCD3 /* Pods_mobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0C15C60F46FA27F1125FEDAD /* Pods_mobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D68BEB6724322AB000ECA711 /* SensorLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEB6624322AB000ECA711 /* SensorLogView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -122,6 +123,7 @@
 		D6080E96242AABE80037C8C4 /* SensorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorView.swift; sourceTree = "<group>"; };
 		D60AE26C242B97C000E27E46 /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 		D60AE26D242B97C000E27E46 /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
+		D68BEB6624322AB000ECA711 /* SensorLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorLogView.swift; sourceTree = "<group>"; };
 		F5CA5A23333C2006E78882C2 /* Pods-mobile WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobile WatchKit Extension.release.xcconfig"; path = "Target Support Files/Pods-mobile WatchKit Extension/Pods-mobile WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -206,6 +208,7 @@
 				D6080E51242AAB5F0037C8C4 /* AppDelegate.swift */,
 				D6080E53242AAB5F0037C8C4 /* SceneDelegate.swift */,
 				D6080E55242AAB5F0037C8C4 /* ContentView.swift */,
+				D68BEB6624322AB000ECA711 /* SensorLogView.swift */,
 				D6080E57242AAB600037C8C4 /* Assets.xcassets */,
 				D6080E5C242AAB600037C8C4 /* LaunchScreen.storyboard */,
 				D6080E5F242AAB600037C8C4 /* Info.plist */,
@@ -486,6 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D6080E52242AAB5F0037C8C4 /* AppDelegate.swift in Sources */,
+				D68BEB6724322AB000ECA711 /* SensorLogView.swift in Sources */,
 				D6080E54242AAB5F0037C8C4 /* SceneDelegate.swift in Sources */,
 				D6080E56242AAB5F0037C8C4 /* ContentView.swift in Sources */,
 			);

@@ -29,11 +29,16 @@ class MotionManager: ObservableObject {
     var z: Double = 0.0
     
     let header = "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z\n"
+    @Published
     var sensorString: String = ""
     
     init() {
         self.motionManager = CMMotionManager()
         sensorString = self.header
+    }
+    
+    func reset() {
+        self.sensorString = self.header
     }
     
     func startUpdates(Hz: TimeInterval) {
@@ -82,7 +87,8 @@ class MotionManager: ObservableObject {
         NSLog("\(self.sensorString)")
         self.motionManager.stopDeviceMotionUpdates()  // stopping updates
         // maybe call self.sendMessage(sensorData: ["sensorString", self.sensorString])
-        self.sensorString = self.header
+//        self.sensorString = self.header
+        // find somewhere to reset header
     }
 }
 
@@ -98,6 +104,7 @@ struct SensorView: View {
         ScrollView {
             VStack {
                 Button(action: {
+                    self.motion.reset()
                     self.motion.startUpdates(Hz: 1.0/5)
                 }) {
                     Text("Start Recording!")
@@ -107,14 +114,16 @@ struct SensorView: View {
                     // we'll want to send the sensorString in message, this is for test
                     self.motion.sendMessage(sensorData: ["x": "\(self.motion.x)",
                         "y": "\(self.motion.y)",
-                        "z": "\(self.motion.z)"])
+                        "z": "\(self.motion.z)",
+                        "sensorString": self.motion.sensorString])
                 }) {
                     Text("Stop Recording!")
                 }
-                Text("Accelerometer data")
+                Text("Accelerometer readings")
                 Text("X: \(self.motion.x)")
                 Text("Y: \(self.motion.y)")
                 Text("Z: \(self.motion.z)")
+//                Text("full: \(self.motion.sensorString)")
             }
         }
     }
