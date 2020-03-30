@@ -18,7 +18,7 @@ amplify-gradle-config.json
 amplifyxc.config
 Pods/
 Podfile.lock
-#*/xcuserdata/*
+*/xcuserdata/*
 =======
 amplifyxc.config
 >>>>>>> c5ac6119cc57baa956b2f4d7ff1f5c63dbe16b7a
