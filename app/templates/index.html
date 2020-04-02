@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+	</head>
+
+    <body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+		  <a class="navbar-brand" href="#">Sparkle</a>
+		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		    <span class="navbar-toggler-icon"></span>
+		  </button>
+
+		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+		  	<form class="form-inline my-2 my-lg-0">
+		      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+		      <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+		    </form>
+		    <ul class="navbar-nav mr-auto">
+		      <li class="nav-item active">
+		        <a class="nav-link" href="#">Dashboard<span class="sr-only">(current)</span></a>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link" href="#">Link</a>
+		      </li>
+		      <li class="nav-item dropdown">
+		        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		          Dropdown
+		        </a>
+		        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+		          <a class="dropdown-item" href="#">Action</a>
+		          <a class="dropdown-item" href="#">Another action</a>
+		          <div class="dropdown-divider"></div>
+		          <a class="dropdown-item" href="#">Something else here</a>
+		        </div>
+		      </li>
+		      <li class="nav-item">
+		        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+		      </li>
+		    </ul>
+		  </div>
+		</nav>
+
+    	<div class="jumbotron">
+		  <h1 class="display-4">Welcome to Sparkle!</h1>
+		  <p class="lead">Using machine learning to encourage medication adherence.</p>
+		  <hr class="my-4">
+		  <p>Team Members: Matt, Stephanie, Andy, Kevin, Collin.</p>
+		  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+		</div>
+
+		<div class='container'>
+			<div class="card-deck">
+			  <div class="card" style="width: 18rem;">
+				  <div class="card-body">
+				    <h5 class="card-title">John Smith</h5>
+				    <h6 class="card-subtitle mb-2 text-muted">Male, 50</h6>
+				    <p class="card-text">
+				    	<button type="button" class="btn btn-success">
+						  Aspirin <span class="badge badge-light">10</span>
+						</button>
+						<button type="button" class="btn btn-warning">
+						  Lipitor <span class="badge badge-light">3</span>
+						</button>
+				    </p>
+				    <a href="#" class="card-link">View profile</a>
+				    <a href="#" class="card-link">Remind</a>
+				  </div>
+			  </div>
+			  <div class="card" style="width: 18rem;">
+				  <div class="card-body">
+				    <h5 class="card-title">Sheila Jones</h5>
+				    <h6 class="card-subtitle mb-2 text-muted">Female, 28</h6>
+				    <p class="card-text">
+				    	<button type="button" class="btn btn-success">
+						  Nexium <span class="badge badge-light">8</span>
+						</button>
+				    </p>
+				    <a href="#" class="card-link">View profile</a>
+				    <a href="#" class="card-link">Remind</a>
+				  </div>
+			  </div>
+			  <div class="card" style="width: 18rem;">
+				  <div class="card-body">
+				    <h5 class="card-title">Paul Johnson</h5>
+				    <h6 class="card-subtitle mb-2 text-muted">Male, 73</h6>
+				    <p class="card-text">
+				    	<button type="button" class="btn btn-danger">
+						  Aspirin <span class="badge badge-light">0</span>
+						</button>
+						<button type="button" class="btn btn-warning">
+						  Metformin <span class="badge badge-light">2</span>
+						</button>
+						<button type="button" class="btn btn-success">
+						  Amoxicillin <span class="badge badge-light">12</span>
+						</button>
+				    </p>
+				    <a href="#" class="card-link">View profile</a>
+				    <a href="#" class="card-link">Remind</a>
+				  </div>
+			  </div>
+			</div>
+		</div>
+    </body>
+</html>
