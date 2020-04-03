@@ -8,14 +8,8 @@
 
 import SwiftUI
 import CoreMotion
-import AVFoundation
 import WatchConnectivity
 
-
-// init sensor data collection
-// https://developer.apple.com/documentation/coremotion/getting_processed_device-motion_data
-// https://github.com/hsiaoer/MotionTracking/blob/master/MotionTracking%20WatchKit%20Extension/MotionManager.swift
-// 2017 core motion keynote https://developer.apple.com/videos/play/wwdc2017/704/
 
 
 
@@ -70,26 +64,32 @@ class MotionManager: ObservableObject {
         }
     }
     
-    func sendMessage(sensorData: [String: String]) {
-        // 2
-        guard WCSession.default.isReachable else { return }
-
-        // 3
-        WCSession.default.sendMessage(
-            sensorData,
-            replyHandler: { reply in print(reply) },
-            errorHandler: { e in
-                print("Error sending the message: \(e.localizedDescription)")
-        })
+//    func sendMessage(sensorData: [String: String]) {
+//        // 2
+//        guard WCSession.default.isReachable else { return }
+//
+//        // 3
+//        WCSession.default.sendMessage(
+//            sensorData,
+//            replyHandler: { reply in print(reply) },
+//            errorHandler: { e in
+//                print("Error sending the message: \(e.localizedDescription)")
+//        })
+//    }
+    
+    func saveToCSV(url: URL) {
+        do {
+            try self.sensorString.write(to: url, atomically: true, encoding: .utf8)
+//            self.reset()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
     func stopUpdates() {
         NSLog("Stopping Updates")
         NSLog("\(self.sensorString)")
-        self.motionManager.stopDeviceMotionUpdates()  // stopping updates
-        // maybe call self.sendMessage(sensorData: ["sensorString", self.sensorString])
-//        self.sensorString = self.header
-        // find somewhere to reset header
+        self.motionManager.stopDeviceMotionUpdates()
     }
 }
 
@@ -110,12 +110,31 @@ class MotionManager: ObservableObject {
 //    }
 //}
 
+func getTimeStamp() -> String {
+    let now = Date()
+    let formatter = DateFormatter()
+    formatter.timeZone = TimeZone.current
+    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    let dateString = formatter.string(from: now)
+    
+    return dateString
+}
 
 
 // View
 struct SensorView: View {
     @ObservedObject
     var motion: MotionManager
+    
+    let watchSessionManager = WatchSessionManager()
+    
+    func getDocumentsDirectory() -> URL {
+        // find all possible documents directories for this user
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+
+        // just send back the first one, which ought to be the only one
+        return paths[0]
+    }
 
     var body: some View {
         ScrollView {
@@ -128,11 +147,16 @@ struct SensorView: View {
                 }
                 Button(action: {
                     self.motion.stopUpdates()
-                    // we'll want to send the sensorString in message, this is for test
-                    self.motion.sendMessage(sensorData: ["x": "\(self.motion.x)",
-                        "y": "\(self.motion.y)",
-                        "z": "\(self.motion.z)",
-                        "sensorString": self.motion.sensorString])
+                    let filename = "\(getTimeStamp()).csv"
+                    self.motion.saveToCSV(url: self.getDocumentsDirectory().appendingPathComponent(filename))
+                    // now send it to iphone!
+                    var transfer_obj = self.watchSessionManager.transferFile(file: URL(fileURLWithPath: filename), metadata: ["dummy": "metadata"])
+                    
+                    
+//                    self.motion.sendMessage(sensorData: ["x": "\(self.motion.x)",
+//                        "y": "\(self.motion.y)",
+//                        "z": "\(self.motion.z)",
+//                        "sensorString": self.motion.sensorString])
                 }) {
                     Text("Stop Recording!")
                 }
