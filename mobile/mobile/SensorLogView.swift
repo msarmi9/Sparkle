@@ -123,8 +123,6 @@ extension WatchSessionManager: WCSessionDelegate {
 }
 
 
-
-
 struct SensorLogView: View {
     @ObservedObject
     var watchSession: WatchSessionManager

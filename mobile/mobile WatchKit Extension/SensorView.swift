@@ -8,6 +8,7 @@
 
 import SwiftUI
 import CoreMotion
+import AVFoundation
 import WatchConnectivity
 
 
@@ -92,6 +93,22 @@ class MotionManager: ObservableObject {
     }
 }
 
+
+//class AudioSession: ObservableObject {
+//
+//    init() {
+//        self.audioSession = AVAudioSession.sharedInstance()
+//    }
+//
+//    func record() {
+//        do {
+//            // Set the audio session category, mode, and options.
+//            try self.audioSession.setCategory(.record, mode: .measurement, options: [])
+//        } catch {
+//            print("Failed to set audio session category.")
+//        }
+//    }
+//}
 
 
 
