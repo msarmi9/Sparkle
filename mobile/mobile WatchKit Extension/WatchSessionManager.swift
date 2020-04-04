@@ -2,7 +2,7 @@
 //  WatchSessionManager.swift
 //  mobile WatchKit Extension
 //
-//  Created by Collin Prather on 4/3/20.
+//  Created by Collin Prather on 4/4/20.
 //  Copyright © 2020 Collin Prather. All rights reserved.
 //
 
@@ -81,8 +81,10 @@ extension WatchSessionManager {
     func session(_ session: WCSession, didReceive file: WCSessionFile) {
         // handle receiving file
         DispatchQueue.main.async {
-            // make sure to put on the main queue to update UI!
+            // write to csv on iphone
+            // https://www.hackingwithswift.com/books/ios-swiftui/writing-data-to-the-documents-directory
+            
+            // then upload to s3
         }
     }
 }
-

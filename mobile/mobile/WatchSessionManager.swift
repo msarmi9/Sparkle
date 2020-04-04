@@ -41,10 +41,16 @@ import Amplify
 //    return dateString
 //}
 
+// struct to display list of messages sent to s3
+struct Message: Identifiable {
+    var id = UUID()
+    var timestamp: String
+}
+
 // NSObject is a base class for ObjC objects
 class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
     @Published
-    var messagesReceived: [Any] = []
+    var messagesReceived: [Message] = []
     
     func sessionDidBecomeInactive(_: WCSession) { print("session did become inactive") }
     func sessionDidDeactivate(_: WCSession) { print("session did deactivate") }
@@ -122,6 +128,11 @@ extension WatchSessionManager {
         DispatchQueue.main.async {
             // write to csv on iphone
             // https://www.hackingwithswift.com/books/ios-swiftui/writing-data-to-the-documents-directory
+            print("printing: received a file!")
+            NSLog("nslogging: received a file!\n\(file)")
+            
+            // update published attribute
+            self.messagesReceived.append(Message(timestamp: file.metadata?["filename"] as! String))
             
             // then upload to s3
         }

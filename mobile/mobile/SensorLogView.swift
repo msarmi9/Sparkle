@@ -7,39 +7,24 @@
 //
 
 import SwiftUI
-import Combine
-import WatchConnectivity
-
-
-// struct to display list of messages sent to s3
-struct Message: Identifiable {
-    var id = UUID()
-    var dateString: String
-}
-
-class WatchMessages: ObservableObject {
-    @Published
-    var messagesReceived: [Any] = []
-    
-    
-}
-
-
 
 
 struct SensorLogView: View {
-//    @ObservedObject
-//    var watchSession: WatchSessionManager
+    @ObservedObject
+    var watchSession: WatchSessionManager
     
     var body: some View {
-        Text("Lots to add")
-//        List(watchSession.messagesReceived) { message in
-//            Text(message.dateString)
+        ScrollView {
+            Text("Lots to add")
+            List(watchSession.messagesReceived) { message in
+                Text(message.timestamp)
+            }
         }
     }
+}
 
 struct SensorLogView_Previews: PreviewProvider {
     static var previews: some View {
-        SensorLogView()
+        SensorLogView(watchSession: WatchSessionManager())
     }
 }

@@ -80,6 +80,7 @@ class MotionManager: ObservableObject {
     func saveToCSV(url: URL) {
         do {
             try self.sensorString.write(to: url, atomically: true, encoding: .utf8)
+            NSLog("appears to have successfully saved to csv on apple watch.")
 //            self.reset()
         } catch {
             print(error.localizedDescription)
@@ -148,9 +149,11 @@ struct SensorView: View {
                 Button(action: {
                     self.motion.stopUpdates()
                     let filename = "\(getTimeStamp()).csv"
+                    NSLog("Stopped sensor smapling at: \(filename)")
                     self.motion.saveToCSV(url: self.getDocumentsDirectory().appendingPathComponent(filename))
                     // now send it to iphone!
-                    var transfer_obj = self.watchSessionManager.transferFile(file: URL(fileURLWithPath: filename), metadata: ["dummy": "metadata"])
+                    var transfer_obj = self.watchSessionManager.transferFile(file: URL(fileURLWithPath: filename), metadata: ["filename": filename])
+                    NSLog("Tried to send data over to iphone")
                     
                     
 //                    self.motion.sendMessage(sensorData: ["x": "\(self.motion.x)",
