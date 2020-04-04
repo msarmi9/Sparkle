@@ -7,47 +7,9 @@
 //
 
 import WatchConnectivity
-import Amplify
-
-// *************** TO DO *************************
-// - edit uploadData to send data csv data from file!
-// - When a message is received from the watch, update the observable object to update view!
-
-
-
-//func uploadData(dataString: String) -> String {
-//    let data = dataString.data(using: .utf8)!
-//
-//    // date-embedded key
-//    let now = Date()
-//    let formatter = DateFormatter()
-//    formatter.timeZone = TimeZone.current
-//    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//    let dateString = formatter.string(from: now)
-//
-//
-//    Amplify.Storage.uploadData(key: "\(dateString).csv", data: data) { (event) in
-//        switch event {
-//        case .completed(let data):
-//            print("Completed: \(data)")
-//        case .failed(let storageError):
-//            print("Failed: \(storageError.errorDescription). \(storageError.recoverySuggestion)")
-//        case .inProcess(let progress):
-//            print("Progress: \(progress)")
-//        default:
-//            break
-//        }
-//    }
-//    return dateString
-//}
 
 // NSObject is a base class for ObjC objects
-class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
-    @Published
-    var messagesReceived: [Any] = []
-    
-    func sessionDidBecomeInactive(_: WCSession) { print("session did become inactive") }
-    func sessionDidDeactivate(_: WCSession) { print("session did deactivate") }
+class WatchSessionManager: NSObject, WCSessionDelegate {
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         if let e = error {
@@ -79,7 +41,6 @@ class WatchSessionManager: NSObject, WCSessionDelegate, ObservableObject {
         #elseif os(watchOS)
             return session
         #endif
-        return nil
     }
 
     func startSession() {
@@ -120,10 +81,8 @@ extension WatchSessionManager {
     func session(_ session: WCSession, didReceive file: WCSessionFile) {
         // handle receiving file
         DispatchQueue.main.async {
-            // write to csv on iphone
-            // https://www.hackingwithswift.com/books/ios-swiftui/writing-data-to-the-documents-directory
-            
-            // then upload to s3
+            // make sure to put on the main queue to update UI!
         }
     }
 }
+
