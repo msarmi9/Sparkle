@@ -1,11 +1,11 @@
 {
     "pipeline": {
-        "name": "Sparkle_web_automated",
+        "name": "Sparkle-pipeline",
         "version": 1,
-        "roleArn": "arn:aws:iam::374226464461:role/service-role/AWSCodePipelineServiceRole-us-west-2-MSDS603_Week1",
+        "roleArn": "arn:aws:iam::678524477173:role/service-role/AWSCodePipelineServiceRole-us-west-2-Sparkle-Pipeline",
         "artifactStore": {
             "type": "S3",
-            "location": "codepipeline-msds603-week1"
+            "location": "codepipeline-us-west-2-666860716781"
         },
         "stages": [
             {
@@ -57,8 +57,8 @@
 
                         ],
                   "configuration": {
-                    "ApplicationName": "Sparkle_web_automated",
-                    "EnvironmentName": "Sparkle-web-automated-env"
+                    "ApplicationName": "Sparkle",
+                    "EnvironmentName": "Sparkle-env"
                   },
                   "runOrder": 2
                 }

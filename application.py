@@ -29,7 +29,7 @@ def index():
     """
     return render_template(
         'index.html',
-        message='Get ready to Sparkle and shine and fly!!')
+        message='Sparkle 0.0.1')
 
 
 if __name__ == '__main__':
