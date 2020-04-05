@@ -19,3 +19,10 @@ Interestingly, to my knowledge at the moment, it is not possible to create and l
     - creates an s3 bucket with a name similar to `codepipeline-us-west-2-375147072177`
     - Creates a service role with a name similar to `AWSCodePipelineServiceRole-us-west-2-Sparkle-Pipeline`
     - Now any new pushes to the master branch will automatically update our live app!
+
+_Optional steps for instantiating CodePipeline from cli after initial instantialization from console:_
+
+5. Collin updates the `pipeline.json` with the correct CodePipeline arn, s3 location, github OAuth token and application/env name.
+
+6. Collin runs `aws codepipeline create-pipeline --cli-input-json file://pipeline.json --profile collinprather@msds-iam`
+
