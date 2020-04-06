@@ -1,8 +1,9 @@
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
+from flask_wtf.file import FileRequired
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from wtforms import PasswordField, StringField, SubmitField
+from wtforms import FileField, PasswordField, StringField, SubmitField
 from wtforms.validators import DataRequired
 
 from app import db, login_manager

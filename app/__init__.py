@@ -11,9 +11,14 @@ application = Flask(__name__)
 application.secret_key = os.urandom(33)  # For CSRF token
 application.config.from_object(Config)
 
+# Create DB
 db = SQLAlchemy(application)
 db.create_all()
 db.session.commit()
+
+# login_manager needs to be initiated before running the app
+login_manager = LoginManager()
+login_manager.init_app(application)
 
 # Added at the bottom to avoid circular dependencies. (Altough it violates PEP8 standards)
 from app import classes

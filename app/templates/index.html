@@ -2,6 +2,7 @@
 
 <html>
 	<head>
+		<!-- Bootstrap and jquery CDN -->
 		<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 
@@ -10,7 +11,8 @@
 	</head>
 
     <body>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    	<!-- navbar -->
+    	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 		  <a class="navbar-brand" href="#">Sparkle</a>
 		  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 		    <span class="navbar-toggler-icon"></span>
@@ -43,68 +45,20 @@
 		        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
 		      </li>
 		    </ul>
+		    <span class="navbar-text active">
+		      {% if current_user.is_authenticated %}
+		      	Welcome, Dr. {{ current_user.username }}
+		      {% else %}
+		      	Log in | Sign up  <!-- TODO: make actual links/btns -->
+		      {% endif %}
+		    </span>
 		  </div>
 		</nav>
+		<!-- end navbar -->
 
-    	<div class="jumbotron">
-		  <h1 class="display-4">Welcome to Sparkle!</h1>
-		  <p class="lead">Using machine learning to encourage medication adherence.</p>
-		  <hr class="my-4">
-		  <p>Team Members: Matt, Stephanie, Andy, Kevin, Collin.</p>
-		  <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
-		</div>
-
-		<div class='container'>
-			<div class="card-deck">
-			  <div class="card" style="width: 18rem;">
-				  <div class="card-body">
-				    <h5 class="card-title">John Smith</h5>
-				    <h6 class="card-subtitle mb-2 text-muted">Male, 50</h6>
-				    <p class="card-text">
-				    	<button type="button" class="btn btn-success">
-						  Aspirin <span class="badge badge-light">10</span>
-						</button>
-						<button type="button" class="btn btn-warning">
-						  Lipitor <span class="badge badge-light">3</span>
-						</button>
-				    </p>
-				    <a href="#" class="card-link">View profile</a>
-				    <a href="#" class="card-link">Remind</a>
-				  </div>
-			  </div>
-			  <div class="card" style="width: 18rem;">
-				  <div class="card-body">
-				    <h5 class="card-title">Sheila Jones</h5>
-				    <h6 class="card-subtitle mb-2 text-muted">Female, 28</h6>
-				    <p class="card-text">
-				    	<button type="button" class="btn btn-success">
-						  Nexium <span class="badge badge-light">8</span>
-						</button>
-				    </p>
-				    <a href="#" class="card-link">View profile</a>
-				    <a href="#" class="card-link">Remind</a>
-				  </div>
-			  </div>
-			  <div class="card" style="width: 18rem;">
-				  <div class="card-body">
-				    <h5 class="card-title">Paul Johnson</h5>
-				    <h6 class="card-subtitle mb-2 text-muted">Male, 73</h6>
-				    <p class="card-text">
-				    	<button type="button" class="btn btn-danger">
-						  Aspirin <span class="badge badge-light">0</span>
-						</button>
-						<button type="button" class="btn btn-warning">
-						  Metformin <span class="badge badge-light">2</span>
-						</button>
-						<button type="button" class="btn btn-success">
-						  Amoxicillin <span class="badge badge-light">12</span>
-						</button>
-				    </p>
-				    <a href="#" class="card-link">View profile</a>
-				    <a href="#" class="card-link">Remind</a>
-				  </div>
-			  </div>
-			</div>
-		</div>
+		{% block splash %} {% endblock %}
+		{% block login %} {% endblock %}
+		{% block logout %} {% endblock %}
+		{% block cards %} {% endblock %}  <!-- only visible after user logs in -->
     </body>
 </html>

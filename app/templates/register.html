@@ -1,0 +1,16 @@
+<html>
+<div class="container">
+
+    <form method="POST"> <!-- post : handle submission -->
+        <h2>Sign Up </h2>
+        {{ form.csrf_token }}
+        {{ form.username.label}} {{form.username()}} <br/>
+        {{ form.email.label}} {{form.email()}}<br/>
+        {{ form.password.label}} {{form.password()}}<br/>
+        {{ form.submit()}}
+
+    </form>
+    <br/>
+
+</div> <!-- /container -->
+</html>
