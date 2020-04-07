@@ -17,4 +17,4 @@ eb create Sparkle-web-automated-env
 # assumptions: arn has correct permissions (CodePipeline and S3)
 #              aws account/profile has correct permissions
 #              
-aws codepipeline create-pipeline --cli-input-json file://pipeline.json
+aws codepipeline create-pipeline --cli-input-json file://pipeline.json --profile AWS_test2
