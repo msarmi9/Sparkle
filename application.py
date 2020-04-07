@@ -27,7 +27,7 @@ def index():
     """
     Renders the index.html web page.
     """
-    return render_template(message='Sparkle 0.0.1 - SwiftUI ftw')
+    return render_template('index.html', message='Sparkle 0.0.1 - SwiftUI ftw')
 
 
 if __name__ == '__main__':
