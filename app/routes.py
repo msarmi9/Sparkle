@@ -1,6 +1,6 @@
 from app import application, db
 from app.classes import *
-from flask import render_template, redirect, url_for
+from flask import render_template, redirect, url_for, request
 from flask_login import current_user, login_user, login_required, logout_user
 import logging
 import os
@@ -17,6 +17,17 @@ def index():
 @login_required
 def dashboard():
     return render_template('dashboard.html', patients=['TODO'])	
+
+# Data receiving endpoint ---------------------------------------------------
+@application.route('/send-data', methods=['POST'])
+def send_data():
+
+	pid = request.args.get('patient_id')
+	timestamp = request.args.get('timestamp')
+	data = request.args.get('data')
+
+	# TODO: store metadata in DB
+	return f"Received patient ID {pid} at {timestamp}\nData:\n{data}"
 
 
 # New user registration -----------------------------------------------------
