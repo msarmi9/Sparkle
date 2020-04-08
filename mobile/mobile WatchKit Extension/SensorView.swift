@@ -115,7 +115,7 @@ func getTimeStamp() -> String {
     let now = Date()
     let formatter = DateFormatter()
     formatter.timeZone = TimeZone.current
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    formatter.dateFormat = "yyyy-MM-dd_HH:mm:ss"
     let dateString = formatter.string(from: now)
     
     return dateString
@@ -129,12 +129,20 @@ struct SensorView: View {
     
     let watchSessionManager = WatchSessionManager()
     
+    @State
+    private var outstandingTransfers: [WCSessionFileTransfer] = []
+    
     func getDocumentsDirectory() -> URL {
         // find all possible documents directories for this user
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
 
         // just send back the first one, which ought to be the only one
         return paths[0]
+    }
+    
+    func getTempDirectory() -> String {
+        let tempDirectory = NSTemporaryDirectory()
+        return tempDirectory
     }
 
     var body: some View {
@@ -149,10 +157,17 @@ struct SensorView: View {
                 Button(action: {
                     self.motion.stopUpdates()
                     let filename = "\(getTimeStamp()).csv"
-                    NSLog("Stopped sensor smapling at: \(filename)")
-                    self.motion.saveToCSV(url: self.getDocumentsDirectory().appendingPathComponent(filename))
+                    let directory = self.getTempDirectory()
+                    let filepath = directory+filename
+                    NSLog("Stopped sensor sampling at: \(filename)")
+                    NSLog("Attempting to save csv file to \(filepath)")
+                    self.motion.saveToCSV(url: URL(string: filepath)!)
+                    
                     // now send it to iphone!
                     var transfer_obj = self.watchSessionManager.transferFile(file: URL(fileURLWithPath: filename), metadata: ["filename": filename])
+                    
+                    self.outstandingTransfers = self.watchSessionManager.validSession?.outstandingFileTransfers as! [WCSessionFileTransfer]
+                    
                     NSLog("Tried to send data over to iphone")
                     
                     
@@ -162,6 +177,7 @@ struct SensorView: View {
 //                        "sensorString": self.motion.sensorString])
                 }) {
                     Text("Stop Recording!")
+                    Text("Transfers: \(outstandingTransfers.count)")
                 }
                 Text("Accelerometer readings")
                 Text("X: \(self.motion.x)")

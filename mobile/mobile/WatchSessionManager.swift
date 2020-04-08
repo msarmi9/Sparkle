@@ -106,19 +106,19 @@ extension WatchSessionManager {
     func session(_ session: WCSession, didFinish fileTransfer: WCSessionFileTransfer, error: Error?) {
         // handle filed transfer completion
         if let e = error {
-            print("Completed file transfer with error: \(e.localizedDescription)")
+            NSLog("Completed file transfer with error: \(e.localizedDescription)")
         } else {
-            print("Completed file transfer!")
+            NSLog("Completed file transfer!")
         }
     }
 
     func session(_ session: WCSession, didFinishWithError fileTransfer: WCSessionFileTransfer, error: Error?) {
         // handle filed transfer completion
         if let e = error {
-            print("runs through the 'didFinishWithError' function")
-            print("Completed file transfer with error: \(e.localizedDescription)")
+            NSLog("runs through the 'didFinishWithError' function")
+            NSLog("Completed file transfer with error: \(e.localizedDescription)")
         } else {
-            print("Completed file transfer!")
+            NSLog("Completed file transfer!")
         }
     }
 
@@ -128,7 +128,7 @@ extension WatchSessionManager {
         DispatchQueue.main.async {
             // write to csv on iphone
             // https://www.hackingwithswift.com/books/ios-swiftui/writing-data-to-the-documents-directory
-            print("printing: received a file!")
+            NSLog("printing: received a file!")
             NSLog("nslogging: received a file!\n\(file)")
             
             // update published attribute

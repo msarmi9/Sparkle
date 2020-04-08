@@ -33,7 +33,7 @@ struct Title: View {
         HStack {
             Image(systemName: "star.fill")
 
-            Text("0.0.2")
+            Text("0.0.4")
                 .font(.system(size: 32)).italic()
 
             Image(systemName: "star.fill")
