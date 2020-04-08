@@ -4,6 +4,8 @@ from flask import render_template, redirect, url_for, request
 from flask_login import current_user, login_user, login_required, logout_user
 import logging
 import os
+import numpy as np
+from io import StringIO
 
 
 # Home / splash page --------------------------------------------------------
@@ -87,12 +89,26 @@ def upload():
 	return render_template('upload.html', form=file)
 
 # Data receiving endpoint ---------------------------------------------------
+def adherence_model(data):
+    """
+    takes in gyroscope data as a string
+    and makes binary prediction about whether or not medication
+    was consumed
+    """
+    gyro_data = np.genfromtxt(StringIO(data), delimiter=",")
+    global_mean = gyro_data.mean(axis=1).mean(axis=0)
+    if global_mean > 1:
+        return "You just took your medication!"
+    return "It does not appear you took any medication."
+
+
 @application.route('/send-data', methods=['POST'])
 def send_data():
 
-	pid = request.args.get('patient_id')
-	timestamp = request.args.get('timestamp')
-	data = request.args.get('data')
+    pid = request.form["patient_id"]
+    timestamp = request.form["timestamp"]
+    data = request.form["data"]
+    model_pred = adherence_model(data)
 
-	# TODO: store metadata in DB
-	return f"Received patient ID {pid} at {timestamp}\nData:\n{data}"
+    # TODO: store metadata in DB
+    return model_pred
