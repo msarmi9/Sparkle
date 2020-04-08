@@ -12,6 +12,8 @@ Welcome to Sparkle's documentation!
 
    tutorial
    code
+   authors
+   requirements
 
 
 Indices and tables
