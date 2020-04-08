@@ -22,4 +22,5 @@ eb create Sparkle-env --profile Sparkle-EBS-CodePipeline
 # assumptions: arn has correct permissions (CodePipeline and S3)
 #              aws account/profile has correct permissions
 #              
+
 aws codepipeline create-pipeline --cli-input-json file://pipeline.json --profile Sparkle-EBS-CodePipeline
