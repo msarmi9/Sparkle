@@ -32,6 +32,7 @@
 		D60AE26F242B97C000E27E46 /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = D60AE26D242B97C000E27E46 /* amplifyconfiguration.json */; };
 		D65641D2242E34B40054BCD3 /* Pods_mobile.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0C15C60F46FA27F1125FEDAD /* Pods_mobile.framework */; };
 		D65641D3242E34B40054BCD3 /* Pods_mobile.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 0C15C60F46FA27F1125FEDAD /* Pods_mobile.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		D6824E2D243D8F840043DEEE /* MotionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6824E2C243D8F840043DEEE /* MotionManager.swift */; };
 		D68BEB6724322AB000ECA711 /* SensorLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D68BEB6624322AB000ECA711 /* SensorLogView.swift */; };
 /* End PBXBuildFile section */
 
@@ -123,6 +124,7 @@
 		D6080E96242AABE80037C8C4 /* SensorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorView.swift; sourceTree = "<group>"; };
 		D60AE26C242B97C000E27E46 /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 		D60AE26D242B97C000E27E46 /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
+		D6824E2C243D8F840043DEEE /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		D68BEB6624322AB000ECA711 /* SensorLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorLogView.swift; sourceTree = "<group>"; };
 		F5CA5A23333C2006E78882C2 /* Pods-mobile WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobile WatchKit Extension.release.xcconfig"; path = "Target Support Files/Pods-mobile WatchKit Extension/Pods-mobile WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -240,6 +242,7 @@
 			children = (
 				D6080E76242AAB610037C8C4 /* ContentView.swift */,
 				D6080E96242AABE80037C8C4 /* SensorView.swift */,
+				D6824E2C243D8F840043DEEE /* MotionManager.swift */,
 				D6080E78242AAB610037C8C4 /* HostingController.swift */,
 				D6080E7A242AAB610037C8C4 /* ExtensionDelegate.swift */,
 				D6080E7C242AAB610037C8C4 /* NotificationController.swift */,
@@ -506,6 +509,7 @@
 				D6080E7B242AAB610037C8C4 /* ExtensionDelegate.swift in Sources */,
 				D6080E7F242AAB610037C8C4 /* NotificationView.swift in Sources */,
 				D6080E81242AAB610037C8C4 /* ComplicationController.swift in Sources */,
+				D6824E2D243D8F840043DEEE /* MotionManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

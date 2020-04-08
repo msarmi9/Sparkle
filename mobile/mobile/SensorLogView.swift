@@ -22,7 +22,7 @@ func uploadData(dataString: String) -> String {
     let now = Date()
     let formatter = DateFormatter()
     formatter.timeZone = TimeZone.current
-    formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    formatter.dateFormat = "yyyy-MM-dd_HH:mm:ss"
     let dateString = formatter.string(from: now)
     
     

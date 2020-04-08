@@ -14,11 +14,4 @@ awsconfiguration.json
 amplifyconfiguration.json
 amplify-build-config.json
 amplify-gradle-config.json
-<<<<<<< HEAD
 amplifyxc.config
-Pods/
-Podfile.lock
-*/xcuserdata/*
-=======
-amplifyxc.config
->>>>>>> c5ac6119cc57baa956b2f4d7ff1f5c63dbe16b7a

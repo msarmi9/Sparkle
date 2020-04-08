@@ -10,20 +10,24 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var isRecording: Bool = false // UI changes when this variable changes
-    @State private var currentTime: TimeInterval = 0.0
+    @ObservedObject var motion: MotionManager
+    
 
     var body: some View {
         VStack {
             Title()
             Spacer().frame(height: 25)
-            RecordingButton(isRecording: $isRecording)
             if isRecording {
-                RecordingStatus(isRecording: $isRecording)
-                Text("\(currentTime)")
-                // resume @ 21 mins in WWDC19 Data Flow video
-                // for now, viewing WWDC19 Combine in practice
+                // When isRecording = True
+                VStack {
+                    isRecordingTrue(isRecording: $isRecording,
+                                    motion: motion)
+                    DurationView()
+                    }
+            } else {
+                isRecordingFalse(isRecording: $isRecording,
+                                 motion: motion)
             }
-            SeeSensors()
         }
     }
 }
@@ -41,71 +45,60 @@ struct Title: View {
     }
 }
 
-struct RecordingButton: View {
-    @Binding var isRecording: Bool
-    var body: some View {
-        Button(action: {
-            withAnimation{ self.isRecording.toggle() }
-        }) {
-            isRecording ? Text("Stop Recording"): Text("Start Recording")
-            
-        }
-    }
-}
 
-struct RecordingStatus: View {
+struct isRecordingFalse: View {
     @Binding var isRecording: Bool
+    @ObservedObject var motion: MotionManager
     var body: some View {
-        VStack {
-            if isRecording {
-                RecordingYes(isRecording: $isRecording)
-                }
+        HStack {
+            Image(systemName: "calendar")
             
-            else {
-                RecordingNo(isRecording: $isRecording)
-
+            Button(action: {
+                self.isRecording.toggle()
+                self.motion.reset()
+                self.motion.startUpdates(Hz: 1.0/60)
+            }) {
+                Text("Take a pill")
             }
         }
     }
 }
 
-struct RecordingYes: View {
-    @Binding var isRecording: Bool
-    var body: some View {
-        HStack {
-        Image(systemName: "play.fill")
-            .font(.headline).foregroundColor(.green)
-            Text("Recording Data")
-        }
-    }
-}
 
-struct RecordingNo: View {
+struct isRecordingTrue: View {
     @Binding var isRecording: Bool
+    @ObservedObject var motion: MotionManager
     var body: some View {
         HStack {
-        Image(systemName: "stop.fill")
-            .font(.headline).foregroundColor(.red)
-            Text("Recording Data")
-        }
-    }
-}
-
-struct SeeSensors: View {
-    var body: some View {
-        HStack {
-            Image(systemName: "antenna.radiowaves.left.and.right")
-                .font(.headline)
-            // maybe want to use a button here..
-            NavigationLink(destination: SensorView(motion: MotionManager())){
-                Text("See sensors")
+            Image(systemName: "calendar")
+                .foregroundColor(Color.green)
+            
+            Button(action: {
+                // Not sure what the order of these lines of code should be
+                self.isRecording.toggle()
+                self.motion.stopUpdates()
+                self.motion.sendMessage(sensorData: ["sensorString": self.motion.sensorString])
+            }) {
+                Text("Stop recording")
             }
         }
     }
 }
 
+
+struct DurationView: View {
+    @State var duration = 0.0
+    let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+
+    var body: some View {
+        Text("\(String(format: "Duration: %.1f", duration))")
+            .onReceive(timer) { input in
+                self.duration = self.duration + 0.1
+            }
+    }
+}
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(motion: MotionManager())
     }
 }
