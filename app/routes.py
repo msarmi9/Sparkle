@@ -12,29 +12,17 @@ import os
 def index():
     return render_template('splash.html', message='Welcome to Sparkle!')	
 
-# Dashboard - visible once a doc logs in ------------------------------------
+# Dashboard - visible once a user logs in -----------------------------------
 @application.route('/dashboard')
 @login_required
 def dashboard():
     return render_template('dashboard.html', patients=['TODO'])	
-
-# Data receiving endpoint ---------------------------------------------------
-@application.route('/send-data', methods=['POST'])
-def send_data():
-
-	pid = request.args.get('patient_id')
-	timestamp = request.args.get('timestamp')
-	data = request.args.get('data')
-
-	# TODO: store metadata in DB
-	return f"Received patient ID {pid} at {timestamp}\nData:\n{data}"
 
 
 # New user registration -----------------------------------------------------
 @application.route('/register',  methods=('GET', 'POST'))
 def register():
     registration_form = RegistrationForm()
-    # print('in register')
     if registration_form.validate_on_submit():
         username = registration_form.username.data
         password = registration_form.password.data
@@ -50,7 +38,6 @@ def register():
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('index'))
-    # print('rendering register')
     return render_template('register.html', form=registration_form)
 
 
@@ -68,22 +55,17 @@ def login():
         if user is not None and user.check_password(password):
             login_user(user)
             return redirect(url_for('dashboard'))
+    else:
+    	print(login_form.errors)
 
     return render_template('login.html', form=login_form)
 
 
 # User logout ------------------------------------------------------------------
 @application.route('/logout')
-# @login_required
 def logout():
-    before_logout = '<h1> Before logout - is_autheticated : ' \
-                    + str(current_user.is_authenticated) + '</h1>'
-
     logout_user()
-
-    after_logout = '<h1> After logout - is_autheticated : ' \
-                   + str(current_user.is_authenticated) + '</h1>'
-    return before_logout + after_logout
+    redirect(url_for('index'))
 
 
 # File upload ---------------------------------------------------------------
@@ -103,3 +85,14 @@ def upload():
 
 		return redirect(url_for('index'))
 	return render_template('upload.html', form=file)
+
+# Data receiving endpoint ---------------------------------------------------
+@application.route('/send-data', methods=['POST'])
+def send_data():
+
+	pid = request.args.get('patient_id')
+	timestamp = request.args.get('timestamp')
+	data = request.args.get('data')
+
+	# TODO: store metadata in DB
+	return f"Received patient ID {pid} at {timestamp}\nData:\n{data}"

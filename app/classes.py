@@ -26,14 +26,14 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username:', validators=[DataRequired()])
-    email = StringField('Email:', validators=[DataRequired()])
-    password = PasswordField('Password:', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class LogInForm(FlaskForm):
-    username = StringField('Username:', validators=[DataRequired()])
-    password = PasswordField('Password:', validators=[DataRequired()])
+    username = StringField('Username', validators=[DataRequired()])
+    password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
 class UploadFileForm(FlaskForm):
