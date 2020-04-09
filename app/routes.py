@@ -95,11 +95,14 @@ def adherence_model(data):
     and makes binary prediction about whether or not medication
     was consumed
     """
-    gyro_data = np.genfromtxt(StringIO(data), delimiter=",")
+    gyro_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
     global_mean = gyro_data.mean(axis=1).mean(axis=0)
+    print(global_mean)
     if global_mean > 1:
-        return "You just took your medication!"
-    return "It does not appear you took any medication."
+        pred_string = "You just took your medication!"
+    else:
+        pred_string = "It does not appear you took any medication."
+    return {"pred_string": pred_string, "pred": global_mean}
 
 
 @application.route('/send-data', methods=['POST'])
@@ -108,7 +111,9 @@ def send_data():
     Json in and json out
     """
     content = request.get_json()
-    model_pred = adherence_model(content["data"])
+    data = content["data"]
+    print(f"data received: {data}")
+    model_pred_dict = adherence_model(data)
 
     # TODO: store metadata in DB
-    return jsonify({"model_pred": model_pred})
+    return jsonify(model_pred_dict)
