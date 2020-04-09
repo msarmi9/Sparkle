@@ -1,6 +1,6 @@
 from app import application, db
 from app.classes import *
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 import logging
 import os
@@ -104,11 +104,11 @@ def adherence_model(data):
 
 @application.route('/send-data', methods=['POST'])
 def send_data():
-
-    pid = request.form["patient_id"]
-    timestamp = request.form["timestamp"]
-    data = request.form["data"]
-    model_pred = adherence_model(data)
+    """
+    Json in and json out
+    """
+    content = request.get_json()
+    model_pred = adherence_model(content["data"])
 
     # TODO: store metadata in DB
-    return model_pred
+    return jsonify({"model_pred": model_pred})
