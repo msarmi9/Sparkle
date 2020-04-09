@@ -98,7 +98,7 @@ def adherence_model(data):
     gyro_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
     global_mean = np.abs(gyro_data).mean(axis=1).mean(axis=0)
     print(global_mean)
-    if global_mean > 1:
+    if global_mean > 0.5:
         pred_string = "You just took your medication!"
     else:
         pred_string = "It does not appear you took any medication."
