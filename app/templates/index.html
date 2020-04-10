@@ -32,7 +32,7 @@
 		    <ul class="navbar-nav mr-auto">
 			    {% if current_user.is_authenticated %}
 			      <li class="nav-item active">
-			        <a class="nav-link" href="#">Dashboard</a>
+			        <a class="nav-link" href="/dashboard">Dashboard</a>
 			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" href="#">Patients</a>
@@ -71,6 +71,8 @@
 		{% block login %} {% endblock %}
 		{% block logout %} {% endblock %}
 		{% block add_patient %} {% endblock %}
+		{% block patient_profile %} {% endblock %}
+		{% block add_prescription %} {% endblock %}
 		{% block cards %} {% endblock %}  <!-- only visible after user logs in -->
     </body>
 </html>

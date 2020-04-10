@@ -23,6 +23,52 @@ def dashboard():
     return render_template('dashboard.html', patients=patients)
 
 
+# Patient profile -----------------------------------------------------------
+@application.route('/patients/<int:patient_id>', methods=('GET', 'POST'))
+@login_required
+def patient_profile(patient_id):
+    patient = Patient.query.filter_by(id=patient_id).first()
+    prescriptions = patient.prescriptions
+    return render_template('patient_profile.html',
+                           patient=patient, prescriptions=prescriptions)
+
+
+# New prescription for patient ----------------------------------------------
+@application.route('/patients/<int:patient_id>/new-prescription',
+                   methods=('GET', 'POST'))
+@login_required
+def add_prescription(patient_id):
+    rx_form = PrescriptionForm()
+    patient = Patient.query.filter_by(id=patient_id).first()
+    if rx_form.validate_on_submit():
+        drug = rx_form.drug.data
+        desc = rx_form.desc.data 
+        freq = rx_form.freq.data
+        cycle_n = rx_form.cycle_n.data
+        cycle_unit = rx_form.cycle_unit.data
+        start_pills = rx_form.start_pills.data
+        last_refill_date = rx_form.last_refill_date.data
+        remaining_pills = start_pills  # No pills taken yet at this point
+
+        rx = Prescription(drug=drug, desc=desc, freq=freq, cycle_n=cycle_n,
+                          cycle_unit=cycle_unit, start_pills=start_pills,
+                          last_refill_date=last_refill_date,
+                          remaining_pills=remaining_pills,
+                          next_refill_date='2020-05-10', patient=patient)
+
+        # TODO: latest, next refill dates should be date fields.
+        # TODO: calculate next refill date based on freq, cycle_n, cycle_units
+        # and number of starting pills.
+
+        db.session.add(rx)
+        db.session.commit()
+        return redirect(url_for('patient_profile', patient_id=patient_id))
+    else:
+        print(rx_form.errors)
+    return render_template('add_prescription.html',
+                           patient=patient, form=rx_form)
+
+
 # New patient ---------------------------------------------------------------
 @application.route('/add-patient',  methods=('GET', 'POST'))
 @login_required

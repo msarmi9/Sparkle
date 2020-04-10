@@ -76,12 +76,13 @@ class PatientForm(FlaskForm):
 
 class PrescriptionForm(FlaskForm):
     drug = StringField('Drug name', validators=[DataRequired()])
-    desc = StringField('Drug name', validators=[DataRequired()])
+    desc = StringField('Purpose / description', validators=[DataRequired()])
     freq = IntegerField('Frequency', validators=[DataRequired()])
     cycle_n = IntegerField('Cycle number', validators=[DataRequired()])
-    cycle_unit = StringField('Cylce unit', validators=[DataRequired()])
+    cycle_unit = StringField('Cycle unit', validators=[DataRequired()])
     start_pills = IntegerField('Starting number of pills', validators=[DataRequired()])
     # remaining_pills automatically populated in new_prescription route
+    last_refill_date = StringField('Latest refill date', validators=[DataRequired()])
 
 class RegistrationForm(FlaskForm):
     firstname = StringField('First name', validators=[DataRequired()])

@@ -1,0 +1,39 @@
+{% extends "index.html" %}
+
+{% block add_prescription %}
+	<div class="container main">
+		<h3>New prescription for <i>{{ patient.lastname }}, {{ patient.firstname }}</i></h3>
+	    <form method="POST">
+	    	{{ form.csrf_token }}
+	    	<div class="form-group">
+	    		<label for="drug">{{ form.drug.label }}</label>
+	    		<input id="drug" class="form-control" name="drug" required>
+			</div>
+			<div class="form-group">
+	    		<label for="desc">{{ form.desc.label }}</label>
+	    		<input id="desc" class="form-control" name="desc" required>
+			</div>
+			<div class="form-group">
+	    		<label for="freq">{{ form.freq.label }}</label>
+	    		<input id="freq" class="form-control" name="freq" required>
+			</div>
+			<div class="form-group">
+	    		<label for="cycle_n">{{ form.cycle_n.label }}</label>
+	    		<input id="cycle_n" class="form-control" name="cycle_n" required>
+			</div>
+			<div class="form-group">
+	    		<label for="cycle_unit">{{ form.cycle_unit.label }}</label>
+	    		<input id="cycle_unit" class="form-control" name="cycle_unit" required>
+			</div>
+			<div class="form-group">
+	    		<label for="start_pills">{{ form.start_pills.label }}</label>
+	    		<input id="start_pills" class="form-control" name="start_pills" required>
+			</div>
+			<div class="form-group">
+	    		<label for="last_refill_date">{{ form.last_refill_date.label }}</label>
+	    		<input id="last_refill_date" class="form-control" name="last_refill_date" required>
+			</div>
+			<button type="submit" class="btn btn-primary">Create</button>
+	    </form>
+	</div>
+{% endblock %}
