@@ -9,21 +9,30 @@ from io import StringIO
 
 
 # Home / splash page --------------------------------------------------------
-@application.route('/')
 @application.route('/home')
+@application.route('/')
 def index():
+    """
+    Home page of our site. Many other pages redirect here.
+    """
     return render_template('splash.html', message='Welcome to Sparkle!')	
 
 # Dashboard - visible once a user logs in -----------------------------------
 @application.route('/dashboard')
 @login_required
 def dashboard():
+    """
+    The main dashboard for our site, only made visible to the user once logged in.
+    """
     return render_template('dashboard.html', patients=['TODO'])	
 
 
 # New user registration -----------------------------------------------------
 @application.route('/register',  methods=('GET', 'POST'))
 def register():
+    """
+    Page that allows users to register an account on our site.
+    """
     registration_form = RegistrationForm()
     if registration_form.validate_on_submit():
         username = registration_form.username.data
@@ -46,6 +55,9 @@ def register():
 # User login ------------------------------------------------------------------
 @application.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Page that allows registered users to log-in to our site.
+    """
     login_form = LogInForm()
     if login_form.validate_on_submit():
         username = login_form.username.data
@@ -66,6 +78,9 @@ def login():
 # User logout ------------------------------------------------------------------
 @application.route('/logout')
 def logout():
+    """
+    Page that allows logged-in users to logout.
+    """
     logout_user()
     return redirect(url_for('index'))
 
@@ -108,7 +123,8 @@ def adherence_model(data):
 @application.route('/send-data', methods=['POST'])
 def send_data():
     """
-    Json in and json out
+    Post route that receives and responds with json data.
+    Currently set up to receive smart watch sensor data from Apple Watch.
     """
     content = request.get_json()
     data = content["data"]

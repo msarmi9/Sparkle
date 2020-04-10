@@ -1,21 +1,20 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Automatically Generated Code Documentation &#8212; Sparkle 0 documentation</title>
+    <meta charset="utf-8" />
+    <title>Code Documentation &#8212; Sparkle 0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Authors" href="authors.html" />
     <link rel="prev" title="My Code Tutorial" href="tutorial.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -33,18 +32,233 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="module-application">
-<span id="automatically-generated-code-documentation"></span><h1>Automatically Generated Code Documentation<a class="headerlink" href="#module-application" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-sparkle.scripts.preprocess">
+<span id="code-documentation"></span><h1>Code Documentation<a class="headerlink" href="#module-sparkle.scripts.preprocess" title="Permalink to this headline">¶</a></h1>
 <dl class="function">
-<dt id="application.index">
-<code class="descclassname">application.</code><code class="descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Renders the index.html web page.</p>
+<dt id="sparkle.scripts.preprocess.concat_files">
+<code class="sig-prename descclassname">sparkle.scripts.preprocess.</code><code class="sig-name descname">concat_files</code><span class="sig-paren">(</span><em class="sig-param">paths</em>, <em class="sig-param">file_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sparkle/scripts/preprocess.html#concat_files"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sparkle.scripts.preprocess.concat_files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Concatenates processed files from the paths into a single dataframe,
+and exports to csv</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="application.read_s3_obj">
-<code class="descclassname">application.</code><code class="descname">read_s3_obj</code><span class="sig-paren">(</span><em>bucket_name</em>, <em>output_file</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/application.html#read_s3_obj"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#application.read_s3_obj" title="Permalink to this definition">¶</a></dt>
-<dd><p>reads from an s3 bucket.</p>
+<dt id="sparkle.scripts.preprocess.get_meta_info">
+<code class="sig-prename descclassname">sparkle.scripts.preprocess.</code><code class="sig-name descname">get_meta_info</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sparkle/scripts/preprocess.html#get_meta_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sparkle.scripts.preprocess.get_meta_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create metadata df with columns = [“watchOnTwistHand”, “n_pills”, “pills_low”]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sparkle.scripts.preprocess.pivot_data">
+<code class="sig-prename descclassname">sparkle.scripts.preprocess.</code><code class="sig-name descname">pivot_data</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sparkle/scripts/preprocess.html#pivot_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sparkle.scripts.preprocess.pivot_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get ‘mean’, ‘min’, ‘max’, ‘std’ per window per column and pivot the entire data into a single row.
+Ex) Input df columns: [‘loggingSample’, ‘gyro_x’, ‘gyro_y’,.., ‘audio_average_power’, ‘window’]
+Output df columns: [‘gyro_x_mean_1’, ‘gyro_x_mean_2’,…,’audio_average_power_std_10’]</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sparkle.scripts.preprocess.process_file">
+<code class="sig-prename descclassname">sparkle.scripts.preprocess.</code><code class="sig-name descname">process_file</code><span class="sig-paren">(</span><em class="sig-param">path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sparkle/scripts/preprocess.html#process_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sparkle.scripts.preprocess.process_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preprocess a raw data into a single row data and add meta data columns.s</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sparkle.scripts.preprocess.rename_columns">
+<code class="sig-prename descclassname">sparkle.scripts.preprocess.</code><code class="sig-name descname">rename_columns</code><span class="sig-paren">(</span><em class="sig-param">df</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sparkle/scripts/preprocess.html#rename_columns"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sparkle.scripts.preprocess.rename_columns" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rename columns.
+SensorLog’s data comes in two different types of column names depending on Apple Watch version.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sparkle.scripts.preprocess.trim_data">
+<code class="sig-prename descclassname">sparkle.scripts.preprocess.</code><code class="sig-name descname">trim_data</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">trim_start_pct</em>, <em class="sig-param">trim_end_pct</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sparkle/scripts/preprocess.html#trim_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sparkle.scripts.preprocess.trim_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trim first ‘trim_start_pct’ and last ‘trim_end_pct’ of data.
+Ex) trim_data(df, 0.05, 0.05)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="sparkle.scripts.preprocess.window_data">
+<code class="sig-prename descclassname">sparkle.scripts.preprocess.</code><code class="sig-name descname">window_data</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">n_windows</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/sparkle/scripts/preprocess.html#window_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#sparkle.scripts.preprocess.window_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Partition data into equal sized windows and assign ‘window’ id.
+‘window’ id ranges from 1 to n_windows.</p>
+</dd></dl>
+
+<span class="target" id="module-app.classes"></span><dl class="class">
+<dt id="app.classes.LogInForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.classes.</code><code class="sig-name descname">LogInForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/classes.html#LogInForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.classes.LogInForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flask form allowing users to log in to our site.</p>
+<dl class="attribute">
+<dt id="app.classes.LogInForm.password">
+<code class="sig-name descname">password</code><em class="property"> = &lt;UnboundField(PasswordField, ('Password',), {'validators': [&lt;wtforms.validators.DataRequired object&gt;]})&gt;</em><a class="headerlink" href="#app.classes.LogInForm.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.LogInForm.submit">
+<code class="sig-name descname">submit</code><em class="property"> = &lt;UnboundField(SubmitField, ('Login',), {})&gt;</em><a class="headerlink" href="#app.classes.LogInForm.submit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.LogInForm.username">
+<code class="sig-name descname">username</code><em class="property"> = &lt;UnboundField(StringField, ('Username',), {'validators': [&lt;wtforms.validators.DataRequired object&gt;]})&gt;</em><a class="headerlink" href="#app.classes.LogInForm.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.classes.RegistrationForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.classes.</code><code class="sig-name descname">RegistrationForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/classes.html#RegistrationForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.classes.RegistrationForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flask form allowing users to register to our site.</p>
+<dl class="attribute">
+<dt id="app.classes.RegistrationForm.email">
+<code class="sig-name descname">email</code><em class="property"> = &lt;UnboundField(StringField, ('Email',), {'validators': [&lt;wtforms.validators.DataRequired object&gt;]})&gt;</em><a class="headerlink" href="#app.classes.RegistrationForm.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.RegistrationForm.password">
+<code class="sig-name descname">password</code><em class="property"> = &lt;UnboundField(PasswordField, ('Password',), {'validators': [&lt;wtforms.validators.DataRequired object&gt;]})&gt;</em><a class="headerlink" href="#app.classes.RegistrationForm.password" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.RegistrationForm.submit">
+<code class="sig-name descname">submit</code><em class="property"> = &lt;UnboundField(SubmitField, ('Submit',), {})&gt;</em><a class="headerlink" href="#app.classes.RegistrationForm.submit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.RegistrationForm.username">
+<code class="sig-name descname">username</code><em class="property"> = &lt;UnboundField(StringField, ('Username',), {'validators': [&lt;wtforms.validators.DataRequired object&gt;]})&gt;</em><a class="headerlink" href="#app.classes.RegistrationForm.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.classes.UploadFileForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.classes.</code><code class="sig-name descname">UploadFileForm</code><span class="sig-paren">(</span><em class="sig-param">formdata=&lt;object object&gt;</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/classes.html#UploadFileForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.classes.UploadFileForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flask form allowing users to upload a file to our site.</p>
+<dl class="attribute">
+<dt id="app.classes.UploadFileForm.file_selector">
+<code class="sig-name descname">file_selector</code><em class="property"> = &lt;UnboundField(FileField, ('File',), {'validators': [&lt;flask_wtf.file.FileRequired object&gt;]})&gt;</em><a class="headerlink" href="#app.classes.UploadFileForm.file_selector" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.UploadFileForm.submit">
+<code class="sig-name descname">submit</code><em class="property"> = &lt;UnboundField(SubmitField, ('Submit',), {})&gt;</em><a class="headerlink" href="#app.classes.UploadFileForm.submit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="app.classes.User">
+<em class="property">class </em><code class="sig-prename descclassname">app.classes.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param">username</em>, <em class="sig-param">email</em>, <em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/classes.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.classes.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the “User” schema for SQLAlchemy.
+Hashes the password for security.
+Using __table_args__ due to recommendation here: <a class="reference external" href="https://stackoverflow.com/questions/37908767/table-roles-users-is-already-defined-for-this-metadata-instance">https://stackoverflow.com/questions/37908767/table-roles-users-is-already-defined-for-this-metadata-instance</a></p>
+<dl class="method">
+<dt id="app.classes.User.check_password">
+<code class="sig-name descname">check_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/classes.html#User.check_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.classes.User.check_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify credentials of user by comparing
+password with encoded password hash</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.User.email">
+<code class="sig-name descname">email</code><a class="headerlink" href="#app.classes.User.email" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.User.id">
+<code class="sig-name descname">id</code><a class="headerlink" href="#app.classes.User.id" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.User.password_hash">
+<code class="sig-name descname">password_hash</code><a class="headerlink" href="#app.classes.User.password_hash" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="app.classes.User.set_password">
+<code class="sig-name descname">set_password</code><span class="sig-paren">(</span><em class="sig-param">password</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/classes.html#User.set_password"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.classes.User.set_password" title="Permalink to this definition">¶</a></dt>
+<dd><p>Automatically hash password upon call of __init__()</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="app.classes.User.username">
+<code class="sig-name descname">username</code><a class="headerlink" href="#app.classes.User.username" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="app.classes.load_user">
+<code class="sig-prename descclassname">app.classes.</code><code class="sig-name descname">load_user</code><span class="sig-paren">(</span><em class="sig-param">id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/classes.html#load_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.classes.load_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reloads the user object from the session.</p>
+</dd></dl>
+
+<span class="target" id="module-app.routes"></span><dl class="function">
+<dt id="app.routes.adherence_model">
+<code class="sig-prename descclassname">app.routes.</code><code class="sig-name descname">adherence_model</code><span class="sig-paren">(</span><em class="sig-param">data</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routes.html#adherence_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.routes.adherence_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>takes in gyroscope data as a string
+and makes binary prediction about whether or not medication
+was consumed</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.routes.dashboard">
+<code class="sig-prename descclassname">app.routes.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routes.html#dashboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.routes.dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main dashboard for our site, only made visible to the user once logged in.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.routes.index">
+<code class="sig-prename descclassname">app.routes.</code><code class="sig-name descname">index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routes.html#index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.routes.index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Home page of our site. Many other pages redirect here.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.routes.login">
+<code class="sig-prename descclassname">app.routes.</code><code class="sig-name descname">login</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routes.html#login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.routes.login" title="Permalink to this definition">¶</a></dt>
+<dd><p>Page that allows registered users to log-in to our site.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.routes.logout">
+<code class="sig-prename descclassname">app.routes.</code><code class="sig-name descname">logout</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routes.html#logout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.routes.logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Page that allows logged-in users to logout.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.routes.register">
+<code class="sig-prename descclassname">app.routes.</code><code class="sig-name descname">register</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routes.html#register"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.routes.register" title="Permalink to this definition">¶</a></dt>
+<dd><p>Page that allows users to register an account on our site.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.routes.send_data">
+<code class="sig-prename descclassname">app.routes.</code><code class="sig-name descname">send_data</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routes.html#send_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.routes.send_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Post route that receives and responds with json data.
+Currently set up to receive smart watch sensor data from Apple Watch.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="app.routes.upload">
+<code class="sig-prename descclassname">app.routes.</code><code class="sig-name descname">upload</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/routes.html#upload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.routes.upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Upload a file from the client machine.</p>
+</dd></dl>
+
+<span class="target" id="module-tests"></span><dl class="function">
+<dt id="tests.test_adherence_model">
+<code class="sig-prename descclassname">tests.</code><code class="sig-name descname">test_adherence_model</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests.html#test_adherence_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_adherence_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test to ensure that the baseline pill prediction model behaves as expected.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tests.test_user_from_db">
+<code class="sig-prename descclassname">tests.</code><code class="sig-name descname">test_user_from_db</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests.html#test_user_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.test_user_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test to ensure that a user’s info is correctly entered into database.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="tests.user_from_db">
+<code class="sig-prename descclassname">tests.</code><code class="sig-name descname">user_from_db</code><span class="sig-paren">(</span><em class="sig-param">username</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/tests.html#user_from_db"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#tests.user_from_db" title="Permalink to this definition">¶</a></dt>
+<dd><p>Helper function to query a specific user from a database.</p>
 </dd></dl>
 
 </div>
@@ -68,8 +282,11 @@
 <h3>Navigation</h3>
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorial.html">My Code Tutorial</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Automatically Generated Code Documentation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Code Documentation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
 </ul>
 
 <div class="relations">
@@ -77,21 +294,20 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="tutorial.html" title="previous chapter">My Code Tutorial</a></li>
+      <li>Next: <a href="authors.html" title="next chapter">Authors</a></li>
   </ul></li>
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -108,7 +324,7 @@
       &copy;2020, Andy Cheon, Stephanie Jung, Collin Prather, Matthew Sarmiento, Kevin Wong.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.8.5</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
