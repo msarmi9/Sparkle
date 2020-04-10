@@ -2,10 +2,10 @@
     "pipeline": {
         "name": "Sparkle-pipeline",
         "version": 1,
-        "roleArn": "arn:aws:iam::479073530619:role/service-role/AWSCodePipelineServiceRole-us-west-2-sparkle-pipeline",
+            "roleArn": "arn:aws:iam::374226464461:role/service-role/AWSCodePipelineServiceRole-us-west-2-MSDS603_Week1",
         "artifactStore": {
             "type": "S3",
-            "location": "codepipeline-us-west-2-262311485021"
+            "location": "codepipeline-msds603-week1"    
         },
         "stages": [
             {
