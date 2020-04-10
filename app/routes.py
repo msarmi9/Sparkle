@@ -70,7 +70,7 @@ def add_prescription(patient_id):
 
 
 # New patient ---------------------------------------------------------------
-@application.route('/add-patient',  methods=('GET', 'POST'))
+@application.route('/new-patient',  methods=('GET', 'POST'))
 @login_required
 def add_patient():
     patient_form = PatientForm()
