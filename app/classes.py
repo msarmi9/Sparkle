@@ -66,6 +66,13 @@ class Prescription(db.Model):
 
     patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
 
+class PatientForm(FlaskForm):
+    firstname = StringField('First name', validators=[DataRequired()])
+    lastname = StringField('Last name', validators=[DataRequired()])
+    email = StringField('Email')
+    age = IntegerField('Age', validators=[DataRequired()])
+    weight = IntegerField('Weight', validators=[DataRequired()])
+
 
 class PrescriptionForm(FlaskForm):
     drug = StringField('Drug name', validators=[DataRequired()])

@@ -18,7 +18,27 @@ def index():
 @application.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', patients=['TODO']) 
+    return render_template('dashboard.html', patients=['TODO'])
+
+
+# New patient ---------------------------------------------------------------
+@application.route('/add-patient',  methods=('GET', 'POST'))
+@login_required
+def add_patient():
+    patient_form = PatientForm()
+    if patient_form.validate_on_submit():
+        firstname = patient_form.firstname.data
+        lastname = patient_form.lastname.data 
+        email = patient_form.email.data
+        age = patient_form.age.data
+        weight = patient_form.weight.data
+
+        patient = Patient(firstname=firstname, lastname=lastname, email=email,
+                          age=age, weight=weight, user=current_user)
+        db.session.add(patient)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+    return render_template('add_patient.html', form=patient_form)
 
 
 # New user registration -----------------------------------------------------

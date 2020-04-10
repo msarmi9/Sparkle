@@ -47,7 +47,7 @@
 			      {% if current_user.is_authenticated %}
 			      	  <li class="nav-item">
 					      <span class="navbar-text">
-					      	Welcome, Dr. {{ current_user.username }} |
+					      	Welcome, Dr. {{ current_user.lastname }} |
 					      </span>
 					  </li>
 				      <li class="nav-item">
@@ -70,6 +70,7 @@
 		{% block register %} {% endblock %}
 		{% block login %} {% endblock %}
 		{% block logout %} {% endblock %}
+		{% block add_patient %} {% endblock %}
 		{% block cards %} {% endblock %}  <!-- only visible after user logs in -->
     </body>
 </html>
