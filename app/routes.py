@@ -12,13 +12,13 @@ from io import StringIO
 @application.route('/')
 @application.route('/home')
 def index():
-    return render_template('splash.html', message='Welcome to Sparkle!')	
+    return render_template('splash.html', message='Welcome to Sparkle!')    
 
 # Dashboard - visible once a user logs in -----------------------------------
 @application.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', patients=['TODO'])	
+    return render_template('dashboard.html', patients=['TODO']) 
 
 
 # New user registration -----------------------------------------------------
@@ -26,6 +26,8 @@ def dashboard():
 def register():
     registration_form = RegistrationForm()
     if registration_form.validate_on_submit():
+        firstname = registration_form.firstname.data
+        lastname = registration_form.lastname.data 
         username = registration_form.username.data
         password = registration_form.password.data
         email = registration_form.email.data
@@ -36,7 +38,7 @@ def register():
             return '<h1>Error - Existing user : ' + username \
                    + ' OR ' + email + '</h1>'
         else:
-            user = User(username, email, password)
+            user = User(firstname, lastname, username, email, password)
             db.session.add(user)
             db.session.commit()
             return redirect(url_for('login'))
@@ -58,7 +60,7 @@ def login():
             login_user(user)
             return redirect(url_for('dashboard'))
     else:
-    	print(login_form.errors)
+        print(login_form.errors)
 
     return render_template('login.html', form=login_form)
 
@@ -73,20 +75,20 @@ def logout():
 # File upload ---------------------------------------------------------------
 @application.route('/upload', methods=['GET', 'POST'])
 def upload():
-	"""
-	Upload a file from the client machine.
-	"""
-	file = UploadFileForm()
-	if file.validate_on_submit():
-		f = file.file_selector.data
-		filename = f.filename
+    """
+    Upload a file from the client machine.
+    """
+    file = UploadFileForm()
+    if file.validate_on_submit():
+        f = file.file_selector.data
+        filename = f.filename
 
-		file_dir_path = os.path.join(application.instance_path, 'files')
-		file_path = os.path.join(file_dir_path, filename)
-		f.save(file_path)
+        file_dir_path = os.path.join(application.instance_path, 'files')
+        file_path = os.path.join(file_dir_path, filename)
+        f.save(file_path)
 
-		return redirect(url_for('index'))
-	return render_template('upload.html', form=file)
+        return redirect(url_for('index'))
+    return render_template('upload.html', form=file)
 
 # Data receiving endpoint ---------------------------------------------------
 def adherence_model(data):

@@ -3,18 +3,23 @@ from flask_login import UserMixin
 from flask_wtf.file import FileRequired
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from wtforms import FileField, PasswordField, StringField, SubmitField
+from wtforms import FileField, PasswordField, StringField, SubmitField, IntegerField, TextAreaField
 from wtforms.validators import DataRequired
 
 from app import db, login_manager
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
+    firstname = db.Column(db.String(50), unique=False, nullable=False)
+    lastname = db.Column(db.String(50), unique=False, nullable=False)
+    username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
+    patients = db.relationship('Patient', backref='user', lazy=True)
 
-    def __init__(self, username, email, password):
+    def __init__(self, firstname, lastname, username, email, password):
+        self.firstname = firstname
+        self.lastname = lastname
         self.username = username
         self.email = email
         self.set_password(password)
@@ -25,7 +30,55 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+class Patient(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(50), unique=False, nullable=False)
+    lastname = db.Column(db.String(50), unique=False, nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=True)
+    age = db.Column(db.Integer, unique=False, nullable=False)
+    weight = db.Column(db.Integer, unique=False, nullable=False)
+    doctor_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    prescriptions = db.relationship('Prescription', backref='patient', lazy=True)
+
+class Prescription(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    drug = db.Column(db.String(100), unique=False, nullable=False)
+    desc = db.Column(db.String(500), unique=False, nullable=False)
+    freq = db.Column(db.Integer, unique=False, nullable=False)
+    cycle_n = db.Column(db.Integer, unique=False, nullable=False)
+    cycle_unit = db.Column(db.String(50), unique=False, nullable=False)
+
+    # freq = number of times per cycle e.g. 2 (twice), 1 (once)
+    # cycle_n = every n <unit> 
+    # cycle_unit = unit of repeat e.g. day, week, month
+    # Example Rx: "twice daily" --> freq=2, cycle_n=1, cycle_unit=day
+    # Example Rx: "once every other day" --> freq=1, cycle_n=2, cycle_unit=day
+    
+    start_pills = db.Column(db.Integer, unique=False, nullable=False)
+    remaining_pills = db.Column(db.Integer, unique=False, nullable=False)
+    last_refill_date = db.Column(db.String(20), unique=False, nullable=False)
+    next_refill_date = db.Column(db.String(20), unique=False, nullable=False)
+
+    # start_pills = starting number of pills for this refill cycle
+    # remaining_pills = remaining number of pills for this refill cycle
+    # last_refill_date = when the Rx was last refilled (if first time, then date of first fill)
+    # next_refill_date = when the Rx will be next refilled
+
+    patient_id = db.Column(db.Integer, db.ForeignKey('patient.id'), nullable=False)
+
+
+class PrescriptionForm(FlaskForm):
+    drug = StringField('Drug name', validators=[DataRequired()])
+    desc = StringField('Drug name', validators=[DataRequired()])
+    freq = IntegerField('Frequency', validators=[DataRequired()])
+    cycle_n = IntegerField('Cycle number', validators=[DataRequired()])
+    cycle_unit = StringField('Cylce unit', validators=[DataRequired()])
+    start_pills = IntegerField('Starting number of pills', validators=[DataRequired()])
+    # remaining_pills automatically populated in new_prescription route
+
 class RegistrationForm(FlaskForm):
+    firstname = StringField('First name', validators=[DataRequired()])
+    lastname = StringField('Last name', validators=[DataRequired()])
     username = StringField('Username', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
