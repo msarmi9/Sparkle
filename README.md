@@ -1,6 +1,5 @@
 # _Sparkle_: A Multi-Platform System for Combating Medication Non-adherence with Machine Learning
 
-
 #### _Team Members_:
 * [Andy Cheon](https://www.linkedin.com/in/acheon/)
 * [Stephanie Jung](https://www.linkedin.com/in/yeojujung/)
@@ -76,3 +75,14 @@ _In development on the_ [_`web` branch_](https://github.com/msarmi9/Sparkle/tree
 
 _This is a screenshot of a drafted UI and is likely to change in the coming weeks._
     
+=======
+MSDS698 Project - Sparkle  
+
+Contributors:  
+* Andy Cheon  
+* Stephanie Jung  
+* Collin Prather  
+* Matt Sarmiento  
+* Kevin Wong
+
+[Project board](https://github.com/msarmi9/Sparkle/projects/5)
