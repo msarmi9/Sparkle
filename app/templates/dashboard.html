@@ -4,54 +4,24 @@
 	<div class="container main">
 		<h3>Dashboard</h3>
 		<div class="card-deck">
-		  <div class="card" style="width: 18rem;">
-			  <div class="card-body">
-			    <h5 class="card-title">John Smith</h5>
-			    <h6 class="card-subtitle mb-2 text-muted">Male, 50</h6>
-			    <p class="card-text">
-			    	<button type="button" class="btn btn-success">
-					  Aspirin <span class="badge badge-light">10</span>
-					</button>
-					<button type="button" class="btn btn-warning">
-					  Lipitor <span class="badge badge-light">3</span>
-					</button>
-			    </p>
-			    <a href="#" class="card-link">View profile</a>
-			    <a href="#" class="card-link">Remind</a>
-			  </div>
-		  </div>
-		  <div class="card" style="width: 18rem;">
-			  <div class="card-body">
-			    <h5 class="card-title">Sheila Jones</h5>
-			    <h6 class="card-subtitle mb-2 text-muted">Female, 28</h6>
-			    <p class="card-text">
-			    	<button type="button" class="btn btn-success">
-					  Nexium <span class="badge badge-light">8</span>
-					</button>
-			    </p>
-			    <a href="#" class="card-link">View profile</a>
-			    <a href="#" class="card-link">Remind</a>
-			  </div>
-		  </div>
-		  <div class="card" style="width: 18rem;">
-			  <div class="card-body">
-			    <h5 class="card-title">Paul Johnson</h5>
-			    <h6 class="card-subtitle mb-2 text-muted">Male, 73</h6>
-			    <p class="card-text">
-			    	<button type="button" class="btn btn-danger">
-					  Aspirin <span class="badge badge-light">0</span>
-					</button>
-					<button type="button" class="btn btn-warning">
-					  Metformin <span class="badge badge-light">2</span>
-					</button>
-					<button type="button" class="btn btn-success">
-					  Amoxicillin <span class="badge badge-light">12</span>
-					</button>
-			    </p>
-			    <a href="#" class="card-link">View profile</a>
-			    <a href="#" class="card-link">Remind</a>
-			  </div>
-		  </div>
+			{% for p in patients %}
+				<div class="card" style="width: 18rem;">
+				  <div class="card-body">
+				    <h5 class="card-title">{{ p.firstname }} {{ p.lastname }}</h5>
+				    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
+				    <p class="card-text">
+				    	<button type="button" class="btn btn-success">
+						  Aspirin <span class="badge badge-light">10</span>
+						</button>
+						<button type="button" class="btn btn-warning">
+						  Lipitor <span class="badge badge-light">3</span>
+						</button>
+				    </p>
+				    <a href="#" class="card-link">View profile</a>
+				    <a href="#" class="card-link">Remind</a>
+				  </div>
+				</div>
+			{% endfor %}
 		</div>
 	</div>
 {% endblock %}

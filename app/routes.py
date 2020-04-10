@@ -18,7 +18,9 @@ def index():
 @application.route('/dashboard')
 @login_required
 def dashboard():
-    return render_template('dashboard.html', patients=['TODO'])
+    patients = User.query.filter_by(id=current_user.id).first().patients
+    print([(p.age, p.firstname) for p in patients])
+    return render_template('dashboard.html', patients=patients)
 
 
 # New patient ---------------------------------------------------------------
