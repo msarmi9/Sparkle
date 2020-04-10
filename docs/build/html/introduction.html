@@ -14,7 +14,7 @@
     <script src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="My Code Tutorial" href="tutorial.html" />
+    <link rel="next" title="Tutorial" href="tutorial.html" />
     <link rel="prev" title="Welcome to Sparkle’s documentation!" href="index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
@@ -34,7 +34,23 @@
             
   <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
-<p>intro</p>
+<p>Currently, there are a variety of mobile and smartwatch applications available that are designed to help patients take their medication correctly. These applications require patients to manually add dosage information and intake schedule for each medication, and provide automated reminders to take medication accordingly. In other words, the burden of correctly taking medication is placed entirely on the patient and there is no mechanism for verifying that a patient did indeed do so. We believe this to be a fundamental flaw and attempt to address it by integrating both patients and doctors into a single feedback loop in which:</p>
+<ol class="arabic simple">
+<li><p>Doctors upload patient medication information to an internal online portal.</p></li>
+<li><p>This information is automatically propagated to a patient’s mobile device.</p></li>
+<li><p>Patients receive automated alerts to take medication via mobile &amp; smartwatch devices.</p></li>
+<li><p>Correct medication intake is verified both by patient input and a ML model.</p></li>
+<li><p>The doctors’ internal portal is updated with this information, allowing doctors to:</p></li>
+<li><p>Take corrective action if a patient fails to take medication as prescribed.</p></li>
+<li><p>Submit a prescription refill order to a patient’s pharmacy if needed.</p></li>
+</ol>
+<p>Patients are alerted to pick-up medication refills at their local pharmacy or are notified that they have completed the course of treatment for the given medication.
+Our goal is to implement this feedback loop via a multi-platform system composed of the following three components:</p>
+<ol class="arabic simple">
+<li><p>A quiet Apple Watch app that fades seamlessly into the background, notifying patients only when it is time to take their medication.</p></li>
+<li><p>An accompanying iPhone app that displays a clean and minimal dashboard presenting a patient’s medication schedule for the current week.</p></li>
+<li><p>An internal web app presenting doctors with a bird’s-eye-view of all of their patients.</p></li>
+</ol>
 </div>
 
 
@@ -57,7 +73,7 @@
 <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="tutorial.html">My Code Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorial.html">Tutorial</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code.html">Code Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="requirements.html">Requirements</a></li>
@@ -68,7 +84,7 @@
 <ul>
   <li><a href="index.html">Documentation overview</a><ul>
       <li>Previous: <a href="index.html" title="previous chapter">Welcome to Sparkle’s documentation!</a></li>
-      <li>Next: <a href="tutorial.html" title="next chapter">My Code Tutorial</a></li>
+      <li>Next: <a href="tutorial.html" title="next chapter">Tutorial</a></li>
   </ul></li>
 </ul>
 </div>
