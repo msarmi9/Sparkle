@@ -19,7 +19,6 @@ def index():
 @login_required
 def dashboard():
     patients = User.query.filter_by(id=current_user.id).first().patients
-    print([(p.age, p.firstname) for p in patients])
     return render_template('dashboard.html', patients=patients)
 
 
@@ -63,8 +62,6 @@ def add_prescription(patient_id):
         db.session.add(rx)
         db.session.commit()
         return redirect(url_for('patient_profile', patient_id=patient_id))
-    else:
-        print(rx_form.errors)
     return render_template('add_prescription.html',
                            patient=patient, form=rx_form)
 
@@ -127,9 +124,6 @@ def login():
         if user is not None and user.check_password(password):
             login_user(user)
             return redirect(url_for('dashboard'))
-    else:
-        print(login_form.errors)
-
     return render_template('login.html', form=login_form)
 
 
@@ -154,7 +148,6 @@ def upload():
         file_dir_path = os.path.join(application.instance_path, 'files')
         file_path = os.path.join(file_dir_path, filename)
         f.save(file_path)
-
         return redirect(url_for('index'))
     return render_template('upload.html', form=file)
 
