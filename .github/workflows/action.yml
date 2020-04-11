@@ -1,4 +1,4 @@
-name: CI
+name: ci
 
 on: push
 
@@ -11,27 +11,20 @@ jobs:
     - name: Checkout master
       uses: actions/checkout@v2
       
-    - name: Conda setup
-      uses: s-weigand/setup-conda@v1.0.2
+    - name: Setup python
+      uses: actions/setup-python@v1.2.0
       with:
-        update-conda: true
-        conda-channels: conda-forge, anaconda
-    
-    - name: Update environment
-      run: | 
-        conda env create -n sparkle -f ./environment.yml
-        conda activate -n sparkle
-        which python  # Check for correct env
-        conda list    # and packages
-        
+        python-version: 3.7
+                  
     - name: Generate coverage report
       run: |
+        pip install pytest pytest-cov
         pytest --cov=./ --cov-report=xml
 
     - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v1.0.5
+      uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
         name: codecov-umbrella
-        fail_ci_if_error: true 
+        fail_ci_if_error: true
+        flags: unittests
