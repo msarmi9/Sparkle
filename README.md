@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/msarmi9/Sparkle/branch/master/graph/badge.svg)](https://codecov.io/gh/msarmi9/Sparkle)
+
 # _Sparkle_: A Multi-Platform System for Combating Medication Non-adherence with Machine Learning
 
 
