@@ -4,9 +4,9 @@
 	<div class="container main">
 		<h3>Dashboard</h3>
 		<br><br>
-		<div class="card-deck">
+		<div class="card-columns card-deck">
 			{% for p in patients %}
-				<div class="card" style="width: 18rem;">
+				<div class="card patient-card" style="width: 18rem;">
 				  <div class="card-body">
 				    <h5 class="card-title">{{ p.firstname }} {{ p.lastname }}</h5>
 				    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
