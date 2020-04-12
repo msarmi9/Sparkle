@@ -1,24 +1,28 @@
 name: ci
 
-on: push
+on: [push, pull_request]
 
 jobs:
   run:
     name: Codecov
-    runs-on: ubuntu-latest
-    steps:
-      
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix: 
+        os: [ubuntu-latest, macOS-latest]
+        python-version: [3.6, 3.7, 3.8]
+    
+    steps: 
     - name: Checkout master
       uses: actions/checkout@v2
       
-    - name: Setup python
+    - name: Set up python
       uses: actions/setup-python@v1.2.0
       with:
-        python-version: 3.7
+        python-version: ${{ matrix.python-version }}
                   
     - name: Generate coverage report
       run: |
-        pip install pytest pytest-cov
+        pip install -U pytest pytest-cov
         pytest --cov=./ --cov-report=xml
 
     - name: Upload coverage to Codecov
@@ -26,5 +30,5 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
         name: codecov-umbrella
-        fail_ci_if_error: true
         flags: unittests
+        fail_ci_if_error: true
