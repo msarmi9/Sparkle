@@ -1,12 +1,5 @@
-# from app import application, db
 from app.classes import User
 from app.routes import adherence_model
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
-from werkzeug.security import check_password_hash, generate_password_hash
-import requests
-import os
 
 
 def user_from_db(username):
