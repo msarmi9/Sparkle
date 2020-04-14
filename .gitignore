@@ -1,6 +1,3 @@
-# Ignore AWS access keys
-credentials/
-
 # Ignore project data
 data/
 
