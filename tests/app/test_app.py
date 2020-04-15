@@ -9,7 +9,7 @@ def user_from_db(username):
 
 
 def test_user_from_db():
-    user = User("andy", "cheon.andy@gmail.com", "123")
+    user = User(username="andy", email="cheon.andy@gmail.com", password="123")
     db.session.add(user)
     db.session.commit()
     
