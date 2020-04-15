@@ -1,0 +1,36 @@
+{% extends "index.html" %}
+
+{% block cards %}
+	<div class="container main">
+		<h3>Dashboard</h3>
+		<br><br>
+		<div class="card-columns card-deck">
+			{% for p in patients %}
+				<div class="card patient-card" style="width: 18rem;">
+				  <div class="card-body">
+				    <h5 class="card-title">{{ p.firstname }} {{ p.lastname }}</h5>
+				    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
+				    <div>
+				    	{% for rx in p.prescriptions %}
+					    	<button type="button"
+					    	        class="btn btn-{% if rx.remaining_pills <= 3 %}danger{% elif rx.remaining_pills > 3 and rx.remaining_pills <= 10 %}warning{% else %}success{% endif %}">
+								{{ rx.drug }}
+								<span class="badge badge-light">
+									{{ rx.remaining_pills }}
+								</span>
+							</button>
+						{% endfor %}
+				    </div>
+				    <div style="padding-top: 10px;">
+					    <a href="/patients/{{ p.id }}" class="card-link">View profile</a>
+					    <a href="/patients/{{ p.id }}/new-prescription" class="card-link">New prescription</a>
+					</div>
+				  </div>
+				</div>
+			{% endfor %}
+		</div>
+		<div>
+			<p><a href="/new-patient">Add patient</a></p>
+		</div>
+	</div>
+{% endblock %}

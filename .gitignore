@@ -18,3 +18,12 @@ __pycache__/
 
 # Ignore vim's .swp files
 .*.swp
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# Ignore local test DB
+sparkle.db
+

@@ -80,4 +80,3 @@ _In development on the_ [_`web` branch_](https://github.com/msarmi9/Sparkle/tree
 ![webapp](./images/web_app.png)
 
 _This is a screenshot of a drafted UI and is likely to change in the coming weeks._
-    
