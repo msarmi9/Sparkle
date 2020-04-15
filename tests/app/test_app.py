@@ -1,16 +1,11 @@
+"""
+Note: in order to test our database with a gh action,
+we will have to get fancy.
+"""
+# from app import db
 from app.classes import User
 from app.routes import adherence_model
 
-
-def user_from_db(username):
-    user = User.query.filter_by(username=username).first()
-    return user
-
-
-def test_user_from_db():
-    assert user_from_db("andy").email == "cheon.andy@gmail.com"
-    assert user_from_db("andy").username == "andy"
-    assert user_from_db("andy").check_password("123") == True
 
 
 def test_adherence_model():
