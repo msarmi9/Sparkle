@@ -1,3 +1,4 @@
+from app import db
 from app.classes import User
 from app.routes import adherence_model
 
@@ -8,6 +9,10 @@ def user_from_db(username):
 
 
 def test_user_from_db():
+    user = User("andy", "cheon.andy@gmail.com", "123")
+    db.session.add(user)
+    db.session.commit()
+    
     assert user_from_db("andy").email == "cheon.andy@gmail.com"
     assert user_from_db("andy").username == "andy"
     assert user_from_db("andy").check_password("123") == True
