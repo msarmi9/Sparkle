@@ -25,7 +25,7 @@ class MotionManager: ObservableObject {
     @Published var z: Double = 0.0
     @Published var sensorString: String = ""
     
-    let header = "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z, Roll, Yaw, Pitch\n"
+    let header = "Rotation_x, Rotation_y, Rotation_z\n"
     
     
     init() {
@@ -53,15 +53,12 @@ class MotionManager: ObservableObject {
                 // appending to arr
                 NSLog(String(sensor.timestamp))
                 self.sensorString = self.sensorString +
-                                    "\(sensor.userAcceleration.x)," +
-                                    "\(sensor.userAcceleration.y)," +
-                                    "\(sensor.userAcceleration.z)," +
+//                                    "\(sensor.userAcceleration.x)," +
+//                                    "\(sensor.userAcceleration.y)," +
+//                                    "\(sensor.userAcceleration.z)," +
                                     "\(sensor.rotationRate.x)," +
                                     "\(sensor.rotationRate.y)," +
                                     "\(sensor.rotationRate.z)" +
-                                    "\(sensor.attitude.roll)" +
-                                    "\(sensor.attitude.yaw)" +
-                                    "\(sensor.attitude.pitch)" +
                                     "\n"
                 
             }

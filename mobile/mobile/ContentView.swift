@@ -11,12 +11,9 @@ import SwiftUI
 
 // View
 struct ContentView: View {
-    
-
     var body: some View {
         VStack {
             Title()
-            Spacer().frame(height: 25)
             SeeSensors()
         }
     }
@@ -43,7 +40,7 @@ struct SeeSensors: View {
                     .font(.headline)
                 // maybe want to use a button here..
                 NavigationLink(destination: SensorLogView(watchSession: WatchSessionManager())){
-                    Text("See sensors")
+                    Text("See recordings")
                 }
             }
         }

@@ -11,6 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var isRecording: Bool = false // UI changes when this variable changes
     @ObservedObject var motion: MotionManager
+    @State var duration: Float = 0.0
     
 
     var body: some View {
@@ -21,12 +22,14 @@ struct ContentView: View {
                 // When isRecording = True
                 VStack {
                     isRecordingTrue(isRecording: $isRecording,
-                                    motion: motion)
-                    DurationView()
+                                    motion: motion,
+                                    duration: $duration)
+                    DurationView(duration: $duration)
                     }
             } else {
                 isRecordingFalse(isRecording: $isRecording,
-                                 motion: motion)
+                                 motion: motion,
+                                 duration: $duration)
             }
         }
     }
@@ -49,6 +52,7 @@ struct Title: View {
 struct isRecordingFalse: View {
     @Binding var isRecording: Bool
     @ObservedObject var motion: MotionManager
+    @Binding var duration: Float
     var body: some View {
         HStack {
             Image(systemName: "calendar")
@@ -56,7 +60,8 @@ struct isRecordingFalse: View {
             Button(action: {
                 self.isRecording.toggle()
                 self.motion.reset()
-                self.motion.startUpdates(Hz: 1.0/60)
+                self.motion.startUpdates(Hz: 1.0/5)
+                self.duration = 0.0
             }) {
                 Text("Take a pill")
             }
@@ -68,6 +73,7 @@ struct isRecordingFalse: View {
 struct isRecordingTrue: View {
     @Binding var isRecording: Bool
     @ObservedObject var motion: MotionManager
+    @Binding var duration: Float
     var body: some View {
         HStack {
             Image(systemName: "calendar")
@@ -87,7 +93,7 @@ struct isRecordingTrue: View {
 
 
 struct DurationView: View {
-    @State var duration = 0.0
+    @Binding var duration: Float
     let timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
 
     var body: some View {

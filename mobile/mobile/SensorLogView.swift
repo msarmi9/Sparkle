@@ -10,6 +10,7 @@ import SwiftUI
 import Combine
 import Amplify
 import WatchConnectivity
+import Alamofire
 // https://jasonzurita.com/bare-minimum-for-apple-watch-communication/
 // https://forums.developer.apple.com/thread/125664
 // https://gist.github.com/filsv/55febaea46b6d15d6309a7da7296ec3a
@@ -48,18 +49,46 @@ struct Message: Identifiable {
     var dateString: String
 }
 
+// PUT HTTP Alamofire stuff here!
+struct flaskResponse: Decodable {
+    let pred_string: String
+    let pred: Float
+}
+
+// exmaple HTTP parameters:
+// let parameters: [String: String] = [
+//     "patient_id": "12345",
+//     "timestamp": "2019-04-09",
+//     "data": "0,0.3,0.4\n1,1,1\n1,1,1"
+//     ]
+func sendPost(parameters: [String: String], _ completion: @escaping (String?, Float?) -> Void){
+    // the completion allows me to return the pred
+    // https://stackoverflow.com/questions/51504239/difficulty-with-swift-alamofire-completion-handlers
+    AF.request("http://sparkle-env.eba-b8vqgrb3.us-west-2.elasticbeanstalk.com/send-data",
+               method: .post,
+               parameters: parameters,
+               encoder: JSONParameterEncoder.default).responseDecodable(of: flaskResponse.self) { response in
+//                    debugPrint(response)
+                guard let flaskresponse = response.value else { return }
+                let pred_string = flaskresponse.pred_string
+                let pred = flaskresponse.pred
+                NSLog("Successfully received a response with\npred_string: \(pred_string)\npred: \(pred)")
+                completion(pred_string, pred)
+    }
+}
+
+
 
 // NSObject is a base class for ObjC objects
 final class WatchSessionManager: NSObject, ObservableObject {
-    @Published
-    var x: String = "0.0"
-    @Published
-    var y: String = "0.0"
-    @Published
-    var z: String = "0.0"
+    @Published var x: String = "0.0"
+    @Published var y: String = "0.0"
+    @Published var z: String = "0.0"
     
-    @Published
-    var messagesReceived: [Message] = []
+    @Published var messagesReceived: [Message] = []
+    
+    @Published var pred_string: String = "You haven't taken medication recently."
+    @Published var pred: Float = 0.0
     
     override init() {
         super.init()
@@ -116,7 +145,18 @@ extension WatchSessionManager: WCSessionDelegate {
             // now receiving and uploading sensordata to s3
             let sensorString = String(m["sensorString"] ?? "nil")
             let dateString = uploadData(dataString: sensorString)
-            self.messagesReceived.append(Message(dateString: dateString))
+            
+            // send post request
+            sendPost(parameters: ["data": String(m["sensorString"] ?? "nil")]) { pred_string, pred  in
+                guard let pred_string = pred_string else { return }
+                guard let pred = pred else { return }
+                self.pred_string = pred_string
+                self.pred = pred
+            }
+            
+            
+            // updated UI
+            self.messagesReceived.append(Message(dateString: dateString + ".csv"))
             
         }
     }
@@ -130,8 +170,12 @@ struct SensorLogView: View {
     var watchSession: WatchSessionManager
     
     var body: some View {
-        List(watchSession.messagesReceived) { message in
-            Text(message.dateString)
+        VStack {
+            Text("Status:").bold()
+            Text(watchSession.pred_string).italic().padding(.bottom, 50)
+            List(watchSession.messagesReceived) { message in
+                Text(message.dateString)
+            }
         }
     }
 }
