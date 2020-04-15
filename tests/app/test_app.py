@@ -9,10 +9,12 @@ def user_from_db(username):
 
 
 def test_user_from_db():
+    # creating dummy user
     user = User(username="andy", email="cheon.andy@gmail.com", password="123")
     db.session.add(user)
     db.session.commit()
-    
+   
+    # verifying dummy user in db
     assert user_from_db("andy").email == "cheon.andy@gmail.com"
     assert user_from_db("andy").username == "andy"
     assert user_from_db("andy").check_password("123") == True
