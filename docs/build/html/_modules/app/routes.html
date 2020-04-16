@@ -32,10 +32,19 @@
             
   <h1>Source code for app.routes</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">application</span><span class="p">,</span> <span class="n">db</span>
-<span class="kn">from</span> <span class="nn">app.classes</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">app.classes</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">User</span><span class="p">,</span>
+    <span class="n">Patient</span><span class="p">,</span>
+    <span class="n">Prescription</span><span class="p">,</span>
+    <span class="n">PrescriptionForm</span><span class="p">,</span>
+    <span class="n">Patient</span><span class="p">,</span>
+    <span class="n">PatientForm</span><span class="p">,</span>
+    <span class="n">RegistrationForm</span><span class="p">,</span>
+    <span class="n">LogInForm</span><span class="p">,</span>
+    <span class="n">UploadFileForm</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">render_template</span><span class="p">,</span> <span class="n">redirect</span><span class="p">,</span> <span class="n">url_for</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">jsonify</span>
 <span class="kn">from</span> <span class="nn">flask_login</span> <span class="kn">import</span> <span class="n">current_user</span><span class="p">,</span> <span class="n">login_user</span><span class="p">,</span> <span class="n">login_required</span><span class="p">,</span> <span class="n">logout_user</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
