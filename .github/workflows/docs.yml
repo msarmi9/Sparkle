@@ -1,0 +1,16 @@
+name: docs
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout master
+        uses: actions/checkout@v1
+
+      - name: Build docs
+        uses: ammaraskar/sphinx-action@master
+        with:
+          docs-folder: docs
