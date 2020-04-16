@@ -7,8 +7,8 @@
 # http://www.sphinx-doc.org/en/master/config
 
 # -- .md -> .rst setup  ------------------------------------------------------
-import recommonmark
-from recommonmark.parser import CommonMarkParser
+# import recommonmark
+# from recommonmark.parser import CommonMarkParser
 
 # -- Path setup --------------------------------------------------------------
 
