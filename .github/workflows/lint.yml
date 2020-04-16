@@ -1,9 +1,9 @@
 name: lint
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
-  lint:
+  build:
     runs-on: ubuntu-latest
 
     steps:

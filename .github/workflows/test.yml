@@ -1,8 +1,8 @@
 name: ci
-on: [push, pull_request]
+on: [push]
 
 jobs:
-  ci:
+  build:
     runs-on: ubuntu-latest
     
     steps: 
