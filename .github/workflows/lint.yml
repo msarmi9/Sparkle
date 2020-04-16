@@ -25,6 +25,6 @@ jobs:
           pip install --upgrade pip
           pip install --upgrade flake8
           # Fail on syntax errors, undefined names, and unused imports
-          flake8 . --select=E9,F4,F63,F7,F82,F84 --statistics
+          flake8 . --select=E9,F63,F7,F82,F84 --statistics
           # Treat all other errors as warnings
           flake8 . --exit-zero --max-complexity=10 --max-line-length=88 --statistics

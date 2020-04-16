@@ -7,9 +7,9 @@
 # http://www.sphinx-doc.org/en/master/config
 
 # -- .md -> .rst setup  ------------------------------------------------------
-import recommonmark
-from recommonmark.parser import CommonMarkParser
-
+# import recommonmark
+# from recommonmark.parser import CommonMarkParser
+#
 # -- Path setup --------------------------------------------------------------
 
 # If extensions (or modules to document with autodoc) are in another directory,

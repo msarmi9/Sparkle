@@ -4,12 +4,6 @@
 import os
 import glob
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from pyspark import SparkContext
-from pyspark.sql import SparkSession
-from pyspark.sql.types import *
-
 
 # Designate your own data folder path
 path = "/Users/stephj/Desktop/git/sparkle/pills-data"

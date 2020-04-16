@@ -1,7 +1,4 @@
-import os
-import glob
 import math
-import numpy as np
 import pandas as pd
 
 
@@ -22,35 +19,45 @@ def rename_columns(df):
     SensorLog's data comes in two different types of column names depending on Apple Watch version.
     """
     try:
-        df = df[['loggingSample(N)',
-                 'gyroRotationX(rad/s)',
-                 'gyroRotationY(rad/s)',
-                 'gyroRotationZ(rad/s)',
-                 'accelerometerAccelerationX(G)',
-                 'accelerometerAccelerationY(G)',
-                 'accelerometerAccelerationZ(G)',
-                 'avAudioRecorderPeakPower(dB)',
-                 'avAudioRecorderAveragePower(dB)']]
+        df = df[
+            [
+                "loggingSample(N)",
+                "gyroRotationX(rad/s)",
+                "gyroRotationY(rad/s)",
+                "gyroRotationZ(rad/s)",
+                "accelerometerAccelerationX(G)",
+                "accelerometerAccelerationY(G)",
+                "accelerometerAccelerationZ(G)",
+                "avAudioRecorderPeakPower(dB)",
+                "avAudioRecorderAveragePower(dB)",
+            ]
+        ]
     except:
-        df = df[['loggingSample',
-                 'gyroRotationX',
-                 'gyroRotationY',
-                 'gyroRotationZ',
-                 'accelerometerAccelerationX',
-                 'accelerometerAccelerationY',
-                 'accelerometerAccelerationZ',
-                 'avAudioRecorderPeakPower',
-                 'avAudioRecorderAveragePower']]
+        df = df[
+            [
+                "loggingSample",
+                "gyroRotationX",
+                "gyroRotationY",
+                "gyroRotationZ",
+                "accelerometerAccelerationX",
+                "accelerometerAccelerationY",
+                "accelerometerAccelerationZ",
+                "avAudioRecorderPeakPower",
+                "avAudioRecorderAveragePower",
+            ]
+        ]
 
-    df.columns = ['loggingSample',
-                  'gyro_x',
-                  'gyro_y',
-                  'gyro_z',
-                  'accel_x',
-                  'accel_y',
-                  'accel_z',
-                  'audio_peak_power',
-                  'audio_average_power']
+    df.columns = [
+        "loggingSample",
+        "gyro_x",
+        "gyro_y",
+        "gyro_z",
+        "accel_x",
+        "accel_y",
+        "accel_z",
+        "audio_peak_power",
+        "audio_average_power",
+    ]
     return df
 
 
@@ -71,9 +78,7 @@ def window_data(df, n_windows):
     Partition data into equal sized windows and assign 'window' id.
     'window' id ranges from 1 to n_windows.
     """
-    df["window"] = pd.qcut(df["loggingSample"],
-                           n_windows,
-                           range(1, n_windows+1))
+    df["window"] = pd.qcut(df["loggingSample"], n_windows, range(1, n_windows + 1))
 
     return df
 
@@ -84,12 +89,20 @@ def pivot_data(df):
     Ex) Input df columns: ['loggingSample', 'gyro_x', 'gyro_y',.., 'audio_average_power', 'window']
     Output df columns: ['gyro_x_mean_1', 'gyro_x_mean_2',...,'audio_average_power_std_10']
     """
-    df = df.groupby('window')[["gyro_x", "gyro_y", "gyro_z",
-                               "accel_x", "accel_y", "accel_z",
-                               "audio_peak_power", "audio_average_power"]]\
-        .agg(["mean", "min", "max", "std"])
+    df = df.groupby("window")[
+        [
+            "gyro_x",
+            "gyro_y",
+            "gyro_z",
+            "accel_x",
+            "accel_y",
+            "accel_z",
+            "audio_peak_power",
+            "audio_average_power",
+        ]
+    ].agg(["mean", "min", "max", "std"])
 
-    df.columns = ['_'.join(col) for col in df.columns]
+    df.columns = ["_".join(col) for col in df.columns]
     df["temp"] = None  # need None column to use as an index for pivot
     df = df.reset_index()
 
@@ -124,6 +137,6 @@ def concat_files(paths, file_name):
     for i, path in enumerate(paths):
         print(i)
         df = pd.concat([df, process_file(path)])
-    df.to_csv('data/'+file_name+'.csv', index=False)
-    
+    df.to_csv("data/" + file_name + ".csv", index=False)
+
     return df

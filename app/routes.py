@@ -1,8 +1,17 @@
 from app import application, db
-from app.classes import *
+from app.classes import (
+    User,
+    Patient,
+    Prescription,
+    PrescriptionForm,
+    Patient,
+    PatientForm,
+    RegistrationForm,
+    LogInForm,
+    UploadFileForm,
+)
 from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
-import logging
 import os
 import numpy as np
 from io import StringIO
