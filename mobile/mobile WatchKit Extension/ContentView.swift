@@ -11,7 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var isRecording: Bool = false // UI changes when this variable changes
     @ObservedObject var motion: MotionManager
-    @State var duration: Float = 0.0
+    @State private var duration: Float = 0.0
     
 
     var body: some View {
