@@ -9,7 +9,6 @@ from wtforms import (
     StringField,
     SubmitField,
     IntegerField,
-    # TextAreaField,
 )
 from wtforms.validators import DataRequired
 
