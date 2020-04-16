@@ -53,6 +53,7 @@ struct isRecordingFalse: View {
     @Binding var isRecording: Bool
     @ObservedObject var motion: MotionManager
     @Binding var duration: Float
+
     var body: some View {
         HStack {
             Image(systemName: "calendar")
