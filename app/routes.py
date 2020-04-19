@@ -38,7 +38,7 @@ def patient_profile(patient_id):
 @application.route(
     "/patients/<int:patient_id>/new-prescription", methods=("GET", "POST")
 )
-@login_required
+# @login_required
 def add_prescription(patient_id):
     rx_form = PrescriptionForm()
     patient = Patient.query.filter_by(id=patient_id).first()

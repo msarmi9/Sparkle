@@ -51,29 +51,46 @@ class Patient(db.Model):
 
 
 class Prescription(db.Model):
+    """
+    Prescription model.
+
+    drug = name of drug
+    desc = purpose/description of drug/prescription (aka "indication")
+    quant = number of units per fill cycle
+    amount = number of units taken per intake
+    duration = number of days in entire treatment
+    refills = number of expected refills throughout duration
+
+    cycle_unit = unit of repeat e.g. day, week, month
+    Example Rx: "twice daily" --> freq=2, cycle_n=1, cycle_unit=day
+    Example Rx: "once every other day" --> freq=1, cycle_n=2, cycle_unit=day
+    """
     id = db.Column(db.Integer, primary_key=True)
+
+    # Prescription-related
     drug = db.Column(db.String(100), unique=False, nullable=False)
     desc = db.Column(db.String(500), unique=False, nullable=False)
+    strength = db.Column(db.Integer, unique=False, nullable=False)
+    strength_unit = db.Column(db.String(20), unique=False, nullable=False)
+    quantity = db.Column(db.Integer, unique=False, nullable=False)
+    form = db.Column(db.String(20), unique=False, nullable=False)
+    amount = db.Column(db.Integer, unique=False, nullable=False)
+    route = db.Column(db.String(10), unique=False, nullable=False)
     freq = db.Column(db.Integer, unique=False, nullable=False)
-    cycle_n = db.Column(db.Integer, unique=False, nullable=False)
-    cycle_unit = db.Column(db.String(50), unique=False, nullable=False)
+    freq_repeat = db.Column(db.Integer, unique=False, nullable=False)
+    freq_repeat_unit = db.Column(db.String(10), unique=False, nullable=False)
+    duration = db.Column(db.Integer, unique=False, nullable=False)
+    duration_unit = db.Column(db.String(10), unique=False, nullable=False)
+    refills = db.Column(db.Integer, unique=False, nullable=False)
+    time_of_day = db.Column(db.String(10), unique=False, nullable=False)
+    
+    # Metadata
+    created = db.Column(db.DateTime(), unique=False, nullable=False)
+    start_date = db.Column(db.DateTime(), unique=False, nullable=False)
+    next_refill = db.Column(db.DateTime(), unique=False, nullable=True)
+    days_remaining = db.Column(db.Integer, unique=False, nullable=False)
 
-    # freq = number of times per cycle e.g. 2 (twice), 1 (once)
-    # cycle_n = every n <unit>
-    # cycle_unit = unit of repeat e.g. day, week, month
-    # Example Rx: "twice daily" --> freq=2, cycle_n=1, cycle_unit=day
-    # Example Rx: "once every other day" --> freq=1, cycle_n=2, cycle_unit=day
-
-    start_pills = db.Column(db.Integer, unique=False, nullable=False)
-    remaining_pills = db.Column(db.Integer, unique=False, nullable=False)
-    last_refill_date = db.Column(db.String(20), unique=False, nullable=False)
-    next_refill_date = db.Column(db.String(20), unique=False, nullable=False)
-
-    # start_pills = starting number of pills for this refill cycle
-    # remaining_pills = remaining number of pills for this refill cycle
-    # last_refill_date = when the Rx was last refilled (if first time, then date of first fill)
-    # next_refill_date = when the Rx will be next refilled
-
+    # Foreign keys
     patient_id = db.Column(db.Integer, db.ForeignKey("patient.id"), nullable=False)
 
 
