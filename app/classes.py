@@ -23,6 +23,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
+
+    # One-to-many relationship
     patients = db.relationship("Patient", backref="user", lazy=True)
 
     def __init__(self, firstname, lastname, username, email, password):
@@ -46,7 +48,11 @@ class Patient(db.Model):
     email = db.Column(db.String(80), unique=True, nullable=True)
     age = db.Column(db.Integer, unique=False, nullable=False)
     weight = db.Column(db.Integer, unique=False, nullable=False)
+
+    # Foreign key
     doctor_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+
+    # One-to-many relationship
     prescriptions = db.relationship("Prescription", backref="patient", lazy=True)
 
 
@@ -104,6 +110,18 @@ class Prescription(db.Model):
     # Foreign keys
     patient_id = db.Column(db.Integer, db.ForeignKey("patient.id"), nullable=False)
 
+    # One-to-many relationship
+    intakes = db.relationship("Intake", backref="prescription", lazy=True)
+
+
+class Intake(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    s3_url = db.Column(db.String(500), unique=True, nullable=True)
+    recording_data = db.Column(db.JSON(), unique=False, nullable=True)
+    timestamp = db.Column(db.DateTime(), unique=False, nullable=False)
+
+    # Foreign key
+    prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable=False)
 
 class PatientForm(FlaskForm):
     firstname = StringField("First name", validators=[DataRequired()])
