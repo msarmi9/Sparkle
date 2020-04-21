@@ -56,14 +56,23 @@ class Prescription(db.Model):
 
     drug = name of drug
     desc = purpose/description of drug/prescription (aka "indication")
-    quant = number of units per fill cycle
+    strength = how much of the drug per tablet (e.g. 30mg)
+    strength_unit = unit for strength (e.g. mg, ug)
+    quantity = number of tablets per fill cycle
+    form = form factor of pill (for now, only tablet aka 'tab')
     amount = number of units taken per intake
-    duration = number of days in entire treatment
+    route = how it gets into the body (only oral for now)
+    freq = how many times per freq_repeat_unit
+    freq_repeat = every <freq_repeat> <freq_repeat_unit>
+    freq_repeat_unit = how often a day of intake repeats (e.g. every 3 days)
+    duration = length of entire treatment
     refills = number of expected refills throughout duration
+    time_of_day = time pill(s) should be taken (e.g. AM, PM)
 
-    cycle_unit = unit of repeat e.g. day, week, month
-    Example Rx: "twice daily" --> freq=2, cycle_n=1, cycle_unit=day
-    Example Rx: "once every other day" --> freq=1, cycle_n=2, cycle_unit=day
+    created = date this Prescription was created; auto-filled
+    start_date = start date of first intake (regardless of refill)
+    next_refill = date of next refill; auto-filled
+    days_remaining = days until next refill; auto-filled nightly
     """
     id = db.Column(db.Integer, primary_key=True)
 
@@ -82,13 +91,15 @@ class Prescription(db.Model):
     duration = db.Column(db.Integer, unique=False, nullable=False)
     duration_unit = db.Column(db.String(10), unique=False, nullable=False)
     refills = db.Column(db.Integer, unique=False, nullable=False)
-    time_of_day = db.Column(db.String(10), unique=False, nullable=False)
+    time_of_day = db.Column(db.String(10), unique=False, nullable=True)
     
     # Metadata
-    created = db.Column(db.DateTime(), unique=False, nullable=False)
     start_date = db.Column(db.DateTime(), unique=False, nullable=False)
-    next_refill = db.Column(db.DateTime(), unique=False, nullable=True)
-    days_remaining = db.Column(db.Integer, unique=False, nullable=False)
+    created = db.Column(db.DateTime(), unique=False, nullable=False)
+    last_refill_date = db.Column(db.DateTime(), unique=False, nullable=True)
+    next_refill_date = db.Column(db.DateTime(), unique=False, nullable=True)
+    refill_num = db.Column(db.Integer, unique=False, nullable=True)
+    days_until_refill = db.Column(db.Integer, unique=False, nullable=True)
 
     # Foreign keys
     patient_id = db.Column(db.Integer, db.ForeignKey("patient.id"), nullable=False)
@@ -104,13 +115,18 @@ class PatientForm(FlaskForm):
 
 class PrescriptionForm(FlaskForm):
     drug = StringField("Drug name", validators=[DataRequired()])
-    desc = StringField("Purpose / description", validators=[DataRequired()])
-    freq = IntegerField("Frequency", validators=[DataRequired()])
-    cycle_n = IntegerField("Cycle number", validators=[DataRequired()])
-    cycle_unit = StringField("Cycle unit", validators=[DataRequired()])
-    start_pills = IntegerField("Starting number of pills", validators=[DataRequired()])
-    # remaining_pills automatically populated in new_prescription route
-    last_refill_date = StringField("Latest refill date", validators=[DataRequired()])
+    # desc = StringField("Purpose / description", validators=[DataRequired()])
+    # strength = IntegerField("Strength", validators=[DataRequired()])
+    # strength_unit = StringField("Strength unit", validators=[DataRequired()])
+    # quantity = IntegerField("Quantity", validators=[DataRequired()])
+    # form = StringField("Form", validators=[DataRequired()])
+    # amount = IntegerField("Amount", validators=[DataRequired()])
+    # route = StringField("Route", validators=[DataRequired()])
+    # duration = IntegerField("Duration", validators=[DataRequired()])
+    # duration_unit = StringField("Duration unit", validators=[DataRequired()])
+    # refills = IntegerField("# Refills", validators=[DataRequired()])
+    # dosage = StringField("Dosage", validators=[DataRequired()])
+    # # time_of_day_am = 
 
 
 class RegistrationForm(FlaskForm):
