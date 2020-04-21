@@ -8,17 +8,22 @@
 			{% for p in patients %}
 				<div class="card patient-card" style="width: 18rem;">
 				  <div class="card-body">
-				    <h5 class="card-title">{{ p.firstname }} {{ p.lastname }}</h5>
+				    <h5 class="card-title">{{ p.lastname }}, {{ p.firstname }}</h5>
 				    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
+				    <h6 class="card-subtitle mb-2 text-muted">
+				    	{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}
+					</h6>
 				    <div>
 				    	{% for rx in p.prescriptions %}
+				    		<!-- {% if rx.days_until_refill %} -->
 					    	<button type="button"
-					    	        class="btn btn-{% if rx.remaining_pills <= 3 %}danger{% elif rx.remaining_pills > 3 and rx.remaining_pills <= 10 %}warning{% else %}success{% endif %}">
+					    	        class="btn btn-{% if rx.days_until_refill <= 3 %}danger{% elif rx.days_until_refill > 3 and rx.days_until_refill <= 10 %}warning{% else %}success{% endif %}">
 								{{ rx.drug }}
 								<span class="badge badge-light">
-									{{ rx.remaining_pills }}
+									{{ rx.days_until_refill }}
 								</span>
 							</button>
+							<!-- {% endif %} -->
 						{% endfor %}
 				    </div>
 				    <div style="padding-top: 10px;">
