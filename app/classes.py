@@ -119,6 +119,7 @@ class Intake(db.Model):
     s3_url = db.Column(db.String(500), unique=True, nullable=True)
     recording_data = db.Column(db.JSON(), unique=False, nullable=True)
     timestamp = db.Column(db.DateTime(), unique=False, nullable=False)
+    on_time = db.Column(db.Boolean(), unique=False, nullable=False)
 
     # Foreign key
     prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable=False)
