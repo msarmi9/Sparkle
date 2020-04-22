@@ -186,8 +186,13 @@ class Prescription(db.Model):
     # One-to-many relationship
     intakes = db.relationship("Intake", backref="prescription", lazy=True)
 
-    def get_intake_stats(self):
-        pass
+    def has_started(self):
+        return datetime.now() >= self.start_date
+
+    def is_adherent(self, on_time_threshold=0.9,
+                    required_intakes_threshold=0.9):
+        return (self.frac_on_time() >= on_time_threshold and
+                self.frac_required_intakes() >= required_intakes_threshold)
 
     def frac_on_time(self):
         '''

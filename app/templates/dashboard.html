@@ -6,7 +6,7 @@
 		<br><br>
 		<div class="card-columns card-deck">
 			{% for p in patients %}
-				<div class="card patient-card" style="width: 18rem;">
+				<div class="card bg-light patient-card" style="width: 18rem;">
 				  <div class="card-body">
 				    <h5 class="card-title">{{ p.lastname }}, {{ p.firstname }}</h5>
 				    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
@@ -16,12 +16,12 @@
 					<h6 class="card-subtitle mb-2">Adherent: {{ p.is_adherent() }}</h6>
 				    <div>
 				    	{% for rx in p.prescriptions %}
-				    		{% if rx.days_until_refill is none %}
-				    			<span class="badge badge-pill badge-primary">
+				    		{% if not rx.has_started() %}
+				    			<span class="badge badge-pill badge-secondary">
 				    				{{ rx.drug }}
 				    			</span>
 				    		{% else %}
-				    			<span class="badge badge-pill badge-{% if rx.days_until_refill <= 3 %}danger{% elif rx.days_until_refill > 3 and rx.days_until_refill <= 10 %}warning{% else %}success{% endif %}">
+				    			<span class="badge badge-pill badge-{% if not rx.is_adherent() %}danger{% else %}success{% endif %}">
 				    				{{ rx.drug }}
 				    			</span>
 							{% endif %}
