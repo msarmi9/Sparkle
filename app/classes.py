@@ -198,6 +198,36 @@ class Prescription(db.Model):
     def get_intake_stats(self):
         pass
 
+    def frac_on_time(self):
+        '''
+        Return fraction of intakes that were on time, out of all recorded
+        intakes.
+        '''
+        if len(self.intakes) == 0:
+            return 1.0
+        on_time = Intake.query.filter_by(prescription_id=self.id,
+                                         on_time=True).all()
+        return len(on_time) / len(self.intakes)
+
+    def frac_required_intakes(self):
+        '''
+        Return fraction of recorded intakes, out of total number of intakes
+        that are supposed to be recorded by this time.
+        '''
+
+        # start of treatment until yesterday
+        days_since_start = (datetime.now() - self.start_date).days - 1
+        if days_since_start <= 0:
+            return 1.0
+        pills_per_day = int(self.amount * self.freq /
+                            (self.freq_repeat *
+                            DAY_STD[self.freq_repeat_unit]))
+        n_required_intakes = days_since_start * pills_per_day
+
+        if n_required_intakes == 0:
+            return 1.0
+        return len(self.intakes) / n_required_intakes
+
 
 class Intake(db.Model):
     id = db.Column(db.Integer, primary_key=True)
