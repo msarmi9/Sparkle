@@ -1,7 +1,9 @@
 from app.utils import *
+from collections import defaultdict
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
 from flask_wtf.file import FileRequired
+import numpy as np
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 from wtforms import (
@@ -56,7 +58,7 @@ class Patient(db.Model):
     # One-to-many relationship
     prescriptions = db.relationship("Prescription", backref="patient", lazy=True)
 
-    def get_all_intakes(self, start=None, end=None):
+    def all_intakes(self, start=None, end=None):
         '''
         Return Intake objects associated with this Patient.
         start: datetime - optional start date for filtering
@@ -71,71 +73,60 @@ class Patient(db.Model):
             all_intakes += rx.intakes
         return all_intakes
 
-    def is_adherent(self, on_time_threshold=0.95, adherence_threshold=0.95):
+    def adherence_stats(self):
         '''
-        Return True if Patient is considered adherent; False otherwise.
-        on_time_threshold: float - percentage of on-time intakes to be considered adherent
-        adherence_threshold: float - percentage of recorded intakes (of prescribed total
-                             up to this date) to be considered adherent
-
-        A Patient is deemed "adherent" if their intakes are mostly:
-          - on-time (on time intakes / all intakes >= on_time_threshold)
-          - AND fewer than 5% missed intakes
-            (recorded intakes / total prescribed intakes >= 0.95
-            where total prescribed intakes is calculated from pills per day
-            and difference between current day and start date)
-
-        Adherence requires _both_ of these conditions to be true.
-        Violating _either_ of these conditions makes a patient "non-adherent".
-
-        A patient may be non-adherent even if they took all prescribed pills but were 
-        late in doing so more than 5% of the time.
-        A patient may be non-adherent even if they took pills on time but skipped 
-        pills altogether more than 5% of the time.
+        Return adherence statistics on a per-Prescription basis.
+        return: dict - <prescription ID>: <details>
+        Example:
+        {
+            1: {
+                'frac_on_time': 0.932,
+                'frac_required_intakes': 0.976
+            },
+            19: {
+                'frac_on_time': 0.389,
+                'frac_required_intakes': 1.0
+            },
+            ...
+        }
         '''
-
-        # On-time intakes
-        all_intakes = self.get_all_intakes()
-        
-        if len(all_intakes) > 0:
-            on_time_intakes = list(filter(lambda intake: intake.on_time,
-                                          all_intakes))
-            frac_on_time = len(on_time_intakes) / len(all_intakes)
-            on_time = True if frac_on_time >= on_time_threshold else False
-        else:
-            on_time = True
-
-        # Adhered intakes (patient took the amount they were supposed to up
-        # to this point in time)
-        total_prescribed_intakes = 0
-
-        print(f'NAME: {self.firstname} {self.lastname}')
-        print(f'RECORDED INTAKES: {all_intakes}')
-        print(f'ON TIME: {on_time}')
-
+        stats = defaultdict(lambda: defaultdict(float))
         for rx in self.prescriptions:
-            print(f'\n--> RX: {rx.drug}')
-            days_since_start = (datetime.now() - rx.start_date).days
+            stats[rx.id]['frac_on_time'] = rx.frac_on_time()
+            stats[rx.id]['frac_required_intakes'] = rx.frac_required_intakes()
+        return dict(stats)
 
-            print(f'--> DAYS SINCE START: {days_since_start}')
+    def frac_adhering_prescriptions(self, on_time_threshold=0.9,
+                                    required_intakes_threshold=0.9):
+        if len(self.prescriptions) == 0:
+            return {}
+        adherence = {}
+        frac_on_time_by_rx = []
+        frac_required_intakes_by_rx = []
+        stats = self.adherence_stats()
+        for rx_id, details in stats.items():
+            frac_on_time_by_rx.append(details['frac_on_time'])
+            frac_required_intakes_by_rx.append(details['frac_required_intakes'])
 
-            pills_per_day = rx.amount * rx.freq / (rx.freq_repeat * DAY_STD[rx.freq_repeat_unit])
+        adherence['on_time'] = \
+            (np.sum(np.array(frac_on_time_by_rx) >= on_time_threshold) /
+            len(frac_on_time_by_rx))
 
-            print(f'--> PILLS/DAY: {pills_per_day}')
+        adherence['required_intakes'] = \
+            (np.sum(np.array(frac_required_intakes_by_rx) >=
+                             required_intakes_threshold) /
+             len(frac_required_intakes_by_rx))
+        return adherence
 
-            this_rx_intakes = days_since_start * pills_per_day
-            if this_rx_intakes > 0:
-                total_prescribed_intakes += days_since_start * pills_per_day
-
-        print(f'--> PRESCRIBED INTAKES: {total_prescribed_intakes}')            
-
-        if total_prescribed_intakes > 0:
-            frac_adherent = len(all_intakes) / total_prescribed_intakes
-            adherent = True if frac_adherent >= adherence_threshold else False
-        else:
-            adherent = True
-
-        return on_time and adherent
+    def is_adherent(self, on_time_threshold=0.9,
+                    required_intakes_threshold=0.9):
+        stats = self.adherence_stats()
+        for rx_id, details in stats.items():
+            if (details['frac_on_time'] <= on_time_threshold or
+                details['frac_required_intakes'] <= 
+                required_intakes_threshold):
+                return False
+        return True
 
 
 class Prescription(db.Model):
