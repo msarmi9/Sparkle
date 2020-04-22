@@ -13,17 +13,18 @@
 				    <h6 class="card-subtitle mb-2 text-muted">
 				    	{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}
 					</h6>
+					<h6 class="card-subtitle mb-2">Adherent: {{ p.is_adherent() }}</h6>
 				    <div>
 				    	{% for rx in p.prescriptions %}
-				    		<!-- {% if rx.days_until_refill %} -->
-					    	<button type="button"
-					    	        class="btn btn-{% if rx.days_until_refill <= 3 %}danger{% elif rx.days_until_refill > 3 and rx.days_until_refill <= 10 %}warning{% else %}success{% endif %}">
-								{{ rx.drug }}
-								<span class="badge badge-light">
-									{{ rx.days_until_refill }}
-								</span>
-							</button>
-							<!-- {% endif %} -->
+				    		{% if rx.days_until_refill is none %}
+				    			<span class="badge badge-pill badge-primary">
+				    				{{ rx.drug }}
+				    			</span>
+				    		{% else %}
+				    			<span class="badge badge-pill badge-{% if rx.days_until_refill <= 3 %}danger{% elif rx.days_until_refill > 3 and rx.days_until_refill <= 10 %}warning{% else %}success{% endif %}">
+				    				{{ rx.drug }}
+				    			</span>
+							{% endif %}
 						{% endfor %}
 				    </div>
 				    <div style="padding-top: 10px;">

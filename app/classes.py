@@ -1,3 +1,4 @@
+from app.utils import *
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
 from flask_wtf.file import FileRequired
@@ -54,6 +55,87 @@ class Patient(db.Model):
 
     # One-to-many relationship
     prescriptions = db.relationship("Prescription", backref="patient", lazy=True)
+
+    def get_all_intakes(self, start=None, end=None):
+        '''
+        Return Intake objects associated with this Patient.
+        start: datetime - optional start date for filtering
+        end: datetime - optional end date for filtering
+
+        TODO: Implement start, end filtering
+        NOTE: There's probably a better way of doing this.  Perhaps setting Patient
+              as a foreign key in Intake?
+        '''
+        all_intakes = []
+        for rx in self.prescriptions:
+            all_intakes += rx.intakes
+        return all_intakes
+
+    def is_adherent(self, on_time_threshold=0.95, adherence_threshold=0.95):
+        '''
+        Return True if Patient is considered adherent; False otherwise.
+        on_time_threshold: float - percentage of on-time intakes to be considered adherent
+        adherence_threshold: float - percentage of recorded intakes (of prescribed total
+                             up to this date) to be considered adherent
+
+        A Patient is deemed "adherent" if their intakes are mostly:
+          - on-time (on time intakes / all intakes >= on_time_threshold)
+          - AND fewer than 5% missed intakes
+            (recorded intakes / total prescribed intakes >= 0.95
+            where total prescribed intakes is calculated from pills per day
+            and difference between current day and start date)
+
+        Adherence requires _both_ of these conditions to be true.
+        Violating _either_ of these conditions makes a patient "non-adherent".
+
+        A patient may be non-adherent even if they took all prescribed pills but were 
+        late in doing so more than 5% of the time.
+        A patient may be non-adherent even if they took pills on time but skipped 
+        pills altogether more than 5% of the time.
+        '''
+
+        # On-time intakes
+        all_intakes = self.get_all_intakes()
+        
+        if len(all_intakes) > 0:
+            on_time_intakes = list(filter(lambda intake: intake.on_time,
+                                          all_intakes))
+            frac_on_time = len(on_time_intakes) / len(all_intakes)
+            on_time = True if frac_on_time >= on_time_threshold else False
+        else:
+            on_time = True
+
+        # Adhered intakes (patient took the amount they were supposed to up
+        # to this point in time)
+        total_prescribed_intakes = 0
+
+        print(f'NAME: {self.firstname} {self.lastname}')
+        print(f'RECORDED INTAKES: {all_intakes}')
+        print(f'ON TIME: {on_time}')
+
+        for rx in self.prescriptions:
+            print(f'\n--> RX: {rx.drug}')
+            days_since_start = (datetime.now() - rx.start_date).days
+
+            print(f'--> DAYS SINCE START: {days_since_start}')
+
+            pills_per_day = rx.amount * rx.freq / (rx.freq_repeat * DAY_STD[rx.freq_repeat_unit])
+
+            print(f'--> PILLS/DAY: {pills_per_day}')
+
+            this_rx_intakes = days_since_start * pills_per_day
+            if this_rx_intakes > 0:
+                total_prescribed_intakes += days_since_start * pills_per_day
+
+        print(f'--> PRESCRIBED INTAKES: {total_prescribed_intakes}')            
+
+        if total_prescribed_intakes > 0:
+            frac_adherent = len(all_intakes) / total_prescribed_intakes
+            adherent = True if frac_adherent >= adherence_threshold else False
+        else:
+            adherent = True
+
+        return on_time and adherent
 
 
 class Prescription(db.Model):
@@ -113,6 +195,9 @@ class Prescription(db.Model):
     # One-to-many relationship
     intakes = db.relationship("Intake", backref="prescription", lazy=True)
 
+    def get_intake_stats(self):
+        pass
+
 
 class Intake(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -124,6 +209,7 @@ class Intake(db.Model):
     # Foreign key
     prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable=False)
 
+
 class PatientForm(FlaskForm):
     firstname = StringField("First name", validators=[DataRequired()])
     lastname = StringField("Last name", validators=[DataRequired()])
@@ -133,19 +219,12 @@ class PatientForm(FlaskForm):
 
 
 class PrescriptionForm(FlaskForm):
+    # TODO: We technically don't need these wtf/Flask forms.
+    #       The only reason why we have them now is to provide the CSRF token
+    #       to the frontend/templates when rendering the form.
+    #       At least one field is needed for this FlaskForm so 
+    #       that's why `drug` is still here.
     drug = StringField("Drug name", validators=[DataRequired()])
-    # desc = StringField("Purpose / description", validators=[DataRequired()])
-    # strength = IntegerField("Strength", validators=[DataRequired()])
-    # strength_unit = StringField("Strength unit", validators=[DataRequired()])
-    # quantity = IntegerField("Quantity", validators=[DataRequired()])
-    # form = StringField("Form", validators=[DataRequired()])
-    # amount = IntegerField("Amount", validators=[DataRequired()])
-    # route = StringField("Route", validators=[DataRequired()])
-    # duration = IntegerField("Duration", validators=[DataRequired()])
-    # duration_unit = StringField("Duration unit", validators=[DataRequired()])
-    # refills = IntegerField("# Refills", validators=[DataRequired()])
-    # dosage = StringField("Dosage", validators=[DataRequired()])
-    # # time_of_day_am = 
 
 
 class RegistrationForm(FlaskForm):

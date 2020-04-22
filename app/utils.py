@@ -16,6 +16,9 @@ DAY_STD = {
     'month': 30
 }
 
+
+# TODO: Refactor such that the functions below can go in Prescription class.
+
 def get_next_refill_date(last_refill_date, duration, duration_unit, refills, refill_num):
     '''
     Return next refill date based on most recent (last) refill date 
