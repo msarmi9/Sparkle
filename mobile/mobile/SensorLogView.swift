@@ -15,17 +15,20 @@ import Alamofire
 // https://forums.developer.apple.com/thread/125664
 // https://gist.github.com/filsv/55febaea46b6d15d6309a7da7296ec3a
 
-
-func uploadData(dataString: String) -> String {
-    let data = dataString.data(using: .utf8)!
-    
-    // date-embedded key
+func getTimestamp() -> String {
     let now = Date()
     let formatter = DateFormatter()
     formatter.timeZone = TimeZone.current
     formatter.dateFormat = "yyyy-MM-dd_HH:mm:ss"
     let dateString = formatter.string(from: now)
+    return dateString
+}
+
+func uploadData(dataString: String) -> String {
+    let data = dataString.data(using: .utf8)!
     
+    // date-embedded key
+    let dateString = getTimestamp()
     
     Amplify.Storage.uploadData(key: "\(dateString).csv", data: data) { (event) in
         switch event {
@@ -56,11 +59,15 @@ struct flaskResponse: Decodable {
 }
 
 // exmaple HTTP parameters:
-// let parameters: [String: String] = [
-//     "patient_id": "12345",
-//     "timestamp": "2019-04-09",
-//     "data": "0,0.3,0.4\n1,1,1\n1,1,1"
-//     ]
+//let parameters: [String: String] = [
+//    "id": "1",    // ideally, we are going to want to retrieve this from a different post request
+//    "s3_url": "s3://blah/blah",
+//    "recording_data": "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z, pill_count\n1,2,3,4,5,6,7\n8,9,10,11,12,13,14",
+//    "timestamp": getTimestamp(),
+//    "on_time": "1",
+//    ]
+
+
 func sendPost(parameters: [String: String], _ completion: @escaping (String?, Float?) -> Void){
     // the completion allows me to return the pred
     // https://stackoverflow.com/questions/51504239/difficulty-with-swift-alamofire-completion-handlers
@@ -147,7 +154,14 @@ extension WatchSessionManager: WCSessionDelegate {
             let dateString = uploadData(dataString: sensorString)
             
             // send post request
-            sendPost(parameters: ["data": String(m["sensorString"] ?? "nil")]) { pred_string, pred  in
+            let parameters = [
+                "id": "1",
+                "s3_url": "s3://blah/blah/\(getTimestamp())",
+                "recording_data": String(m["sensorString"] ?? "nil"),
+                "timestamp": getTimestamp(),
+                "on_time": "1",
+                ]
+            sendPost(parameters: parameters) { pred_string, pred  in
                 guard let pred_string = pred_string else { return }
                 guard let pred = pred else { return }
                 self.pred_string = pred_string
