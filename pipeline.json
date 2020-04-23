@@ -1,0 +1,69 @@
+{
+    "pipeline": {
+        "name": "Sparkle-pipeline",
+        "version": 1,
+            "roleArn": "arn:aws:iam::374226464461:role/service-role/AWSCodePipelineServiceRole-us-west-2-MSDS603_Week1",
+        "artifactStore": {
+            "type": "S3",
+            "location": "codepipeline-msds603-week1"    
+        },
+        "stages": [
+            {
+                "name": "Source",
+                "actions": [
+                    {
+                        "name" : "GitHubSource",
+                        "inputArtifacts": [],
+                        "actionTypeId": {
+                            "version": "1",
+                            "owner": "ThirdParty",
+                            "category": "Source",
+                            "provider": "GitHub"
+                        },
+                        "outputArtifacts": [
+                            {
+                                "name": "SourceArtifact"
+                            }
+                        ],
+                        "runOrder": 1,
+                        "configuration": {
+                            "Owner": "MSDS698",
+                            "Repo": "2020-product-analytics-group-project-sparkle",
+                            "PollForSourceChanges": "true",
+                            "Branch": "master",
+                            "OAuthToken": "838ad1c04d543fb60927eb683a3fafd2d6dbb3e3"
+                        }
+                    }
+                ]
+            },
+
+            {
+              "name": "Deploy",
+              "actions": [
+                {
+                  "inputArtifacts": [
+                    {
+                      "name": "SourceArtifact"
+                    }
+                  ],
+                  "name": "CodeDeploy",
+                  "actionTypeId": {
+                    "category": "Deploy",
+                    "owner": "AWS",
+                    "version": "1",
+                    "provider": "ElasticBeanstalk"
+                  },
+                  "outputArtifacts": [
+
+                        ],
+                  "configuration": {
+                    "ApplicationName": "Sparkle",
+                    "EnvironmentName": "Sparkle-env"
+                  },
+                  "runOrder": 2
+                }
+              ]
+            }
+        ]
+    }
+}
