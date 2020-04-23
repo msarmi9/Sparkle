@@ -77,8 +77,6 @@ def add_prescription(patient_id):
     rx_form = PrescriptionForm()
     patient = Patient.query.filter_by(id=patient_id).first()
 
-    day_std = {"day": 1, "week": 7, "month": 30}
-
     if request.method == "POST":
         f = request.form
 
