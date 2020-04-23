@@ -37,9 +37,13 @@ def dashboard():
         return render_template('dashboard.html', patients=patients)
     n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
     patient_adherence = round(n_adherent / len(patients) * 100)
+
     rxs = Prescription.query.all()
-    adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
-    rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
+    if len(rxs) == 0:
+        rx_adherence = 1.0
+    else:
+        adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
+        rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
 
     adhering_patients = list(
         filter(lambda p: p.is_adherent() and len(p.prescriptions) != 0, patients)
