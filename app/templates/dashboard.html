@@ -34,18 +34,20 @@
 			  <li class="nav-item">
 			    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"
 			    style="color: #dc3545;">
-			    	Deviating
+			    	Deviating ({{ nonadhering_patients|length }})
 				</a>
 			  </li>
 			  <li class="nav-item">
 			    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"
 			    style="color: #17a2b8;">
-			    	On track
+			    	On track ({{ adhering_patients|length }})
 				</a>
 			  </li>
 			  <li class="nav-item">
 			    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"
-			    style="color: #17a2b8;">Unprescribed</a>
+			    style="color: #17a2b8;">
+			    	Unprescribed ({{ unprescribed_patients|length }})
+				</a>
 			  </li>
 			</ul>
 			<div class="tab-content dashboard-tab-content" id="myTabContent">
@@ -54,7 +56,7 @@
 					{% for p in nonadhering_patients %}
 						<div class="card bg-light patient-card" style="width: 18rem;">
 						  <div class="card-body">
-						    <h5 class="card-title">{{ p.lastname }}, {{ p.firstname }}</h5>
+						    <h5 class="card-title"><b>{{ p.lastname }}</b>, {{ p.firstname }}</h5>
 						    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
 						    <h6 class="card-subtitle mb-2 text-muted">
 						    	{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}
@@ -86,7 +88,7 @@
 					{% for p in adhering_patients %}
 						<div class="card bg-light patient-card" style="width: 18rem;">
 						  <div class="card-body">
-						    <h5 class="card-title">{{ p.lastname }}, {{ p.firstname }}</h5>
+						    <h5 class="card-title"><b>{{ p.lastname }}</b>, {{ p.firstname }}</h5>
 						    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
 						    <h6 class="card-subtitle mb-2 text-muted">
 						    	{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}
@@ -118,7 +120,7 @@
 					{% for p in unprescribed_patients %}
 						<div class="card bg-light patient-card" style="width: 18rem;">
 						  <div class="card-body">
-						    <h5 class="card-title">{{ p.lastname }}, {{ p.firstname }}</h5>
+						    <h5 class="card-title"><b>{{ p.lastname }}</b>, {{ p.firstname }}</h5>
 						    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
 						    <h6 class="card-subtitle mb-2 text-muted">
 						    	{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}
