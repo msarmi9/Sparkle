@@ -25,7 +25,7 @@ class MotionManager: ObservableObject {
     @Published var z: Double = 0.0
     @Published var sensorString: String = ""
     
-    let header = "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z, pill_count\n"
+    let header = "Acceleration_x, Acceleration_y, Acceleration_z, Rotation_x, Rotation_y, Rotation_z\n"
     
     
     init() {
@@ -58,8 +58,7 @@ class MotionManager: ObservableObject {
                                     "\(sensor.userAcceleration.z)," +
                                     "\(sensor.rotationRate.x)," +
                                     "\(sensor.rotationRate.y)," +
-                                    "\(sensor.rotationRate.z)," +
-                                    "\(pillCount)" +
+                                    "\(sensor.rotationRate.z)" +
                                     "\n"
                 
             }

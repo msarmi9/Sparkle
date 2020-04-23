@@ -14,7 +14,7 @@ from app.classes import (
     RegistrationForm,
     LogInForm,
     UploadFileForm,
-    Intake
+    Intake,
 )
 
 from flask import render_template, redirect, url_for, request, jsonify
@@ -272,7 +272,7 @@ def send_data():
     content = request.get_json()
 
     # retrieving data for Intake table from json
-    id = request.headers["User-Agent"]
+    id = content["id"]  # request.headers["User-Agent"]
     s3_url = content["s3_url"]
     recording_data = content["recording_data"]
     timestamp = datetime.strptime(content["timestamp"], "%Y-%m-%d_%H:%M:%S")
@@ -280,14 +280,17 @@ def send_data():
     print(f"data received: {recording_data}")
 
     # saving data to Intake table
-    # my_prescription_id is the ID of the prescription you're creating an Intake for
     # rx = Prescription.query.filter_by(id=my_prescription_id).first()
-    intake = Intake(s3_url=s3_url, recording_data=recording_data,
-                    timestamp=timestamp, on_time=on_time, prescription_id=id)
-    print("intake:", intake)
+    # note: this _requires_ there to be a prescription already in db!
+    intake = Intake(
+        s3_url=s3_url,
+        recording_data=recording_data,
+        timestamp=timestamp,
+        on_time=on_time,
+        prescription_id=id,
+    )
     db.session.add(intake)
     db.session.commit()
-
 
     model_pred_dict = adherence_model(recording_data)
 
