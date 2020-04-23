@@ -28,20 +28,22 @@ def dashboard():
     adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
     rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
 
-    adhering_patients = list(filter(lambda p: p.is_adherent() and \
-                                              len(p.prescriptions) != 0,
-                                    patients))
-    nonadhering_patients = list(filter(lambda p: not p.is_adherent() and \
-                                                 len(p.prescriptions) != 0,
-                                       patients))
-    unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0,
-                                        patients))
-    return render_template("dashboard.html", patients=patients,
-                           patient_adherence=patient_adherence,
-                           rx_adherence=rx_adherence,
-                           adhering_patients=adhering_patients,
-                           nonadhering_patients=nonadhering_patients,
-                           unprescribed_patients=unprescribed_patients)
+    adhering_patients = list(
+        filter(lambda p: p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    nonadhering_patients = list(
+        filter(lambda p: not p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
+    return render_template(
+        "dashboard.html",
+        patients=patients,
+        patient_adherence=patient_adherence,
+        rx_adherence=rx_adherence,
+        adhering_patients=adhering_patients,
+        nonadhering_patients=nonadhering_patients,
+        unprescribed_patients=unprescribed_patients,
+    )
 
 
 # Patient profile -----------------------------------------------------------
@@ -64,67 +66,67 @@ def add_prescription(patient_id):
     rx_form = PrescriptionForm()
     patient = Patient.query.filter_by(id=patient_id).first()
 
-    day_std = {
-        'day': 1,
-        'week': 7,
-        'month': 30
-    }
+    day_std = {"day": 1, "week": 7, "month": 30}
 
-    if request.method == 'POST':
+    if request.method == "POST":
         f = request.form
 
         # Basic data directly from form input
         rx_fields = {
-            'drug': f.get('drug'),
-            'desc': f.get('desc'),
-            'strength': int(f.get('strength')),
-            'strength_unit': f.get('strength_unit'),
-            'quantity': int(f.get('quantity')),
-            'form': f.get('drug_form'),
-            'amount': int(f.get('amount')),
-            'route': f.get('route'),
-            'duration': int(f.get('duration')),
-            'duration_unit': f.get('duration_unit')[:-1],
-            'refills': int(f.get('refills')),
-            'time_of_day': f"{f.get('time_of_day_am')}, {f.get('time_of_day_pm')}",
-            'start_date': datetime.fromisoformat(f.get('start_date'))
+            "drug": f.get("drug"),
+            "desc": f.get("desc"),
+            "strength": int(f.get("strength")),
+            "strength_unit": f.get("strength_unit"),
+            "quantity": int(f.get("quantity")),
+            "form": f.get("drug_form"),
+            "amount": int(f.get("amount")),
+            "route": f.get("route"),
+            "duration": int(f.get("duration")),
+            "duration_unit": f.get("duration_unit")[:-1],
+            "refills": int(f.get("refills")),
+            "time_of_day": f"{f.get('time_of_day_am')}, {f.get('time_of_day_pm')}",
+            "start_date": datetime.fromisoformat(f.get("start_date")),
         }
 
         # Time of day
-        if f.get('time_of_day_am'):
-            if f.get('time_of_day_pm'):
-                tod = 'AM, PM'
+        if f.get("time_of_day_am"):
+            if f.get("time_of_day_pm"):
+                tod = "AM, PM"
             else:
-                tod = 'AM'
-        elif f.get('time_of_day_pm'):
-            tod = 'PM'
+                tod = "AM"
+        elif f.get("time_of_day_pm"):
+            tod = "PM"
         else:
             tod = None
-        rx_fields['time_of_day'] = tod
-        
+        rx_fields["time_of_day"] = tod
+
         # Translate dosage to frequency info
-        freq_info = DOSAGE_TO_FREQ[f.get('dosage')]
-        rx_fields['freq'] = freq_info['freq']
-        rx_fields['freq_repeat'] = freq_info['freq_repeat']
-        rx_fields['freq_repeat_unit'] = freq_info['freq_repeat_unit']
+        freq_info = DOSAGE_TO_FREQ[f.get("dosage")]
+        rx_fields["freq"] = freq_info["freq"]
+        rx_fields["freq_repeat"] = freq_info["freq_repeat"]
+        rx_fields["freq_repeat_unit"] = freq_info["freq_repeat_unit"]
 
         # Non-form data; autofilled
-        rx_fields['created'] = datetime.now()
-        rx_fields['refill_num'] = 0
-        rx_fields['last_refill_date'] = rx_fields['start_date']
-        rx_fields['patient'] = patient
+        rx_fields["created"] = datetime.now()
+        rx_fields["refill_num"] = 0
+        rx_fields["last_refill_date"] = rx_fields["start_date"]
+        rx_fields["patient"] = patient
 
         # Next refill day, days until next refill
-        next_refill_date = get_next_refill_date(rx_fields['start_date'],
-                               rx_fields['duration'], rx_fields['duration_unit'],
-                               rx_fields['refills'], rx_fields['refill_num'])
-        rx_fields['next_refill_date'] = next_refill_date
+        next_refill_date = get_next_refill_date(
+            rx_fields["start_date"],
+            rx_fields["duration"],
+            rx_fields["duration_unit"],
+            rx_fields["refills"],
+            rx_fields["refill_num"],
+        )
+        rx_fields["next_refill_date"] = next_refill_date
 
         days_until_refill = get_days_until_refill(datetime.now(), next_refill_date)
-        rx_fields['days_until_refill'] = days_until_refill
+        rx_fields["days_until_refill"] = days_until_refill
 
         for k, v in rx_fields.items():
-            print(f'{k}: {v}')
+            print(f"{k}: {v}")
 
         # Create Rx
         rx = Prescription(**rx_fields)
@@ -133,8 +135,7 @@ def add_prescription(patient_id):
 
         return redirect(url_for("patient_profile", patient_id=patient_id))
     print(rx_form.errors)
-    return render_template("add_prescription.html", patient=patient,
-                           form=rx_form)
+    return render_template("add_prescription.html", patient=patient, form=rx_form)
 
 
 # New patient ---------------------------------------------------------------

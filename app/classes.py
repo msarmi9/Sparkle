@@ -59,7 +59,7 @@ class Patient(db.Model):
     prescriptions = db.relationship("Prescription", backref="patient", lazy=True)
 
     def all_intakes(self, start=None, end=None):
-        '''
+        """
         Return Intake objects associated with this Patient.
         start: datetime - optional start date for filtering
         end: datetime - optional end date for filtering
@@ -67,14 +67,14 @@ class Patient(db.Model):
         TODO: Implement start, end filtering
         NOTE: There's probably a better way of doing this.  Perhaps setting Patient
               as a foreign key in Intake?
-        '''
+        """
         all_intakes = []
         for rx in self.prescriptions:
             all_intakes += rx.intakes
         return all_intakes
 
     def adherence_stats(self):
-        '''
+        """
         Return adherence statistics on a per-Prescription basis.
         return: dict - <prescription ID>: <details>
         Example:
@@ -89,15 +89,16 @@ class Patient(db.Model):
             },
             ...
         }
-        '''
+        """
         stats = defaultdict(lambda: defaultdict(float))
         for rx in self.prescriptions:
-            stats[rx.id]['frac_on_time'] = rx.frac_on_time()
-            stats[rx.id]['frac_required_intakes'] = rx.frac_required_intakes()
+            stats[rx.id]["frac_on_time"] = rx.frac_on_time()
+            stats[rx.id]["frac_required_intakes"] = rx.frac_required_intakes()
         return dict(stats)
 
-    def frac_adhering_prescriptions(self, on_time_threshold=0.9,
-                                    required_intakes_threshold=0.9):
+    def frac_adhering_prescriptions(
+        self, on_time_threshold=0.9, required_intakes_threshold=0.9
+    ):
         if len(self.prescriptions) == 0:
             return {}
         adherence = {}
@@ -105,26 +106,25 @@ class Patient(db.Model):
         frac_required_intakes_by_rx = []
         stats = self.adherence_stats()
         for rx_id, details in stats.items():
-            frac_on_time_by_rx.append(details['frac_on_time'])
-            frac_required_intakes_by_rx.append(details['frac_required_intakes'])
+            frac_on_time_by_rx.append(details["frac_on_time"])
+            frac_required_intakes_by_rx.append(details["frac_required_intakes"])
 
-        adherence['on_time'] = \
-            (np.sum(np.array(frac_on_time_by_rx) >= on_time_threshold) /
-            len(frac_on_time_by_rx))
+        adherence["on_time"] = np.sum(
+            np.array(frac_on_time_by_rx) >= on_time_threshold
+        ) / len(frac_on_time_by_rx)
 
-        adherence['required_intakes'] = \
-            (np.sum(np.array(frac_required_intakes_by_rx) >=
-                             required_intakes_threshold) /
-             len(frac_required_intakes_by_rx))
+        adherence["required_intakes"] = np.sum(
+            np.array(frac_required_intakes_by_rx) >= required_intakes_threshold
+        ) / len(frac_required_intakes_by_rx)
         return adherence
 
-    def is_adherent(self, on_time_threshold=0.9,
-                    required_intakes_threshold=0.9):
+    def is_adherent(self, on_time_threshold=0.9, required_intakes_threshold=0.9):
         stats = self.adherence_stats()
         for rx_id, details in stats.items():
-            if (details['frac_on_time'] <= on_time_threshold or
-                details['frac_required_intakes'] <= 
-                required_intakes_threshold):
+            if (
+                details["frac_on_time"] <= on_time_threshold
+                or details["frac_required_intakes"] <= required_intakes_threshold
+            ):
                 return False
         return True
 
@@ -153,6 +153,7 @@ class Prescription(db.Model):
     next_refill = date of next refill; auto-filled
     days_remaining = days until next refill; auto-filled nightly
     """
+
     id = db.Column(db.Integer, primary_key=True)
 
     # Prescription-related
@@ -171,7 +172,7 @@ class Prescription(db.Model):
     duration_unit = db.Column(db.String(10), unique=False, nullable=False)
     refills = db.Column(db.Integer, unique=False, nullable=False)
     time_of_day = db.Column(db.String(10), unique=False, nullable=True)
-    
+
     # Metadata
     start_date = db.Column(db.DateTime(), unique=False, nullable=False)
     created = db.Column(db.DateTime(), unique=False, nullable=False)
@@ -189,35 +190,37 @@ class Prescription(db.Model):
     def has_started(self):
         return datetime.now() >= self.start_date
 
-    def is_adherent(self, on_time_threshold=0.9,
-                    required_intakes_threshold=0.9):
-        return (self.frac_on_time() >= on_time_threshold and
-                self.frac_required_intakes() >= required_intakes_threshold)
+    def is_adherent(self, on_time_threshold=0.9, required_intakes_threshold=0.9):
+        return (
+            self.frac_on_time() >= on_time_threshold
+            and self.frac_required_intakes() >= required_intakes_threshold
+        )
 
     def frac_on_time(self):
-        '''
+        """
         Return fraction of intakes that were on time, out of all recorded
         intakes.
-        '''
+        """
         if len(self.intakes) == 0:
             return 1.0
-        on_time = Intake.query.filter_by(prescription_id=self.id,
-                                         on_time=True).all()
+        on_time = Intake.query.filter_by(prescription_id=self.id, on_time=True).all()
         return len(on_time) / len(self.intakes)
 
     def frac_required_intakes(self):
-        '''
+        """
         Return fraction of recorded intakes, out of total number of intakes
         that are supposed to be recorded by this time.
-        '''
+        """
 
         # start of treatment until yesterday
         days_since_start = (datetime.now() - self.start_date).days - 1
         if days_since_start <= 0:
             return 1.0
-        pills_per_day = int(self.amount * self.freq /
-                            (self.freq_repeat *
-                            DAY_STD[self.freq_repeat_unit]))
+        pills_per_day = int(
+            self.amount
+            * self.freq
+            / (self.freq_repeat * DAY_STD[self.freq_repeat_unit])
+        )
         n_required_intakes = days_since_start * pills_per_day
 
         if n_required_intakes == 0:
@@ -233,7 +236,9 @@ class Intake(db.Model):
     on_time = db.Column(db.Boolean(), unique=False, nullable=False)
 
     # Foreign key
-    prescription_id = db.Column(db.Integer, db.ForeignKey("prescription.id"), nullable=False)
+    prescription_id = db.Column(
+        db.Integer, db.ForeignKey("prescription.id"), nullable=False
+    )
 
 
 class PatientForm(FlaskForm):
@@ -248,7 +253,7 @@ class PrescriptionForm(FlaskForm):
     # TODO: We technically don't need these wtf/Flask forms.
     #       The only reason why we have them now is to provide the CSRF token
     #       to the frontend/templates when rendering the form.
-    #       At least one field is needed for this FlaskForm so 
+    #       At least one field is needed for this FlaskForm so
     #       that's why `drug` is still here.
     drug = StringField("Drug name", validators=[DataRequired()])
 
