@@ -41,6 +41,7 @@
 <span class="kn">import</span> <span class="nn">requests</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
+
 <div class="viewcode-block" id="user_from_db"><a class="viewcode-back" href="../code.html#tests.user_from_db">[docs]</a><span class="k">def</span> <span class="nf">user_from_db</span><span class="p">(</span><span class="n">username</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Helper function to query a specific user from a database.</span>
@@ -48,13 +49,15 @@
     <span class="n">user</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">user</span></div>
 
+
 <div class="viewcode-block" id="test_user_from_db"><a class="viewcode-back" href="../code.html#tests.test_user_from_db">[docs]</a><span class="k">def</span> <span class="nf">test_user_from_db</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Test to ensure that a user&#39;s info is correctly entered into database.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="n">user_from_db</span><span class="p">(</span><span class="s2">&quot;andy&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">email</span> <span class="o">==</span> <span class="s2">&quot;cheon.andy@gmail.com&quot;</span>
     <span class="k">assert</span> <span class="n">user_from_db</span><span class="p">(</span><span class="s2">&quot;andy&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">username</span> <span class="o">==</span> <span class="s2">&quot;andy&quot;</span>
-    <span class="k">assert</span> <span class="n">user_from_db</span><span class="p">(</span><span class="s2">&quot;andy&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">check_password</span><span class="p">(</span><span class="s2">&quot;123&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span></div>
+    <span class="k">assert</span> <span class="n">user_from_db</span><span class="p">(</span><span class="s2">&quot;andy&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">check_password</span><span class="p">(</span><span class="s2">&quot;123&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span></div>
+
 
 <div class="viewcode-block" id="test_adherence_model"><a class="viewcode-back" href="../code.html#tests.test_adherence_model">[docs]</a><span class="k">def</span> <span class="nf">test_adherence_model</span><span class="p">():</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -91,6 +94,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../code.html">Code Documentation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../authors.html">Authors</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../test.html">test markdown file</a></li>
 </ul>
 
 <div class="relations">

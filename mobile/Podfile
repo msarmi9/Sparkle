@@ -1,0 +1,34 @@
+# Uncomment the next line to define a global platform for your project
+# platform :ios, '9.0'
+
+target 'mobile' do
+  platform :ios, '13.2'
+
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for mobile
+  pod 'AmplifyPlugins/AWSS3StoragePlugin'
+  pod 'AWSMobileClient', '~> 2.12.0'
+  pod 'Alamofire'
+end
+
+target 'mobile WatchKit App' do
+  platform :watchos, '6.1'
+
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for mobile WatchKit App
+
+end
+
+target 'mobile WatchKit Extension' do
+  platform :watchos, '6.1'
+
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for mobile WatchKit Extension
+
+end

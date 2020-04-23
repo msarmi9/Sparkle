@@ -1,9 +1,5 @@
 Code Documentation
 ==================
-.. automodule:: sparkle.scripts.preprocess
-   :members:
-   :undoc-members:
-
 .. automodule:: app.classes
    :members:
    :undoc-members:
@@ -11,7 +7,3 @@ Code Documentation
 .. automodule:: app.routes
    :members:
    :undoc-members: 
-
-.. automodule:: tests
-   :members:
-   :undoc-members:

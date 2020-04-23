@@ -1,6 +1,3 @@
-# Ignore AWS access keys
-credentials/
-
 # Ignore project data
 data/
 
@@ -20,12 +17,10 @@ __pycache__/
 .ipynb_checkpoints/
 
 # Ignore vim's .swp files
-.*.swp
+*.swp
 
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+# Ignore egg info
+*.egg-info
 
 # Ignore local test DB
 sparkle.db

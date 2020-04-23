@@ -1,4 +1,10 @@
+[![codecov](https://codecov.io/gh/msarmi9/Sparkle/branch/master/graph/badge.svg)](https://codecov.io/gh/msarmi9/Sparkle)
+[![Documentation Status](https://readthedocs.org/projects/sparkleai/badge/?version=latest)](https://sparkleai.readthedocs.io/en/latest/?badge=latest)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+
+
 # _Sparkle_: A Multi-Platform System for Combating Medication Non-adherence with Machine Learning
+
 
 #### _Team Members_:
 * [Andy Cheon](https://www.linkedin.com/in/acheon/)
@@ -74,15 +80,3 @@ _In development on the_ [_`web` branch_](https://github.com/msarmi9/Sparkle/tree
 ![webapp](./images/web_app.png)
 
 _This is a screenshot of a drafted UI and is likely to change in the coming weeks._
-    
-=======
-MSDS698 Project - Sparkle  
-
-Contributors:  
-* Andy Cheon  
-* Stephanie Jung  
-* Collin Prather  
-* Matt Sarmiento  
-* Kevin Wong
-
-[Project board](https://github.com/msarmi9/Sparkle/projects/5)

@@ -1,8 +1,0 @@
-Archive
-Archive.zip
-CODEOWNERS
-__pycache__/*
-environment.yml
-sparkle/*
-sparkle_env/
-commands-for-automation.md*

@@ -13,6 +13,29 @@
 			.container.main {
 				padding-top: 20px;
 			}
+
+			.dashboard-tab-content {
+				padding-top: 20px;
+			}
+
+			.card.patient-card {
+				max-width: 250px;
+				min-width: 250px;
+			}
+
+			.progress-container {
+				display: flex;
+			}
+
+			.progress-bar-wrapper {
+				margin-right: 30px;
+				margin-bottom: 30px;
+				width: 100%;
+			}
+
+			.dashboard-progress {
+				width: 100%;
+			}
 		</style>
 	</head>
 
@@ -32,7 +55,7 @@
 		    <ul class="navbar-nav mr-auto">
 			    {% if current_user.is_authenticated %}
 			      <li class="nav-item active">
-			        <a class="nav-link" href="#">Dashboard</a>
+			        <a class="nav-link" href="/dashboard">Dashboard</a>
 			      </li>
 			      <li class="nav-item">
 			        <a class="nav-link" href="#">Patients</a>
@@ -47,7 +70,7 @@
 			      {% if current_user.is_authenticated %}
 			      	  <li class="nav-item">
 					      <span class="navbar-text">
-					      	Welcome, Dr. {{ current_user.username }} |
+					      	Welcome, Dr. {{ current_user.lastname }} |
 					      </span>
 					  </li>
 				      <li class="nav-item">
@@ -70,6 +93,9 @@
 		{% block register %} {% endblock %}
 		{% block login %} {% endblock %}
 		{% block logout %} {% endblock %}
+		{% block add_patient %} {% endblock %}
+		{% block patient_profile %} {% endblock %}
+		{% block add_prescription %} {% endblock %}
 		{% block cards %} {% endblock %}  <!-- only visible after user logs in -->
     </body>
 </html>
