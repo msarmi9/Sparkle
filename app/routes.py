@@ -33,6 +33,8 @@ def index():
 @login_required
 def dashboard():
     patients = User.query.filter_by(id=current_user.id).first().patients
+    if len(patients) == 0:
+        return render_template("dashboard.html", patients=patients)
     n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
     patient_adherence = round(n_adherent / len(patients) * 100)
     rxs = Prescription.query.all()
