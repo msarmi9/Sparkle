@@ -5,33 +5,108 @@
 		<h3>New prescription for <i>{{ patient.lastname }}, {{ patient.firstname }}</i></h3>
 	    <form method="POST">
 	    	{{ form.csrf_token }}
-	    	<div class="form-group">
-	    		<label for="drug">{{ form.drug.label }}</label>
-	    		<input id="drug" class="form-control" name="drug" required>
+
+			<div class="form-row">
+		    	<div class="form-group col-md-4">
+		    		<label for="drug">Drug</label>
+		    		<input id="drug" class="form-control" name="drug" placeholder="Amoxicillin" required>
+				</div>
+				<div class="form-group col-md-6">
+		    		<label for="desc">Indication</label>
+		    		<input id="desc" class="form-control" name="desc" placeholder="Reduce infection" required>
+				</div>
+				<div class="form-group col-md-1">
+		    		<label for="strength">Strength</label>
+		    		<input id="strength" class="form-control" name="strength" required>
+				</div>
+				<div class="form-group col-md-1">
+		    		<label for="strength_unit">&nbsp;</label>
+		    		<select class="form-control" id="strength_unit" name="strength_unit" required>
+				      <option>mg</option>
+				      <option>ug</option>
+				    </select>
+				</div>
 			</div>
-			<div class="form-group">
-	    		<label for="desc">{{ form.desc.label }}</label>
-	    		<input id="desc" class="form-control" name="desc" required>
+
+			<div class="form-row">
+				<div class="form-group col-md-1">
+		    		<label for="quantity">Quantity</label>
+		    		<input id="quantity" class="form-control" name="quantity" placeholder="10" required>
+				</div>
+				<div class="form-group col-md-2">
+		    		<label for="drug_form">Form</label>
+		    		<select class="form-control" id="drug_form" name="drug_form" required>
+				      <option>tab</option>
+				      <option>chew tab</option>
+				      <option>cap</option>
+				    </select>
+				</div>
 			</div>
-			<div class="form-group">
-	    		<label for="freq">{{ form.freq.label }}</label>
-	    		<input id="freq" class="form-control" name="freq" required>
+
+			<div class="form-row">
+				<div class="form-group col-md-1">
+		    		<label for="amount">Amount</label>
+		    		<select class="form-control" id="amount" name="amount" required>
+		    		  {% for i in range(1, 6) %}
+		    		  	<option>{{ i }}</option>
+		    		  {% endfor %}
+				    </select>
+				</div>
+				<div class="form-group col-md-2">
+		    		<label for="route">Route</label>
+		    		<select class="form-control" id="route" name="route" required>
+				      <option>oral</option>
+				    </select>
+				</div>
+				<div class="form-group col-md-4">
+		    		<label for="dosage">Dosage</label>
+		    		<select class="form-control" id="dosage" name="dosage" required>
+		    			<option>QD - 1x per day</option>
+						<option>BID	- 2x per day</option>
+						<option>TID	- 3x per day</option>
+						<option>QID	- 4x per day</option>
+				    </select>
+				</div>
+				<div class="form-group col-md-4">
+					<p>Time of day</p>
+				    <div class="form-check form-check-inline">
+				      <input class="form-check-input" type="checkbox" id="time_of_day_am" name="time_of_day_am" value='AM'>
+				      <label class="form-check-label" for="time_of_day_am">AM</label>
+				    </div>
+				    <div class="form-check form-check-inline">
+				      <input class="form-check-input" type="checkbox" id="time_of_day_pm" name="time_of_day_pm" value='PM'>
+				      <label class="form-check-label" for="time_of_day_pm">PM</label>
+				    </div>
+				</div>
 			</div>
-			<div class="form-group">
-	    		<label for="cycle_n">{{ form.cycle_n.label }}</label>
-	    		<input id="cycle_n" class="form-control" name="cycle_n" required>
+
+			<div class="form-row">
+				<div class="form-group col-md-1">
+		    		<label for="duration">Duration</label>
+		    		<input id="duration" class="form-control" name="duration" placeholder="2" required>
+				</div>
+				<div class="form-group col-md-1">
+		    		<label for="duration_unit">&nbsp;</label>
+		    		<select class="form-control" id="duration_unit" name="duration_unit" required>
+		    			<option>days</option>
+						<option>weeks</option>
+						<option>months</option>
+				    </select>
+				</div>
+				<div class="form-group col-md-1">
+		    		<label for="refills">Refills</label>
+		    		<select class="form-control" id="refills" name="refills" required>
+		    			{% for i in range(11) %}
+		    		  		<option>{{ i }}</option>
+		    		  	{% endfor %}
+				    </select>
+				</div>
 			</div>
-			<div class="form-group">
-	    		<label for="cycle_unit">{{ form.cycle_unit.label }}</label>
-	    		<input id="cycle_unit" class="form-control" name="cycle_unit" required>
-			</div>
-			<div class="form-group">
-	    		<label for="start_pills">{{ form.start_pills.label }}</label>
-	    		<input id="start_pills" class="form-control" name="start_pills" required>
-			</div>
-			<div class="form-group">
-	    		<label for="last_refill_date">{{ form.last_refill_date.label }}</label>
-	    		<input id="last_refill_date" class="form-control" name="last_refill_date" required>
+			<div class="form-row">
+				<div class="form-group col-md-2">
+		    		<label for="start_date">Start date</label>
+		    		<input id="start_date" class="form-control" name="start_date" required>
+				</div>
 			</div>
 			<button type="submit" class="btn btn-primary">Create</button>
 	    </form>
