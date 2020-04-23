@@ -248,20 +248,26 @@ def upload():
 
 
 # Data receiving endpoint ---------------------------------------------------
-def adherence_model(data):
+def adherence_model(data, classifier_path="../models/classifier.pkl", regressor_path="../models/regressor.pkl"):
     """
-    takes in gyroscope data as a string
-    and makes binary prediction about whether or not medication
-    was consumed
+    takes in accelerometer and gyroscope data as a string.
     """
-    sensor_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
-    global_mean = np.abs(sensor_data).mean(axis=1).mean(axis=0)
-    print(global_mean)
-    if global_mean > 0.5:
-        pred_string = "You just took your medication!"
+    # loading models
+    classifier = pickle.load(open(classifier_path, "rb"))
+    regressor = pickle.load(open(regressor_path, "rb"))
+    # loading and preprocessing data
+    raw_sensor_data = pd.read_csv(StringIO(data))
+    sensor_data = preprocess(raw_sensor_data)              # imported at top of module
+    # making classification
+    classifier_pred = classifier.predict(sensor_data)      # should be a binary prediction
+    if classifier_pred == 0:
+        pred_string = "It does not appear you took any medication." 
+        return {"pred_string": pred_string, "pred_type": "classification", "pred": classifier_pred}
     else:
-        pred_string = "It does not appear you took any medication."
-    return {"pred_string": pred_string, "pred": global_mean}
+        # making regression
+        regressor_pred = regressor.predict(sensor_data)
+        pred_string = f"It looks like you have {round(regressor_pred) - 1} pills remaining."
+        return {"pred_string": pred_string, "pred_type":"regression", "pred": regressor_pred}
 
 
 @application.route("/send-data", methods=["POST"])
