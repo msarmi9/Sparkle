@@ -22,7 +22,26 @@ def index():
 @login_required
 def dashboard():
     patients = User.query.filter_by(id=current_user.id).first().patients
-    return render_template("dashboard.html", patients=patients)
+    n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
+    patient_adherence = round(n_adherent / len(patients) * 100)
+    rxs = Prescription.query.all()
+    adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
+    rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
+
+    adhering_patients = list(filter(lambda p: p.is_adherent() and \
+                                              len(p.prescriptions) != 0,
+                                    patients))
+    nonadhering_patients = list(filter(lambda p: not p.is_adherent() and \
+                                                 len(p.prescriptions) != 0,
+                                       patients))
+    unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0,
+                                        patients))
+    return render_template("dashboard.html", patients=patients,
+                           patient_adherence=patient_adherence,
+                           rx_adherence=rx_adherence,
+                           adhering_patients=adhering_patients,
+                           nonadhering_patients=nonadhering_patients,
+                           unprescribed_patients=unprescribed_patients)
 
 
 # Patient profile -----------------------------------------------------------
@@ -40,7 +59,7 @@ def patient_profile(patient_id):
 @application.route(
     "/patients/<int:patient_id>/new-prescription", methods=("GET", "POST")
 )
-# @login_required
+@login_required
 def add_prescription(patient_id):
     rx_form = PrescriptionForm()
     patient = Patient.query.filter_by(id=patient_id).first()
