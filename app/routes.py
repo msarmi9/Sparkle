@@ -14,6 +14,7 @@ from app.classes import (
     RegistrationForm,
     LogInForm,
     UploadFileForm,
+    Intake
 )
 
 from flask import render_template, redirect, url_for, request, jsonify
@@ -253,8 +254,8 @@ def adherence_model(data):
     and makes binary prediction about whether or not medication
     was consumed
     """
-    gyro_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
-    global_mean = np.abs(gyro_data).mean(axis=1).mean(axis=0)
+    sensor_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
+    global_mean = np.abs(sensor_data).mean(axis=1).mean(axis=0)
     print(global_mean)
     if global_mean > 0.5:
         pred_string = "You just took your medication!"
@@ -269,9 +270,25 @@ def send_data():
     Json in and json out
     """
     content = request.get_json()
-    data = content["data"]
-    print(f"data received: {data}")
-    model_pred_dict = adherence_model(data)
 
-    # TODO: store metadata in DB
+    # retrieving data for Intake table from json
+    id = request.headers["User-Agent"]
+    s3_url = content["s3_url"]
+    recording_data = content["recording_data"]
+    timestamp = datetime.strptime(content["timestamp"], "%Y-%m-%d_%H:%M:%S")
+    on_time = bool(content["on_time"])
+    print(f"data received: {recording_data}")
+
+    # saving data to Intake table
+    # my_prescription_id is the ID of the prescription you're creating an Intake for
+    # rx = Prescription.query.filter_by(id=my_prescription_id).first()
+    intake = Intake(s3_url=s3_url, recording_data=recording_data,
+                    timestamp=timestamp, on_time=on_time, prescription_id=id)
+    print("intake:", intake)
+    db.session.add(intake)
+    db.session.commit()
+
+
+    model_pred_dict = adherence_model(recording_data)
+
     return jsonify(model_pred_dict)
