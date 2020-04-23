@@ -230,7 +230,7 @@ class Prescription(db.Model):
 class Intake(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     s3_url = db.Column(db.String(500), unique=True, nullable=True)
-    recording_data = db.Column(db.JSON(), unique=False, nullable=True)
+    recording_data = db.Column(db.Text(), unique=False, nullable=True)
     timestamp = db.Column(db.DateTime(), unique=False, nullable=False)
     on_time = db.Column(db.Boolean(), unique=False, nullable=False)
 
