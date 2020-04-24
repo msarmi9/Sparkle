@@ -250,7 +250,7 @@ def upload():
 
 
 # Data receiving endpoint ---------------------------------------------------
-def adherence_model(data, regressor_path="../modeling/regressor.pkl"):
+def adherence_model(data, regressor_path="./modeling/regressor.pkl"):
     """
     takes in accelerometer and gyroscope data as a string.
     """
@@ -271,7 +271,7 @@ def adherence_model(data, regressor_path="../modeling/regressor.pkl"):
         X = preprocess(raw_sensor_data)
 
         regressor = pickle.load(open(regressor_path, "rb"))
-        predicted_pills = regressor.predict(X).round()
+        predicted_pills = regressor.predict(X).round().item()
 
         pred_string = f"It looks like you have {predicted_pills - 1} pills remaining."
         return {

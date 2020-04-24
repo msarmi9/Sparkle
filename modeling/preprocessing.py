@@ -1,22 +1,17 @@
 import math
-
 import numpy as np
 import pandas as pd
-
 import pickle
-
 from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectFromModel
-
 import xgboost as xgb
 
 
-def initializeDf(raw_sensor_data):
+def initializeDf(path):
     """
     Loads the raw sensor data into a Pandas dataframe.
     """
     df = pd.read_csv(path).reset_index()
-
     return df
 
 
@@ -85,11 +80,12 @@ def selectScaleFeatures(df):
 	The output an array of numeric features ready for XGB model usage. 
 	"""
     # apply a pre-fit standard scaler scaling to data
-    ss = pickle.load(open("ss.pkl", "rb"))
+    ss = pickle.load(open("modeling/scaler.pkl", "rb"))
     X_scaled = ss.transform(df.to_numpy())
+    print(X_scaled)
 
     # select the top features according to previous analysis
-    select = pickle.load(open("selection.pkl", "rb"))
+    select = pickle.load(open("modeling/selection.pkl", "rb"))
     X_select = select.transform(X_scaled)
 
     return X_select
