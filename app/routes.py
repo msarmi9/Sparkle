@@ -314,7 +314,7 @@ def send_data():
     # retrieving data for Intake table from json
     id = content["id"]  # request.headers["User-Agent"]
     s3_url = content["s3_url"]
-    recording_data = content["recording_data"]
+    recording_data = content
     timestamp = datetime.strptime(content["timestamp"], "%Y-%m-%d_%H:%M:%S")
     on_time = bool(content["on_time"])
     print(f"data received: {recording_data}")
