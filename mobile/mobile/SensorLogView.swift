@@ -72,7 +72,7 @@ struct flaskResponse: Decodable {
 func sendPost(parameters: [String: String], _ completion: @escaping (String?, String?, Float?) -> Void){
     // the completion allows me to return the pred
     // https://stackoverflow.com/questions/51504239/difficulty-with-swift-alamofire-completion-handlers
-    AF.request("http://twinkle3.us-west-2.elasticbeanstalk.com//send-data",
+    AF.request("http://twinkle3.us-west-2.elasticbeanstalk.com/send-data",
                method: .post,
                parameters: parameters,
                encoder: JSONParameterEncoder.default).responseDecodable(of: flaskResponse.self) { response in
