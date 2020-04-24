@@ -21,6 +21,8 @@ from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 import numpy as np
 
+from modeling.preprocessing import *
+
 
 # Home / splash page --------------------------------------------------------
 @application.route("/")
@@ -270,20 +272,36 @@ def upload():
 
 
 # Data receiving endpoint ---------------------------------------------------
-def adherence_model(data):
+def adherence_model(data, regressor_path="./modeling/regressor.pkl"):
     """
-    takes in gyroscope data as a string
-    and makes binary prediction about whether or not medication
-    was consumed
+    takes in accelerometer and gyroscope data as a string.
     """
     sensor_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
     global_mean = np.abs(sensor_data).mean(axis=1).mean(axis=0)
-    print(global_mean)
-    if global_mean > 0.5:
-        pred_string = "You just took your medication!"
-    else:
+    classifier_pred = global_mean.round()
+
+    if classifier_pred == 0:
         pred_string = "It does not appear you took any medication."
-    return {"pred_string": pred_string, "pred": global_mean}
+        return {
+            "pred_string": pred_string,
+            "pred_type": "classification",
+            "pred": classifier_pred,
+        }
+    else:
+        # run the regression process
+        raw_sensor_data = StringIO(data)
+        X = preprocess(raw_sensor_data)
+
+        regressor = pickle.load(open(regressor_path, "rb"))
+        predicted_pills = regressor.predict(X).round().item()
+        predicted_pills = max(min(predicted_pills, 30), 1)
+
+        pred_string = f"It looks like you have {predicted_pills - 1} pills remaining."
+        return {
+            "pred_string": pred_string,
+            "pred_type": "regression",
+            "pred": predicted_pills,
+        }
 
 
 @application.route("/send-data", methods=["POST"])
