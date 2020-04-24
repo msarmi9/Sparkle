@@ -5,8 +5,7 @@ from datetime import date, datetime, timedelta
 from app import application, db
 from app.utils import *
 from app.classes import (
-    User,
-    Patient,
+    User, Patient,
     Prescription,
     PrescriptionForm,
     Patient,
@@ -39,7 +38,7 @@ def index():
 @login_required
 def dashboard():
     """
-    Render dashboard for doctors to get comprehensive view of patient 
+    Render dashboard for doctors to get comprehensive view of patient
     adherence trends and statistics.
     """
     patients = User.query.filter_by(id=current_user.id).first().patients
