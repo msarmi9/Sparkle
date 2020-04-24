@@ -3,7 +3,7 @@ Flask-Login==0.5.0
 Flask-SQLAlchemy==2.4.1
 Flask-WTF==0.14.3
 numpy==1.18.2
-pandas==0.25.1
+pandas==1.0.3
 pickleshare==0.7.5
 psycopg2-binary==2.8.5
 requests==2.23.0
