@@ -20,6 +20,7 @@ from app.classes import (
 from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 import numpy as np
+import json
 
 from modeling.preprocessing import *
 
@@ -280,7 +281,7 @@ def adherence_model(data, regressor_path="./modeling/regressor.pkl"):
     global_mean = np.abs(sensor_data).mean(axis=1).mean(axis=0)
     classifier_pred = global_mean.round()
 
-    if classifier_pred == 0:
+    if global_mean < 0.2:
         pred_string = "It does not appear you took any medication."
         return {
             "pred_string": pred_string,
@@ -316,7 +317,7 @@ def send_data():
     s3_url = content["s3_url"]
     recording_data = content["recording_data"]
     timestamp = datetime.strptime(content["timestamp"], "%Y-%m-%d_%H:%M:%S")
-    on_time = bool(content["on_time"])
+    on_time = bool(int(content["on_time"]))
     print(f"data received: {recording_data}")
 
     # saving data to Intake table
@@ -324,7 +325,7 @@ def send_data():
     # note: this _requires_ there to be a prescription already in db!
     intake = Intake(
         s3_url=s3_url,
-        recording_data=recording_data,
+        recording_data=json.dumps(content),
         timestamp=timestamp,
         on_time=on_time,
         prescription_id=id,
