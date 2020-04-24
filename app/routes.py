@@ -20,6 +20,7 @@ from app.classes import (
 from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 import numpy as np
+import json
 
 from modeling.preprocessing import *
 
@@ -324,7 +325,7 @@ def send_data():
     # note: this _requires_ there to be a prescription already in db!
     intake = Intake(
         s3_url=s3_url,
-        recording_data=jsonify(content),
+        recording_data=json.dumps(content),
         timestamp=timestamp,
         on_time=on_time,
         prescription_id=id,
