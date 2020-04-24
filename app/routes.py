@@ -25,6 +25,9 @@ import numpy as np
 @application.route("/")
 @application.route("/home")
 def index():
+    """
+    Render splash/home page.
+    """
     return render_template("splash.html", message="Welcome to Sparkle!")
 
 
@@ -32,6 +35,10 @@ def index():
 @application.route("/dashboard")
 @login_required
 def dashboard():
+    """
+    Render dashboard for doctors to get comprehensive view of patient 
+    adherence trends and statistics.
+    """
     patients = User.query.filter_by(id=current_user.id).first().patients
     if len(patients) == 0:
         return render_template("dashboard.html", patients=patients)
@@ -67,6 +74,9 @@ def dashboard():
 @application.route("/patients/<int:patient_id>", methods=("GET", "POST"))
 @login_required
 def patient_profile(patient_id):
+    """
+    'Detail' view for a particular patient.
+    """
     patient = Patient.query.filter_by(id=patient_id).first()
     prescriptions = patient.prescriptions
     return render_template(
@@ -80,6 +90,9 @@ def patient_profile(patient_id):
 )
 @login_required
 def add_prescription(patient_id):
+    """
+    Route to add a prescription from a form.
+    """
     rx_form = PrescriptionForm()
     patient = Patient.query.filter_by(id=patient_id).first()
 
@@ -182,6 +195,9 @@ def add_patient():
 # New user registration -----------------------------------------------------
 @application.route("/register", methods=("GET", "POST"))
 def register():
+    """
+    Registers a user from form data.
+    """
     registration_form = RegistrationForm()
     if registration_form.validate_on_submit():
         firstname = registration_form.firstname.data
@@ -207,6 +223,9 @@ def register():
 # User login ------------------------------------------------------------------
 @application.route("/login", methods=["GET", "POST"])
 def login():
+    """
+    Logs in a user.
+    """
     login_form = LogInForm()
     if login_form.validate_on_submit():
         username = login_form.username.data
@@ -224,6 +243,9 @@ def login():
 # User logout ------------------------------------------------------------------
 @application.route("/logout")
 def logout():
+    """
+    Logs out a user.
+    """
     logout_user()
     return redirect(url_for("index"))
 
