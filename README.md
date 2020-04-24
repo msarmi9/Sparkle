@@ -1,5 +1,5 @@
 [![codecov](https://codecov.io/gh/msarmi9/Sparkle/branch/master/graph/badge.svg)](https://codecov.io/gh/msarmi9/Sparkle)
-[![Documentation Status](https://readthedocs.org/projects/sparkleai/badge/?version=latest)](https://sparkleai.readthedocs.io/en/latest/?badge=latest)
+[![docs](https://github.com/msarmi9/Sparkle/workflows/docs/badge.svg)](https://msarmi9.github.io/Sparkle/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 
@@ -25,9 +25,9 @@ Currently, there are a variety of mobile and smartwatch applications available t
 4. Correct medication intake is verified both by patient input and a ML model.
 
 5. The doctors’ internal portal is updated with this information, allowing doctors to:
-    
+
     - Take corrective action if a patient fails to take medication as prescribed.
-    
+
     - Submit a prescription refill order to a patient’s pharmacy if needed.
 
 6) Patients are alerted to pick-up medication refills at their local pharmacy or are notified that they have completed the course of treatment for the given medication.
@@ -75,7 +75,7 @@ _In development on the_ [_`web` branch_](https://github.com/msarmi9/Sparkle/tree
     - Search bar for selecting patients by name at top of homepage.
     - Ability to upload prescription information and medication schedules for each patient.
     - Alerts (web/text/e-mail) for patients with poor medication adherence and low medication state.
-    
+
 
 ![webapp](./images/web_app.png)
 
