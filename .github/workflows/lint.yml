@@ -1,6 +1,6 @@
 name: lint
 
-on: [push]
+on: pull_request
 
 jobs:
   build:
@@ -9,6 +9,8 @@ jobs:
     steps:
       - name: Checkout master
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
 
       - name: Set up python
         uses: actions/setup-python@v1
@@ -32,3 +34,4 @@ jobs:
         with:
           commit_message: "style: reformat with black"
           commit_author: "Github Actions <actions@github.com>"
+          branch: ${{ github.head_ref }}
