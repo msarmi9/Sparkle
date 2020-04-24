@@ -226,6 +226,28 @@ class Prescription(db.Model):
             return 1.0
         return len(self.intakes) / n_required_intakes
 
+    def next_refill_date(self):
+        """
+        Return next refill date based on most recent (last) refill date 
+        and dosage information.
+        """
+        if self.refill_num == self.refills or self.refills == 0:
+            return None
+        days_per_cycle = (math.floor(self.duration * 
+                                     DAY_STD[self.duration_unit] /
+                                     (self.refills + 1)))
+        return self.last_refill_date + timedelta(days=days_per_cycle)
+
+    def days_until_refill(self):
+        """
+        Return number of days until next refill.
+        If curr_date > next_refill_date, for instance, if refill was not fulfilled
+            in time, then days until refill is still 0.
+        """
+        if self.next_refill_date() is None:
+            return None
+        return max([(self.next_refill_date() - datetime.now()).days, 0])
+
 
 class Intake(db.Model):
     id = db.Column(db.Integer, primary_key=True)
