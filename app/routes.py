@@ -323,15 +323,15 @@ def send_data():
     # saving data to Intake table
     # rx = Prescription.query.filter_by(id=my_prescription_id).first()
     # note: this _requires_ there to be a prescription already in db!
-#     intake = Intake(
-#         s3_url=s3_url,
-#         recording_data=json.dumps(content),
-#         timestamp=timestamp,
-#         on_time=on_time,
-#         prescription_id=id,
-#     )
-#     db.session.add(intake)
-#     db.session.commit()
+    intake = Intake(
+        s3_url=s3_url,
+        recording_data=json.dumps(content),
+        timestamp=timestamp,
+        on_time=on_time,
+        prescription_id=id,
+    )
+    db.session.add(intake)
+    db.session.commit()
 
     model_pred_dict = adherence_model(recording_data)
 
