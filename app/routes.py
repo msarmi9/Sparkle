@@ -272,6 +272,7 @@ def adherence_model(data, regressor_path="./modeling/regressor.pkl"):
 
         regressor = pickle.load(open(regressor_path, "rb"))
         predicted_pills = regressor.predict(X).round().item()
+        predicted_pills = max(min(predicted_pills, 30), 1)
 
         pred_string = f"It looks like you have {predicted_pills - 1} pills remaining."
         return {
