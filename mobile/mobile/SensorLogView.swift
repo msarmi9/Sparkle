@@ -55,6 +55,7 @@ struct Message: Identifiable {
 // PUT HTTP Alamofire stuff here!
 struct flaskResponse: Decodable {
     let pred_string: String
+    let pred_type: String
     let pred: Float
 }
 
@@ -68,7 +69,7 @@ struct flaskResponse: Decodable {
 //    ]
 
 
-func sendPost(parameters: [String: String], _ completion: @escaping (String?, Float?) -> Void){
+func sendPost(parameters: [String: String], _ completion: @escaping (String?, String?, Float?) -> Void){
     // the completion allows me to return the pred
     // https://stackoverflow.com/questions/51504239/difficulty-with-swift-alamofire-completion-handlers
     AF.request("http://sparkle-env.eba-b8vqgrb3.us-west-2.elasticbeanstalk.com/send-data",
@@ -78,9 +79,10 @@ func sendPost(parameters: [String: String], _ completion: @escaping (String?, Fl
 //                    debugPrint(response)
                 guard let flaskresponse = response.value else { return }
                 let pred_string = flaskresponse.pred_string
+                let pred_type = flaskresponse.pred_type
                 let pred = flaskresponse.pred
                 NSLog("Successfully received a response with\npred_string: \(pred_string)\npred: \(pred)")
-                completion(pred_string, pred)
+                completion(pred_string, pred_type, pred)
     }
 }
 
@@ -95,6 +97,7 @@ final class WatchSessionManager: NSObject, ObservableObject {
     @Published var messagesReceived: [Message] = []
     
     @Published var pred_string: String = "You haven't taken medication recently."
+    @Published var pred_type: String = "N/A"
     @Published var pred: Float = 0.0
     
     override init() {
@@ -161,10 +164,12 @@ extension WatchSessionManager: WCSessionDelegate {
                 "timestamp": getTimestamp(),
                 "on_time": "1",
                 ]
-            sendPost(parameters: parameters) { pred_string, pred  in
+            sendPost(parameters: parameters) { pred_string, pred_type, pred  in
                 guard let pred_string = pred_string else { return }
+                guard let pred_type = pred_type else { return }
                 guard let pred = pred else { return }
                 self.pred_string = pred_string
+                self.pred_type = pred_type
                 self.pred = pred
             }
             
@@ -187,6 +192,8 @@ struct SensorLogView: View {
         VStack {
             Text("Status:").bold()
             Text(watchSession.pred_string).italic().padding(.bottom, 50)
+            Text("Prediction Type:")
+            Text(watchSession.pred_type).italic().padding(.bottom, 50)
             List(watchSession.messagesReceived) { message in
                 Text(message.dateString)
             }
