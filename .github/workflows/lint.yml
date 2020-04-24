@@ -30,4 +30,4 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4.1.5
         with:
-          commit_message: style: reformat with black
+          commit_message: "style: reformat with black"
