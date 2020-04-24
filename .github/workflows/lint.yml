@@ -15,16 +15,20 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Check code style with black
-        uses: lgeiger/black-action@master
-        with:
-          args: . --check
-
       - name: Lint with flake8
         run: |
           pip install --upgrade pip
           pip install --upgrade flake8
-          # Fail on syntax errors, undefined names, and unused imports
           flake8 . --select=E9,F63,F7,F82,F84 --statistics
-          # Treat all other errors as warnings
           flake8 . --exit-zero --max-complexity=10 --max-line-length=88 --statistics
+
+      - name: Enforce code style with black
+        uses: lgeiger/black-action@master
+        with:
+          args: .
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4.1.5
+        with:
+          commit_message: "style: reformat with black"
+          commit_author: "Github Actions <actions@github.com>"

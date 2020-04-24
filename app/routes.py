@@ -39,7 +39,7 @@ def index():
 @login_required
 def dashboard():
     """
-    Render dashboard for doctors to get comprehensive view of patient 
+    Render dashboard for doctors to get comprehensive view of patient
     adherence trends and statistics.
     """
     patients = User.query.filter_by(id=current_user.id).first().patients
