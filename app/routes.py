@@ -324,7 +324,7 @@ def send_data():
     # note: this _requires_ there to be a prescription already in db!
     intake = Intake(
         s3_url=s3_url,
-        recording_data=content,
+        recording_data=jsonify(content),
         timestamp=timestamp,
         on_time=on_time,
         prescription_id=id,
