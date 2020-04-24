@@ -19,6 +19,10 @@ from app import db, login_manager
 
 
 class User(db.Model, UserMixin):
+    """
+    User model with functions to set and check password when logging in.
+    """
+
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(50), unique=False, nullable=False)
     lastname = db.Column(db.String(50), unique=False, nullable=False)
@@ -44,6 +48,10 @@ class User(db.Model, UserMixin):
 
 
 class Patient(db.Model):
+    """
+    Defines a Patient, which has a foreign key pointed to User (doctor).
+    """
+
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(50), unique=False, nullable=False)
     lastname = db.Column(db.String(50), unique=False, nullable=False)
@@ -64,7 +72,7 @@ class Patient(db.Model):
         end: datetime - optional end date for filtering
 
         TODO: Implement start, end filtering
-        NOTE: There's probably a better way of doing this.  Perhaps setting Patient
+        NOTE: There's probably a better way of doing this. Perhaps setting Patient
               as a foreign key in Intake?
         """
         all_intakes = []
@@ -98,6 +106,17 @@ class Patient(db.Model):
     def frac_adhering_prescriptions(
         self, on_time_threshold=0.9, required_intakes_threshold=0.9
     ):
+        """
+        Return fraction of prescriptions for this Patient that are deemed 
+        adherent.
+        Adherence requires Intakes to be recorded on time and on track 
+        (i.e. medications aren't missed).
+
+        on_time_threshold: float - fraction on time Intakes needed for 
+        this prescription to be deemed adherent
+        required_intakes_threshold: float - fraction Intakes actually 
+        recorded, out of all prescribed Intakes since start date.
+        """
         if len(self.prescriptions) == 0:
             return {}
         adherence = {}
@@ -118,6 +137,15 @@ class Patient(db.Model):
         return adherence
 
     def is_adherent(self, on_time_threshold=0.9, required_intakes_threshold=0.9):
+        """
+        Whether or not a patient is deemed adherent based on their 
+        prescription adherence.
+
+        on_time_threshold: float - fraction on time Intakes needed for 
+        this prescription to be deemed adherent
+        required_intakes_threshold: float - fraction Intakes actually 
+        recorded, out of all prescribed Intakes since start date.
+        """
         stats = self.adherence_stats()
         for rx_id, details in stats.items():
             if (
@@ -149,8 +177,12 @@ class Prescription(db.Model):
 
     created = date this Prescription was created; auto-filled
     start_date = start date of first intake (regardless of refill)
-    next_refill = date of next refill; auto-filled
-    days_remaining = days until next refill; auto-filled nightly
+    last_refill_date = date of most recent refill
+    next_refill = date of next refill; auto-filled field
+    days_until_refill = days until next refill; auto-filled field
+
+    patient_id = patient ID for which this Prescription is for
+    intakes = collection of Intakes for this Prescription (one to many field)
     """
 
     id = db.Column(db.Integer, primary_key=True)
@@ -187,9 +219,15 @@ class Prescription(db.Model):
     intakes = db.relationship("Intake", backref="prescription", lazy=True)
 
     def has_started(self):
+        """
+        Whether this Prescription is active, according to start date.
+        """
         return datetime.now() >= self.start_date
 
     def is_adherent(self, on_time_threshold=0.9, required_intakes_threshold=0.9):
+        """
+        Whether this Prescription is adhered to by the Patient.
+        """
         return (
             self.frac_on_time() >= on_time_threshold
             and self.frac_required_intakes() >= required_intakes_threshold
@@ -233,9 +271,9 @@ class Prescription(db.Model):
         """
         if self.refill_num == self.refills or self.refills == 0:
             return None
-        days_per_cycle = (math.floor(self.duration * 
-                                     DAY_STD[self.duration_unit] /
-                                     (self.refills + 1)))
+        days_per_cycle = math.floor(
+            self.duration * DAY_STD[self.duration_unit] / (self.refills + 1)
+        )
         return self.last_refill_date + timedelta(days=days_per_cycle)
 
     def days_until_refill(self):
@@ -250,6 +288,11 @@ class Prescription(db.Model):
 
 
 class Intake(db.Model):
+    """
+    Intake model. Intakes are created when the app receives a recording, 
+    indicating that a patient has taken medication.
+    """
+
     id = db.Column(db.Integer, primary_key=True)
     s3_url = db.Column(db.String(500), unique=True, nullable=True)
     recording_data = db.Column(db.JSON(), unique=False, nullable=True)
@@ -263,6 +306,10 @@ class Intake(db.Model):
 
 
 class PatientForm(FlaskForm):
+    """
+    Form for creating a new patient.
+    """
+
     firstname = StringField("First name", validators=[DataRequired()])
     lastname = StringField("Last name", validators=[DataRequired()])
     email = StringField("Email")
@@ -271,6 +318,10 @@ class PatientForm(FlaskForm):
 
 
 class PrescriptionForm(FlaskForm):
+    """
+    Form for creating a new prescription.
+    """
+
     # TODO: We technically don't need these wtf/Flask forms.
     #       The only reason why we have them now is to provide the CSRF token
     #       to the frontend/templates when rendering the form.
@@ -280,6 +331,10 @@ class PrescriptionForm(FlaskForm):
 
 
 class RegistrationForm(FlaskForm):
+    """
+    Form for new user (doctor) registration.
+    """
+
     firstname = StringField("First name", validators=[DataRequired()])
     lastname = StringField("Last name", validators=[DataRequired()])
     username = StringField("Username", validators=[DataRequired()])
@@ -289,12 +344,20 @@ class RegistrationForm(FlaskForm):
 
 
 class LogInForm(FlaskForm):
+    """
+    Form for user log-in.
+    """
+
     username = StringField("Username", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
     submit = SubmitField("Login")
 
 
 class UploadFileForm(FlaskForm):
+    """
+    Form to upload a file.
+    """
+
     file_selector = FileField("File", validators=[FileRequired()])
     submit = SubmitField("Submit")
 
@@ -307,4 +370,8 @@ db.session.commit()
 # from the user ID stored in the session.
 @login_manager.user_loader
 def load_user(id):
+    """
+    This callback is used to reload the user object
+    from the user ID stored in the session.
+    """
     return User.query.get(int(id))
