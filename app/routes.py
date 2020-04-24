@@ -5,7 +5,8 @@ from datetime import date, datetime, timedelta
 from app import application, db
 from app.utils import *
 from app.classes import (
-    User, Patient,
+    User,
+    Patient,
     Prescription,
     PrescriptionForm,
     Patient,
