@@ -21,6 +21,7 @@ from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 import numpy as np
 
+from modeling.preprocessing import preprocess
 
 # Home / splash page --------------------------------------------------------
 @application.route("/")
@@ -248,26 +249,27 @@ def upload():
 
 
 # Data receiving endpoint ---------------------------------------------------
-def adherence_model(data, classifier_path="../models/classifier.pkl", regressor_path="../models/regressor.pkl"):
+def adherence_model(data, regressor_path="../modeling/regressor.pkl"):
     """
     takes in accelerometer and gyroscope data as a string.
     """
-    # loading models
-    classifier = pickle.load(open(classifier_path, "rb"))
-    regressor = pickle.load(open(regressor_path, "rb"))
-    # loading and preprocessing data
-    raw_sensor_data = pd.read_csv(StringIO(data))
-    sensor_data = preprocess(raw_sensor_data)              # imported at top of module
-    # making classification
-    classifier_pred = classifier.predict(sensor_data)      # should be a binary prediction
+    sensor_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
+    global_mean = np.abs(sensor_data).mean(axis=1).mean(axis=0)
+    classifier_pred = global_mean.round()
+
     if classifier_pred == 0:
-        pred_string = "It does not appear you took any medication." 
+        pred_string = "It does not appear you took any medication."
         return {"pred_string": pred_string, "pred_type": "classification", "pred": classifier_pred}
     else:
-        # making regression
-        regressor_pred = regressor.predict(sensor_data)
-        pred_string = f"It looks like you have {round(regressor_pred) - 1} pills remaining."
-        return {"pred_string": pred_string, "pred_type":"regression", "pred": regressor_pred}
+        # run the regression process 
+        raw_sensor_data = StringIO(data)
+        X = preprocess(raw_sensor_data)
+
+        regressor = pickle.load(open(regressor_path, "rb"))
+        predicted_pills = regressor.predict(X).round()
+
+        pred_string = f"It looks like you have {predicted_pills - 1} pills remaining."
+        return {"pred_string": pred_string, "pred_type":"regression", "pred": predicted_pills}
 
 
 @application.route("/send-data", methods=["POST"])
