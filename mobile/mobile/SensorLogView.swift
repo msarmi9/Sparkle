@@ -158,11 +158,11 @@ extension WatchSessionManager: WCSessionDelegate {
             
             // send post request
             let parameters = [
-                "id": "1",
+                "id": "7",
                 "s3_url": "s3://blah/blah/\(getTimestamp())",
                 "recording_data": String(m["sensorString"] ?? "nil"),
                 "timestamp": getTimestamp(),
-                "on_time": "1",
+                "on_time": "0",
                 ]
             sendPost(parameters: parameters) { pred_string, pred_type, pred  in
                 guard let pred_string = pred_string else { return }
