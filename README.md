@@ -61,7 +61,7 @@ _In development on the_ [_`mobile` branch._](https://github.com/msarmi9/Sparkle/
     - Separate view for weekly, monthly, and yearly medication intake summary & statistics.
     - Collection of gamification rewards (characters, planets, trees, etc.) based on successful medication adherence (e.g. streaks).
 
-![mobile_gif](./images/mobile_apps.gif)
+![mobile_gif](./docs/images/mobile_apps.gif)
 
 ### Web Application
 
@@ -77,6 +77,6 @@ _In development on the_ [_`web` branch_](https://github.com/msarmi9/Sparkle/tree
     - Alerts (web/text/e-mail) for patients with poor medication adherence and low medication state.
 
 
-![webapp](./images/web_app.png)
+![webapp](./docs/images/web_app.png)
 
 _This is a screenshot of a drafted UI and is likely to change in the coming weeks._
