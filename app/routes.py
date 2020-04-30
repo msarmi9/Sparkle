@@ -51,7 +51,7 @@ def dashboard():
 
     rxs = Prescription.query.all()
     if len(rxs) == 0:
-        rx_adherence = 1.0
+        rx_adherence = 100
     else:
         adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
         rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
