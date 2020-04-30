@@ -2,7 +2,6 @@ import math
 import numpy as np
 import pandas as pd
 import pickle
-from sklearn.preprocessing import StandardScaler
 from sklearn.feature_selection import SelectFromModel
 import xgboost as xgb
 
@@ -73,30 +72,32 @@ def pivotData(df):
     return df
 
 
-def selectScaleFeatures(df):
+def selectFeatures(X):
     """
-	Loads pre-fit standard scaler and selection objects and applies to input.
-	This casts the dataframe as a numpy array, applies the scaler, then applies feature selection. 
+	Loads pre-fit selection objects and applies to input.
+	This casts the dataframe as a numpy array, then applies feature selection. 
 	The output an array of numeric features ready for XGB model usage. 
 	"""
-    # apply a pre-fit standard scaler scaling to data
-    ss = pickle.load(open("modeling/scaler.pkl", "rb"))
-    X_scaled = ss.transform(df.to_numpy())
-    print(X_scaled)
 
     # select the top features according to previous analysis
     select = pickle.load(open("modeling/selection.pkl", "rb"))
-    X_select = select.transform(X_scaled)
+    X_select = select.transform(X)
 
     return X_select
 
 
-def preprocess(raw_sensor_data, trim_start_pct=0.05, trim_end_pct=0.05, n_windows=5):
+def preprocess(
+    raw_sensor_data, regression, trim_start_pct=0.05, trim_end_pct=0.05, n_windows=5
+):
 
     df = initializeDf(raw_sensor_data)
     df = renameColumns(df)
     df = trimData(df, trim_start_pct=trim_start_pct, trim_end_pct=trim_end_pct)
     df = windowData(df, n_windows=n_windows)
     df = pivotData(df)
-    X = selectScaleFeatures(df)
+
+    X = df.to_numpy()
+    if regression:
+        X = selectFeatures(df)
+
     return X
