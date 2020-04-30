@@ -74,9 +74,8 @@ def pivotData(df):
 
 def selectFeatures(X):
     """
-	Loads pre-fit selection objects and applies to input.
-	This casts the dataframe as a numpy array, then applies feature selection. 
-	The output an array of numeric features ready for XGB model usage. 
+	Loads pre-fit selection object and applies to input, reducing feature space.
+	The output is an dataframe of numeric features ready for XGB regression. 
 	"""
 
     # select the top features according to previous analysis
