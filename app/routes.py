@@ -273,15 +273,22 @@ def upload():
 
 
 # Data receiving endpoint ---------------------------------------------------
-def adherence_model(data, regressor_path="./modeling/regressor.pkl"):
+def adherence_model(
+    data,
+    classifier_path="./modeling/classifier.pkl",
+    regressor_path="./modeling/regressor.pkl",
+):
     """
     takes in accelerometer and gyroscope data as a string.
     """
-    sensor_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
-    global_mean = np.abs(sensor_data).mean(axis=1).mean(axis=0)
-    classifier_pred = global_mean.round()
+    raw_sensor_data = StringIO(data)
 
-    if global_mean < 0.2:
+    # run the pill classifier process
+    X = preprocess(raw_sensor_data, regression=False)
+    classifier = pickle.load(open(classifier_path, "rb"))
+    classifier_pred = classifier.predict(X).item()
+
+    if classifier_pred == 0:
         pred_string = "It does not appear you took any medication."
         return {
             "pred_string": pred_string,
@@ -290,8 +297,7 @@ def adherence_model(data, regressor_path="./modeling/regressor.pkl"):
         }
     else:
         # run the regression process
-        raw_sensor_data = StringIO(data)
-        X = preprocess(raw_sensor_data)
+        X = preprocess(raw_sensor_data, regression=True)
 
         regressor = pickle.load(open(regressor_path, "rb"))
         predicted_pills = regressor.predict(X).round().item()
