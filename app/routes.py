@@ -285,7 +285,7 @@ def adherence_model(
 
     # run the pill classifier process
     X = preprocess(raw_sensor_data, regression=False)
-    classifier = pickle.load(open(regressor_path, "rb"))
+    classifier = pickle.load(open(classifier_path, "rb"))
     classifier_pred = classifier.predict(X).item()
 
     if classifier_pred == 0:
