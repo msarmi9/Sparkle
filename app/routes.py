@@ -279,7 +279,7 @@ def adherence_model(data, regressor_path="./modeling/regressor.pkl"):
     """
     sensor_data = np.genfromtxt(StringIO(data), delimiter=",", skip_header=1)
     global_mean = np.abs(sensor_data).mean(axis=1).mean(axis=0)
-#     classifier_pred = global_mean.round()
+    #     classifier_pred = global_mean.round()
 
     if global_mean < 0.2:
         pred_string = "It does not appear you took any medication."
