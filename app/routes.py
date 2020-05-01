@@ -357,9 +357,13 @@ def mobile_login():
     today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
     todays_schedule = [[metadata for date, metadata in day.items() if date==today] for schedule in schedules for day in schedule]
 
+    # getting name from Patient Table
+    firstname = Patient.query.filter_by(id=patient_id).first().firstname
+
     # flattening and transforming datetime object to string
     todays_schedule = [metadata for rx in todays_schedule for metadata in rx if metadata]
     for schedule in todays_schedule:
         schedule["timestamp"] = schedule["timestamp"].strftime("%Y-%m-%d_%H:%M:%S")
+        schedule["firstname"] = firstname
 
     return jsonify(todays_schedule)
