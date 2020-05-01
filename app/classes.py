@@ -280,6 +280,32 @@ class Prescription(db.Model):
             return None
         return max([(self.next_refill_date() - datetime.now()).days, 0])
 
+    def generate_schedule(self):
+        """
+        Generates the schedule which is a list of rx's, where each
+        rx is a list of dictionaries with key being the date and value being
+        another dictionary of metadata.
+
+        Currently only works for the case when freq_repeat = 1 and
+        freq_repeat_unit = day
+        """
+        dates = [self.start_date + timedelta(days=i) for i in range(self.duration)]
+        schedule = [
+            {
+                date: {
+                    "timestamp": date + timedelta(hours=8)
+                    if self.time_of_day == "AM"
+                    else date + timedelta(hours=20),
+                    "drug": self.drug,
+                    "desc": self.desc,
+                    "amount": self.amount,
+                    "route": self.route,
+                }
+            }
+            for date in dates
+        ]
+        return schedule
+
 
 class Intake(db.Model):
     """

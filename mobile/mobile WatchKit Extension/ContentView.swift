@@ -13,14 +13,14 @@ struct ContentView: View {
     @ObservedObject var motion: MotionManager
     @State private var duration: Float = 0.0
     @State var Hz: Int =  30
-    @State var pillCount: String = "A"
+    @State var pillCount: String = "1"
     
 
     var body: some View {
         ScrollView {
             VStack {
                 Title()
-                Spacer().frame(height: 25)
+                Spacer().frame(height: 23)
                 if isRecording {
                     // When isRecording = True
                     VStack {

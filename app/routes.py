@@ -342,3 +342,40 @@ def send_data():
     model_pred_dict = adherence_model(recording_data)
 
     return jsonify(model_pred_dict)
+
+
+# mobile login  --------------------------------------------------------
+@application.route("/mobile-login", methods=["POST"])
+def mobile_login():
+    """
+    login from web app
+    today's schedule returns a list of dictionaries with metadata
+    """
+    # retrieving data from json request
+    content = request.get_json()
+    patient_id = content["patient_id"]
+
+    # getting all prescriptions for all schedules
+    rxs = Prescription.query.filter_by(patient_id=patient_id).all()
+    schedules = [rx.generate_schedule() for rx in rxs]
+
+    # getting only prescription for today (this can probably be optimized)
+    today = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
+    todays_schedule = [
+        [metadata for date, metadata in day.items() if date == today]
+        for schedule in schedules
+        for day in schedule
+    ]
+
+    # getting name from Patient Table
+    firstname = Patient.query.filter_by(id=patient_id).first().firstname
+
+    # flattening and transforming datetime object to string
+    todays_schedule = [
+        metadata for rx in todays_schedule for metadata in rx if metadata
+    ]
+    for schedule in todays_schedule:
+        schedule["timestamp"] = schedule["timestamp"].strftime("%Y-%m-%d_%H:%M:%S")
+        schedule["firstname"] = firstname
+
+    return jsonify(todays_schedule)

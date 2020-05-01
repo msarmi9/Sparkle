@@ -30,7 +30,7 @@ func uploadData(dataString: String) -> String {
     // date-embedded key
     let dateString = getTimestamp()
     
-    Amplify.Storage.uploadData(key: "\(dateString).csv", data: data) { (event) in
+    Amplify.Storage.uploadData(key: "\(dateString)_5.csv", data: data) { (event) in
         switch event {
         case .completed(let data):
             print("Completed: \(data)")
@@ -70,8 +70,6 @@ struct flaskResponse: Decodable {
 
 
 func sendPost(parameters: [String: String], _ completion: @escaping (String?, String?, Float?) -> Void){
-    // the completion allows me to return the pred
-    // https://stackoverflow.com/questions/51504239/difficulty-with-swift-alamofire-completion-handlers
     AF.request("http://twinkle3.us-west-2.elasticbeanstalk.com/send-data",
                method: .post,
                parameters: parameters,
@@ -157,21 +155,21 @@ extension WatchSessionManager: WCSessionDelegate {
             let dateString = uploadData(dataString: sensorString)
             
             // send post request
-            let parameters = [
-                "id": "7",
-                "s3_url": "s3://blah/blah/\(getTimestamp())",
-                "recording_data": String(m["sensorString"] ?? "nil"),
-                "timestamp": getTimestamp(),
-                "on_time": "0",
-                ]
-            sendPost(parameters: parameters) { pred_string, pred_type, pred  in
-                guard let pred_string = pred_string else { return }
-                guard let pred_type = pred_type else { return }
-                guard let pred = pred else { return }
-                self.pred_string = pred_string
-                self.pred_type = pred_type
-                self.pred = pred
-            }
+//            let parameters = [
+//                "id": "7",
+//                "s3_url": "s3://blah/blah/\(getTimestamp())",
+//                "recording_data": String(m["sensorString"] ?? "nil"),
+//                "timestamp": getTimestamp(),
+//                "on_time": "0",
+//                ]
+//            sendPost(parameters: parameters) { pred_string, pred_type, pred  in
+//                guard let pred_string = pred_string else { return }
+//                guard let pred_type = pred_type else { return }
+//                guard let pred = pred else { return }
+//                self.pred_string = pred_string
+//                self.pred_type = pred_type
+//                self.pred = pred
+//            }
             
             
             // updated UI
