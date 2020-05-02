@@ -35,17 +35,37 @@ def index():
     return render_template("splash.html", message="Welcome to Sparkle!")
 
 
-# Dashboard - visible once a user logs in -----------------------------------
+# Dashboard page ------------------------------------------------------------
+@application.route("/about")
+def about():
+    """
+    "About Us" page.
+    """
+    return render_template('about.html')
+
+
+
+# Dashboard page ------------------------------------------------------------
 @application.route("/dashboard")
 @login_required
 def dashboard():
     """
-    Render dashboard for doctors to get comprehensive view of patient
-    adherence trends and statistics.
+    Render dashboard page which includes plots/analytics of adherence trends 
+    and statistics.
+    """
+    return render_template('dashboard.html')
+
+# Patient cards display -----------------------------------------------------
+@application.route("/patients")
+@login_required
+def patients():
+    """
+    Render patient cards for doctors to quickly monitor patients who are 
+    adhering and deviating.
     """
     patients = User.query.filter_by(id=current_user.id).first().patients
     if len(patients) == 0:
-        return render_template("dashboard.html", patients=patients)
+        return render_template("patients.html", patients=patients)
     n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
     patient_adherence = round(n_adherent / len(patients) * 100)
 
@@ -64,7 +84,7 @@ def dashboard():
     )
     unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
     return render_template(
-        "dashboard.html",
+        "patients.html",
         patients=patients,
         patient_adherence=patient_adherence,
         rx_adherence=rx_adherence,
@@ -192,7 +212,7 @@ def add_patient():
         )
         db.session.add(patient)
         db.session.commit()
-        return redirect(url_for("dashboard"))
+        return redirect(url_for("patients"))
     return render_template("add_patient.html", form=patient_form)
 
 
@@ -240,7 +260,7 @@ def login():
         # Login and validate the user; take them to dashboard page.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("patients"))
     return render_template("login.html", form=login_form)
 
 

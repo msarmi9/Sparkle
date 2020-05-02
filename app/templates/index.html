@@ -59,20 +59,16 @@
 		  </button>
 
 		  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-		  	<form class="form-inline my-2 my-lg-0">
-		      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-		      <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
-		    </form>
 		    <ul class="navbar-nav mr-auto">
 			    {% if current_user.is_authenticated %}
 			      <li class="nav-item active">
 			        <a class="nav-link" href="/dashboard">Dashboard</a>
 			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="#">Patients</a>
+			      <li class="nav-item active">
+			        <a class="nav-link" href="/patients">Patients</a>
 			      </li>
-			      <li class="nav-item">
-			        <a class="nav-link" href="#">Help</a>
+			      <li class="nav-item active">
+			        <a class="nav-link" href="/about">About</a>
 			      </li>
 				{% endif %}
 			</ul>
@@ -88,7 +84,7 @@
 				      	<a class="nav-link" href="/logout">Sign out</a>
 				      </li>
 			      {% else %}
-				      <li class="nav-item active">
+				      <li class="nav-item">
 				        <a class="nav-link" href="/login">Sign in</a>
 				      </li>
 				      <li class="nav-item">
@@ -102,6 +98,7 @@
 
 		{% block splash %} {% endblock %}
 		{% block register %} {% endblock %}
+		{% block analytics %} {% endblock %}
 		{% block login %} {% endblock %}
 		{% block logout %} {% endblock %}
 		{% block add_patient %} {% endblock %}
