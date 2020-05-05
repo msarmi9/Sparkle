@@ -39,34 +39,65 @@ func sendLoginPost(patient_id: String, _ completion: @escaping (String?, String?
 }
 
 
+class ContentViewModel: ObservableObject {
+    // https://www.calincrist.com/blog/2020-04-12-how-to-get-notified-for-changes-in-swiftui/
+    var patient_id: String = "" {
+        willSet { // only updates view if patient_id > 1
+            if patient_id.count > 1  {
+                self.sendLoginPost()
+                objectWillChange.send()
+            }
+        }
+    }
+    @Published var firstname: String = "" {
+        didSet {
+            loggedIn = (firstname.count > 1)
+        }
+    }
+    @Published var nextTime: String = ""
+    @Published var nextDrug: String = ""
+    @Published var nextDesc: String = ""
+    @Published var nextAmount: Int = 0
+    @Published var loggedIn: Bool = false
+    
+    func sendLoginPost(){
+        let parameters = ["patient_id": self.patient_id]
+        AF.request("http://twinkle3.us-west-2.elasticbeanstalk.com/mobile-login",
+                   method: .post,
+                   parameters: parameters,
+                   encoder: JSONParameterEncoder.default).responseDecodable(of: [rxMetadata].self) { response in
+    //                    debugPrint(response)
+                    guard let schedule = response.value else { return }
+                    self.firstname = schedule[0].firstname
+                    self.nextTime = schedule[0].timestamp
+                    self.nextDrug = schedule[0].drug
+                    self.nextDesc = schedule[0].desc
+                    self.nextAmount = schedule[0].amount
+//                    completion(self.firstname, self.nextTime, self.nextDrug, self.nextDesc, self.nextAmount)
+        }
+    }
+}
+
 // View
 struct ContentView: View {
-    @State private var patient_id: String = ""
-    @State private var firstname: String = ""
-    @State private var loggedIn: Bool = false
-    @State private var nextTime: String = ""
-    @State private var nextDrug: String = ""
-    @State private var nextDesc: String = ""
-    @State private var nextAmount: Int = 0
+    @ObservedObject var viewModel = ContentViewModel()
     var body: some View {
         VStack {
             Title()
-            TextField("Enter patient id here",
-                      text: $patient_id,
-                      onCommit: { sendLoginPost(patient_id: "1") { firstname, timestamp, drug, desc, amount in
-                        guard case self.firstname = firstname else { return }
-                        self.loggedIn = true
-                        guard case self.nextTime = timestamp else { return }
-                        guard case self.nextDrug = drug else { return }
-                        guard case self.nextDesc = desc else { return }
-                        guard case self.nextAmount = amount else { return }
-                      } })
+            if self.viewModel.loggedIn == false {  // logged out
+                TextField("Enter patient id here",
+                          text: $viewModel.patient_id,
+                          onCommit: { self.viewModel.sendLoginPost()
+                })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-            .alert(isPresented: $loggedIn) {
-                Alert(title: Text("Welcome, \(self.firstname)"), message: Text("Don't forget to take \(nextAmount) \(nextDrug)'s at \(nextTime) today!"), dismissButton: .default(Text("Got it!")))
+            } else {                               // logged in
+                Toggle(isOn: $viewModel.loggedIn) {
+                    Text("You're logged in")
+                }
+                Text("Welcome \(viewModel.firstname)!")
+                Text("Don't forget to take \(viewModel.nextAmount) \(viewModel.nextDrug)'s at \(viewModel.nextTime) today!")
             }
-            Text("Welcome \(firstname)!")
-            Text("Don't forget to take \(nextAmount) \(nextDrug)'s at \(nextTime) today!")
+            
             SeeSensors()
         }
     }
@@ -89,12 +120,12 @@ struct SeeSensors: View {
     var body: some View {
         NavigationView {
             HStack {
-                Image(systemName: "antenna.radiowaves.left.and.right")
-                    .font(.headline)
-                // maybe want to use a button here..
-                NavigationLink(destination: SensorLogView(watchSession: WatchSessionManager())){
-                    Text("See recordings")
-                }
+                    Image(systemName: "antenna.radiowaves.left.and.right")
+                        .font(.headline)
+                    // maybe want to use a button here..
+                    NavigationLink(destination: SensorLogView(watchSession: WatchSessionManager())){
+                        Text("See recordings")
+                    }
             }
         }
     }

@@ -24,6 +24,19 @@ func getTimestamp() -> String {
     return dateString
 }
 
+extension String {
+    var bool: Bool? {
+        switch self.lowercased() {
+        case "true", "t", "yes", "y", "1":
+            return true
+        case "false", "f", "no", "n", "0":
+            return false
+        default:
+            return nil
+        }
+    }
+}
+
 func uploadData(dataString: String) -> String {
     let data = dataString.data(using: .utf8)!
     
@@ -84,19 +97,33 @@ func sendPost(parameters: [String: String], _ completion: @escaping (String?, St
     }
 }
 
-
+func bool2string(b: Bool) -> String {
+    if b == true {
+        return "1"
+    } else {
+        return "0"
+    }
+}
 
 // NSObject is a base class for ObjC objects
 final class WatchSessionManager: NSObject, ObservableObject {
-    @Published var x: String = "0.0"
-    @Published var y: String = "0.0"
-    @Published var z: String = "0.0"
-    
     @Published var messagesReceived: [Message] = []
     
     @Published var pred_string: String = "You haven't taken medication recently."
     @Published var pred_type: String = "N/A"
     @Published var pred: Float = 0.0
+    
+    @Published var prescription_id: String = ""
+    @Published var s3_url: String = ""
+    @Published var recording_data: String = ""
+    @Published var timestamp: String = ""
+    @Published var onTime: Bool = true
+    
+    //                "id": "7",
+    //                "s3_url": "s3://blah/blah/\(getTimestamp())",
+    //                "recording_data": String(m["sensorString"] ?? "nil"),
+    //                "timestamp": getTimestamp(),
+    //                "on_time": "0",
     
     override init() {
         super.init()
@@ -146,30 +173,27 @@ extension WatchSessionManager: WCSessionDelegate {
         // 8
         DispatchQueue.main.async {
             // make sure to put on the main queue to update UI!
-            self.x = String(m["x"] ?? "nil")
-            self.y = String(m["y"] ?? "nil")
-            self.z = String(m["z"] ?? "nil")
             
             // now receiving and uploading sensordata to s3
             let sensorString = String(m["sensorString"] ?? "nil")
             let dateString = uploadData(dataString: sensorString)
             
             // send post request
-//            let parameters = [
-//                "id": "7",
-//                "s3_url": "s3://blah/blah/\(getTimestamp())",
-//                "recording_data": String(m["sensorString"] ?? "nil"),
-//                "timestamp": getTimestamp(),
-//                "on_time": "0",
-//                ]
-//            sendPost(parameters: parameters) { pred_string, pred_type, pred  in
-//                guard let pred_string = pred_string else { return }
-//                guard let pred_type = pred_type else { return }
-//                guard let pred = pred else { return }
-//                self.pred_string = pred_string
-//                self.pred_type = pred_type
-//                self.pred = pred
-//            }
+            let parameters = [
+                "id": "\(self.prescription_id)",
+                "s3_url": "s3://blah/blah/\(getTimestamp())",
+                "recording_data": String(m["sensorString"] ?? "nil"),
+                "timestamp": getTimestamp(),
+                "on_time": bool2string(b: self.onTime),
+                ]
+            sendPost(parameters: parameters) { pred_string, pred_type, pred  in
+                guard let pred_string = pred_string else { return }
+                guard let pred_type = pred_type else { return }
+                guard let pred = pred else { return }
+                self.pred_string = pred_string
+                self.pred_type = pred_type
+                self.pred = pred
+            }
             
             
             // updated UI
@@ -185,15 +209,20 @@ extension WatchSessionManager: WCSessionDelegate {
 struct SensorLogView: View {
     @ObservedObject
     var watchSession: WatchSessionManager
-    
+    // change parameters here!
     var body: some View {
-        VStack {
-            Text("Status:").bold()
-            Text(watchSession.pred_string).italic().padding(.bottom, 50)
-            Text("Prediction Type:")
-            Text(watchSession.pred_type).italic().padding(.bottom, 50)
-            List(watchSession.messagesReceived) { message in
-                Text(message.dateString)
+        ScrollView {
+            VStack {
+                TextField("Prescription id",
+                          text: $watchSession.prescription_id)
+                Toggle("Intake on time", isOn: $watchSession.onTime)
+                Text("Status:").bold()
+                Text(watchSession.pred_string).italic().padding(.bottom, 50)
+                Text("Prediction Type:")
+                Text(watchSession.pred_type).italic().padding(.bottom, 50)
+                List(watchSession.messagesReceived) { message in
+                    Text(message.dateString)
+                }
             }
         }
     }

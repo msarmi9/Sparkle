@@ -124,6 +124,7 @@
 		D6080E96242AABE80037C8C4 /* SensorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorView.swift; sourceTree = "<group>"; };
 		D60AE26C242B97C000E27E46 /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = "<group>"; };
 		D60AE26D242B97C000E27E46 /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
+		D65EE06B245CF2FD0091E8A8 /* testplayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = testplayground.playground; path = "../../../../../Library/Autosave Information/testplayground.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		D6824E2C243D8F840043DEEE /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		D68BEB6624322AB000ECA711 /* SensorLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorLogView.swift; sourceTree = "<group>"; };
 		D6ADC59A245B2CDC0042A508 /* postPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = postPlayground.playground; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
@@ -208,6 +209,7 @@
 		D6080E50242AAB5F0037C8C4 /* mobile */ = {
 			isa = PBXGroup;
 			children = (
+				D65EE06B245CF2FD0091E8A8 /* testplayground.playground */,
 				D6ADC59A245B2CDC0042A508 /* postPlayground.playground */,
 				D6080E51242AAB5F0037C8C4 /* AppDelegate.swift */,
 				D6080E53242AAB5F0037C8C4 /* SceneDelegate.swift */,
