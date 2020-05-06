@@ -3,6 +3,7 @@ Classes to model users (doctors) and patients.
 """
 
 from collections import defaultdict
+import numpy as np
 
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash
