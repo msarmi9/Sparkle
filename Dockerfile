@@ -11,8 +11,7 @@ WORKDIR /app
 
 COPY requirements.txt /app/requirements.txt
 
-RUN python3.7 -m pip install --upgrade pip \
-    python3.7 -m pip install --no-cache-dir -r requirements.txt
+RUN python3.7 -m pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
