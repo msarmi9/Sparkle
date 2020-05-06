@@ -102,12 +102,47 @@
 				    </select>
 				</div>
 			</div>
-			<div class="form-row">
+
+			<!-- <div class="form-row">
 				<div class="form-group col-md-2">
 		    		<label for="start_date">Start date</label>
 		    		<input id="start_date" class="form-control" name="start_date" required>
 				</div>
+			</div> -->
+
+
+			<div class="container">
+
+			    <div class="row">
+			    	<label for="start_date">Start date</label>
+			        <div class="col-sm-6">
+
+			            <div class="form-group">
+
+			                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+
+			                    <input id="start_date"  type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" required>
+			                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+			                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			        <script type="text/javascript">
+			            $(function () {
+			                $('#datetimepicker1').datetimepicker({
+			                	format: 'L'
+
+			                });
+			            });
+			        </script>
+			    </div>
 			</div>
+
+
+
+
+
 			<button type="submit" class="btn btn-primary">Create</button>
 	    </form>
 	</div>
