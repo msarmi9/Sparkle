@@ -2,12 +2,9 @@ from app.utils import *
 from collections import defaultdict
 from flask_wtf import FlaskForm
 from flask_login import UserMixin
-from flask_wtf.file import FileRequired
 import numpy as np
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
-from wtforms import FileField, PasswordField, StringField, SubmitField, IntegerField
-from wtforms.validators import DataRequired
 
 from app import db, login_manager
 
@@ -101,14 +98,14 @@ class Patient(db.Model):
         self, on_time_threshold=0.9, required_intakes_threshold=0.9
     ):
         """
-        Return fraction of prescriptions for this Patient that are deemed 
+        Return fraction of prescriptions for this Patient that are deemed
         adherent.
-        Adherence requires Intakes to be recorded on time and on track 
+        Adherence requires Intakes to be recorded on time and on track
         (i.e. medications aren't missed).
 
-        on_time_threshold: float - fraction on time Intakes needed for 
+        on_time_threshold: float - fraction on time Intakes needed for
         this prescription to be deemed adherent
-        required_intakes_threshold: float - fraction Intakes actually 
+        required_intakes_threshold: float - fraction Intakes actually
         recorded, out of all prescribed Intakes since start date.
         """
         if len(self.prescriptions) == 0:
@@ -132,12 +129,12 @@ class Patient(db.Model):
 
     def is_adherent(self, on_time_threshold=0.9, required_intakes_threshold=0.9):
         """
-        Whether or not a patient is deemed adherent based on their 
+        Whether or not a patient is deemed adherent based on their
         prescription adherence.
 
-        on_time_threshold: float - fraction on time Intakes needed for 
+        on_time_threshold: float - fraction on time Intakes needed for
         this prescription to be deemed adherent
-        required_intakes_threshold: float - fraction Intakes actually 
+        required_intakes_threshold: float - fraction Intakes actually
         recorded, out of all prescribed Intakes since start date.
         """
         stats = self.adherence_stats()
@@ -260,7 +257,7 @@ class Prescription(db.Model):
 
     def next_refill_date(self):
         """
-        Return next refill date based on most recent (last) refill date 
+        Return next refill date based on most recent (last) refill date
         and dosage information.
         """
         if self.refill_num == self.refills or self.refills == 0:
@@ -309,7 +306,7 @@ class Prescription(db.Model):
 
 class Intake(db.Model):
     """
-    Intake model. Intakes are created when the app receives a recording, 
+    Intake model. Intakes are created when the app receives a recording,
     indicating that a patient has taken medication.
     """
 
@@ -323,63 +320,6 @@ class Intake(db.Model):
     prescription_id = db.Column(
         db.Integer, db.ForeignKey("prescription.id"), nullable=False
     )
-
-
-class PatientForm(FlaskForm):
-    """
-    Form for creating a new patient.
-    """
-
-    firstname = StringField("First name", validators=[DataRequired()])
-    lastname = StringField("Last name", validators=[DataRequired()])
-    email = StringField("Email")
-    age = IntegerField("Age", validators=[DataRequired()])
-    weight = IntegerField("Weight", validators=[DataRequired()])
-
-
-class PrescriptionForm(FlaskForm):
-    """
-    Form for creating a new prescription.
-    """
-
-    # TODO: We technically don't need these wtf/Flask forms.
-    #       The only reason why we have them now is to provide the CSRF token
-    #       to the frontend/templates when rendering the form.
-    #       At least one field is needed for this FlaskForm so
-    #       that's why `drug` is still here.
-    drug = StringField("Drug name", validators=[DataRequired()])
-
-
-class RegistrationForm(FlaskForm):
-    """
-    Form for new user (doctor) registration.
-    """
-
-    firstname = StringField("First name", validators=[DataRequired()])
-    lastname = StringField("Last name", validators=[DataRequired()])
-    username = StringField("Username", validators=[DataRequired()])
-    email = StringField("Email", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Submit")
-
-
-class LogInForm(FlaskForm):
-    """
-    Form for user log-in.
-    """
-
-    username = StringField("Username", validators=[DataRequired()])
-    password = PasswordField("Password", validators=[DataRequired()])
-    submit = SubmitField("Login")
-
-
-class UploadFileForm(FlaskForm):
-    """
-    Form to upload a file.
-    """
-
-    file_selector = FileField("File", validators=[FileRequired()])
-    submit = SubmitField("Submit")
 
 
 db.create_all()
