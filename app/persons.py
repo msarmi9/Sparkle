@@ -8,19 +8,23 @@ from flask_login import UserMixin
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
-from app import db, login_manager
+from app import db
+from app import login_manager
 
 
-class User(db.Model, UserMixin):
-    """
-    User model with functions to set and check password when logging in.
-    """
+class BasicInfo:
+    """Base class for modeling users and patients."""
 
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(50), unique=False, nullable=False)
     lastname = db.Column(db.String(50), unique=False, nullable=False)
-    username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(80), unique=True, nullable=False)
+
+
+class User(db.Model, UserMixin, BasicInfo):
+    """User model with functions to set and check password when logging in."""
+
+    username = db.Column(db.String(20), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
 
     # One-to-many relationship
@@ -40,15 +44,9 @@ class User(db.Model, UserMixin):
         return check_password_hash(self.password_hash, password)
 
 
-class Patient(db.Model):
-    """
-    Defines a Patient, which has a foreign key pointed to User (doctor).
-    """
+class Patient(db.Model, BasicInfo):
+    """Defines a Patient, which has a foreign key pointed to a User (doctor)."""
 
-    id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(50), unique=False, nullable=False)
-    lastname = db.Column(db.String(50), unique=False, nullable=False)
-    email = db.Column(db.String(80), unique=True, nullable=True)
     age = db.Column(db.Integer, unique=False, nullable=False)
     weight = db.Column(db.Integer, unique=False, nullable=False)
 
