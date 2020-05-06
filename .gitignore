@@ -23,5 +23,12 @@ __pycache__/
 *.egg-info
 
 # Ignore local test DB
-sparkle.db
+*.db
 
+# Ignore pre-commit config
+.pre-commit-config.yaml
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
