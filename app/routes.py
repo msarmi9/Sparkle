@@ -10,12 +10,11 @@ import numpy as np
 from app import application, db
 from app.utils import *
 from app.classes import (
-    User,
-    Patient,
     Prescription,
-    Patient,
     Intake,
 )
+
+from app.persons import User, Patient
 
 from app.forms import (
     PatientForm,
