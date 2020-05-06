@@ -9,10 +9,7 @@ import numpy as np
 
 from app import application, db
 from app.utils import *
-from app.classes import (
-    Prescription,
-    Intake,
-)
+from app.medication import Prescription, Intake
 
 from app.persons import User, Patient
 
