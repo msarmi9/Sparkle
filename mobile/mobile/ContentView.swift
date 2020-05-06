@@ -84,7 +84,7 @@ struct ContentView: View {
     @State private var showNext: Bool = false
     var body: some View {
         VStack {
-            Title()
+            Image("logo")
             if self.viewModel.loggedIn == false {  // logged out
                 TextField("Enter patient id here",
                           text: $viewModel.patient_id,
