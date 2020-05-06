@@ -81,6 +81,7 @@ class ContentViewModel: ObservableObject {
 // View
 struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel()
+    @State private var showNext: Bool = false
     var body: some View {
         VStack {
             Title()
@@ -90,10 +91,19 @@ struct ContentView: View {
                           onCommit: { self.viewModel.sendLoginPost()
                 })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                Button(action: {
+                    self.showNext = true
+                }) {
+                    Text("Fetch medication schedule")
+                }
+                .alert(isPresented: $showNext) {
+                    Alert(title: Text("Welcome guy!"), message: Text("Wear sunscreen"), dismissButton: .default(Text("Got it!")))
+                }
             } else {                               // logged in
                 Toggle(isOn: $viewModel.loggedIn) {
                     Text("You're logged in")
                 }
+                
                 Text("Welcome \(viewModel.firstname)!")
                 Text("Don't forget to take \(viewModel.nextAmount) \(viewModel.nextDrug)'s at \(viewModel.nextTime) today!")
             }
