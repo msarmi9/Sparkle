@@ -85,6 +85,8 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Image("logo")
+                .resizable()
+                .scaledToFit()
             if self.viewModel.loggedIn == false {  // logged out
                 TextField("Enter patient id here",
                           text: $viewModel.patient_id,
