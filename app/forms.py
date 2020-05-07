@@ -32,7 +32,7 @@ class RegistrationForm(InfoForm, UserForm):
 class LoginForm(UserForm):
     """Final class for logging in existing users (doctors)."""
 
-    subimt = SubmitField("Login")
+    submit = SubmitField("Login")
 
 
 class PatientForm(InfoForm):

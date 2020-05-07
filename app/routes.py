@@ -10,9 +10,7 @@ import numpy as np
 from app import application, db
 from app.utils import *
 from app.medication import Prescription, Intake
-
 from app.persons import User, Patient
-
 from app.forms import (
     PatientForm,
     RegistrationForm,
@@ -20,7 +18,6 @@ from app.forms import (
     PrescriptionForm,
     UploadFileForm,
 )
-
 
 from modeling.preprocessing import *
 
@@ -226,7 +223,7 @@ def register():
 # User login ------------------------------------------------------------------
 @application.route("/login", methods=["GET", "POST"])
 def login():
-    """Logs in a retturning doctor (user)."""
+    """Logs in a returning doctor (user)."""
     login_form = LoginForm()
     if login_form.validate_on_submit():
         username = login_form.username.data
