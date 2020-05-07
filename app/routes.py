@@ -47,13 +47,14 @@ def about():
 
 # Dashboard page ------------------------------------------------------------
 @application.route("/dashboard")
-@login_required
+# @login_required
 def dashboard():
     """
     Render dashboard page which includes plots/analytics of adherence trends 
     and statistics.
     """
-    return render_template('dashboard.html')
+    output = plotly_map()
+    return render_template('dashboard.html', source=output)
 
 # Patient cards display -----------------------------------------------------
 @application.route("/patients")
