@@ -1,10 +1,13 @@
 """
 Forms for registering doctors, patients, and prescriptions.
 """
-
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileRequired
-from wtforms import FileField, PasswordField, StringField, SubmitField, IntegerField
+from wtforms import FileField
+from wtforms import IntegerField
+from wtforms import PasswordField
+from wtforms import StringField
+from wtforms import SubmitField
 from wtforms.validators import DataRequired
 
 
@@ -51,10 +54,3 @@ class PrescriptionForm(FlaskForm):
     #       At least one field is needed for this FlaskForm so
     #       that's why `drug` is still here.
     drug = StringField("Drug name", validators=[DataRequired()])
-
-
-class UploadFileForm(FlaskForm):
-    """Form to upload a file."""
-
-    file_selector = FileField("File", validators=[FileRequired()])
-    submit = SubmitField("Submit")

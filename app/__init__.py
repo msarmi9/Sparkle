@@ -1,24 +1,33 @@
-from config import Config
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 import os
 
+from flask import Flask
+from flask import render_template
+from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
 
-# Initialization
-# Create an application instance (an object of class Flask) which handles all requests.
+from config import Config
+
+
 application = Flask(__name__)
 application.secret_key = os.urandom(33)  # For CSRF token
 application.config.from_object(Config)
 
-# Create DB
 db = SQLAlchemy(application)
 db.create_all()
 db.session.commit()
 
-# login_manager needs to be initiated before running the app
 login_manager = LoginManager()
 login_manager.init_app(application)
 
-# Added at the bottom to avoid circular dependencies. (Altough it violates PEP8 standards)
-from app import forms, persons, medication, routes
+from app import auth, dashboard, mobile
+
+application.register_blueprint(auth.bp)
+application.register_blueprint(dashboard.bp)
+application.register_blueprint(mobile.bp)
+
+
+@application.route("/")
+@application.route("/home")
+def index():
+    """Render splash/home page."""
+    return render_template("splash.html", message="Welcome to Sparkle!")
