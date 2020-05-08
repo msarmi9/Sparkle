@@ -47,14 +47,9 @@ struct ContentView: View {
 
 struct Title: View {
     var body: some View {
-        HStack {
-            Image(systemName: "star.fill")
-
-            Text("Sparkle")
-                .font(.system(size: 32)).italic()
-
-            Image(systemName: "star.fill")
-        }
+        Image("logo")
+        .resizable()
+        .scaledToFit()
     }
 }
 

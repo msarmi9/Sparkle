@@ -21,20 +21,27 @@ struct rxMetadata: Decodable {
     let amount: Int
 }
 
-func sendLoginPost(patient_id: String, _ completion: @escaping (String?, String?, String?, String?, Int?) -> Void){
-    let parameters = ["patient_id": patient_id]
-    AF.request("http://twinkle3.us-west-2.elasticbeanstalk.com/mobile-login",
-               method: .post,
-               parameters: parameters,
-               encoder: JSONParameterEncoder.default).responseDecodable(of: [rxMetadata].self) { response in
-//                    debugPrint(response)
-                guard let schedule = response.value else { return }
-                let firstname = schedule[0].firstname
-                let timestamp = schedule[0].timestamp
-                let drug = schedule[0].drug
-                let desc = schedule[0].desc
-                let amount = schedule[0].amount
-                completion(firstname, timestamp, drug, desc, amount)
+//func sendLoginPost(patient_id: String, _ completion: @escaping (String?, String?, String?, String?, Int?) -> Void){
+//    let parameters = ["patient_id": patient_id]
+//    AF.request("http://http://sparkle-env-1.eba-b8vqgrb3.us-west-2.elasticbeanstalk.com/mobile-login",
+//               method: .post,
+//               parameters: parameters,
+//               encoder: JSONParameterEncoder.default).responseDecodable(of: [rxMetadata].self) { response in
+////                    debugPrint(response)
+//                guard let schedule = response.value else { return }
+//                let firstname = schedule[0].firstname
+//                let timestamp = schedule[0].timestamp
+//                let drug = schedule[0].drug
+//                let desc = schedule[0].desc
+//                let amount = schedule[0].amount
+//                completion(firstname, timestamp, drug, desc, amount)
+//    }
+//}
+
+// to catch the index out of range error
+extension Collection {
+    subscript(safe index: Index) -> Element? {
+        return indices.contains(index) ? self[index] : nil
     }
 }
 
@@ -62,17 +69,18 @@ class ContentViewModel: ObservableObject {
     
     func sendLoginPost(){
         let parameters = ["patient_id": self.patient_id]
-        AF.request("http://twinkle3.us-west-2.elasticbeanstalk.com/mobile-login",
+        AF.request("http://sparkle-env-1.eba-b8vqgrb3.us-west-2.elasticbeanstalk.com/mobile-login",
                    method: .post,
                    parameters: parameters,
                    encoder: JSONParameterEncoder.default).responseDecodable(of: [rxMetadata].self) { response in
-    //                    debugPrint(response)
+                        debugPrint(response)
                     guard let schedule = response.value else { return }
-                    self.firstname = schedule[0].firstname
-                    self.nextTime = schedule[0].timestamp
-                    self.nextDrug = schedule[0].drug
-                    self.nextDesc = schedule[0].desc
-                    self.nextAmount = schedule[0].amount
+                    self.firstname = schedule[safe: 0]!.firstname
+                    self.nextTime = schedule[safe: 0]!.timestamp
+                    self.nextDrug = schedule[safe: 0]!.drug
+                    self.nextDesc = schedule[safe: 0]!.desc
+                    self.nextAmount = schedule[safe: 0]!.amount
+                    
 //                    completion(self.firstname, self.nextTime, self.nextDrug, self.nextDesc, self.nextAmount)
         }
     }

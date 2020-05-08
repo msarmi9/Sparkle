@@ -83,11 +83,11 @@ struct flaskResponse: Decodable {
 
 
 func sendPost(parameters: [String: String], _ completion: @escaping (String?, String?, Float?) -> Void){
-    AF.request("http://twinkle3.us-west-2.elasticbeanstalk.com/send-data",
+    AF.request("http://sparkle-env-1.eba-b8vqgrb3.us-west-2.elasticbeanstalk.com/send-data",
                method: .post,
                parameters: parameters,
                encoder: JSONParameterEncoder.default).responseDecodable(of: flaskResponse.self) { response in
-//                    debugPrint(response)
+                    debugPrint(response)
                 guard let flaskresponse = response.value else { return }
                 let pred_string = flaskresponse.pred_string
                 let pred_type = flaskresponse.pred_type
