@@ -6,11 +6,11 @@ from sklearn.feature_selection import SelectFromModel
 import xgboost as xgb
 
 
-def initializeDf(path):
+def initializeDf(data):
     """
     Loads the raw sensor data into a Pandas dataframe.
     """
-    df = pd.read_csv(path).reset_index()
+    df = pd.read_csv(data).reset_index()
     return df
 
 
@@ -85,11 +85,9 @@ def selectFeatures(X):
     return X_select
 
 
-def preprocess(
-    raw_sensor_data, regression, trim_start_pct=0.05, trim_end_pct=0.05, n_windows=5
-):
+def preprocess(data, regression, trim_start_pct=0.05, trim_end_pct=0.05, n_windows=5):
 
-    df = initializeDf(raw_sensor_data)
+    df = initializeDf(data)
     df = renameColumns(df)
     df = trimData(df, trim_start_pct=trim_start_pct, trim_end_pct=trim_end_pct)
     df = windowData(df, n_windows=n_windows)
