@@ -65,6 +65,7 @@ class ContentViewModel: ObservableObject {
     @Published var nextDrug: String = ""
     @Published var nextDesc: String = ""
     @Published var nextAmount: Int = 0
+    @Published var attemptedLogIn: Bool = false
     @Published var loggedIn: Bool = false
     
     func sendLoginPost(){
@@ -75,14 +76,26 @@ class ContentViewModel: ObservableObject {
                    encoder: JSONParameterEncoder.default).responseDecodable(of: [rxMetadata].self) { response in
                         debugPrint(response)
                     guard let schedule = response.value else { return }
-                    self.firstname = schedule[safe: 0]!.firstname
-                    self.nextTime = schedule[safe: 0]!.timestamp
-                    self.nextDrug = schedule[safe: 0]!.drug
-                    self.nextDesc = schedule[safe: 0]!.desc
-                    self.nextAmount = schedule[safe: 0]!.amount
+                    self.attemptedLogIn = true
+                    if schedule.count > 0 {
+                        self.firstname = schedule[0].firstname
+                        self.nextTime = schedule[0].timestamp
+                        self.nextDrug = schedule[0].drug
+                        self.nextDesc = schedule[0].desc
+                        self.nextAmount = schedule[0].amount
+                    }
                     
 //                    completion(self.firstname, self.nextTime, self.nextDrug, self.nextDesc, self.nextAmount)
         }
+    }
+}
+
+func parseTime(ts: String) -> String {
+    let hour = ts[String.Index(utf16Offset: 11, in:ts)...String.Index(utf16Offset: 13, in: ts)]
+    if hour == "20" {
+        return "8 pm"
+    } else {
+        return "8 am"
     }
 }
 
@@ -101,24 +114,43 @@ struct ContentView: View {
                           onCommit: { self.viewModel.sendLoginPost()
                 })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
-                Button(action: {
-                    self.showNext = true
-                }) {
-                    Text("Fetch medication schedule")
+                
+                if self.viewModel.attemptedLogIn == true {
+                    Text("It doesn't look like you're registered yet!")
                 }
-                .alert(isPresented: $showNext) {
-                    Alert(title: Text("Welcome guy!"), message: Text("Wear sunscreen"), dismissButton: .default(Text("Got it!")))
-                }
+                
+                
             } else {                               // logged in
                 Toggle(isOn: $viewModel.loggedIn) {
                     Text("You're logged in")
                 }
                 
                 Text("Welcome \(viewModel.firstname)!")
-                Text("Don't forget to take \(viewModel.nextAmount) \(viewModel.nextDrug)'s at \(viewModel.nextTime) today!")
+                
+                Button(action: {
+                    self.showNext = true
+                }) {
+                    Text("Get today's schedule")
+                        .fontWeight(.bold)
+                        .font(.title)
+                        .padding()
+                        .background(Color.purple)
+                        .cornerRadius(40)
+                        .foregroundColor(.white)
+                        .padding(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 40)
+                                .stroke(Color.purple, lineWidth: 5)
+                        )
+                }
+                .alert(isPresented: $showNext) {
+                    Alert(title: Text("Next medication:"), message: Text("Don't forget to take \(viewModel.nextAmount) \(viewModel.nextDrug)'s at \(parseTime(ts: viewModel.nextTime)) today!"), dismissButton: .default(Text("Got it!")))
+                }
+                SeeSensors(viewModel: viewModel)
             }
             
-            SeeSensors()
+            
+            Spacer()
         }
     }
 }
@@ -137,6 +169,7 @@ struct Title: View {
 }
 
 struct SeeSensors: View {
+    @ObservedObject var viewModel: ContentViewModel
     var body: some View {
         NavigationView {
             HStack {
@@ -144,7 +177,7 @@ struct SeeSensors: View {
                         .font(.headline)
                     // maybe want to use a button here..
                     NavigationLink(destination: SensorLogView(watchSession: WatchSessionManager())){
-                        Text("See recordings")
+                        Text("See recent intakes")
                     }
             }
         }
