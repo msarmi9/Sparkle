@@ -29,3 +29,9 @@ application.register_blueprint(mobile.bp)
 def index():
     """Render splash/home page."""
     return render_template("splash.html", message="Welcome to Sparkle!")
+
+
+@application.route("/about")
+def about():
+    """Render about page."""
+    return render_template("about.html")
