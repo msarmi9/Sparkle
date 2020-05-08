@@ -31,6 +31,7 @@ def index():
     """
     return render_template("splash.html", message="Welcome to Sparkle!")
 
+
 # Home / splash page --------------------------------------------------------
 @application.route("/about")
 def about():
