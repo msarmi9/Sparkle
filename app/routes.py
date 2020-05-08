@@ -275,10 +275,9 @@ def adherence_model(
     """
     takes in accelerometer and gyroscope data as a string.
     """
-    raw_sensor_data = io.StringIO(data)
 
     # run the pill classifier process
-    X = preprocess(raw_sensor_data, regression=False)
+    X = preprocess(io.StringIO(data), regression=False)
     classifier = pickle.load(open(classifier_path, "rb"))
     classifier_pred = classifier.predict(X).item()
 
@@ -291,7 +290,7 @@ def adherence_model(
         }
     else:
         # run the regression process
-        X = preprocess(raw_sensor_data, regression=True)
+        X = preprocess(io.StringIO(data), regression=True)
 
         regressor = pickle.load(open(regressor_path, "rb"))
         predicted_pills = regressor.predict(X).round().item()
