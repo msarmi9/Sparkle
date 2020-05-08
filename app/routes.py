@@ -32,6 +32,15 @@ def index():
     return render_template("splash.html", message="Welcome to Sparkle!")
 
 
+# Home / splash page --------------------------------------------------------
+@application.route("/about")
+def about():
+    """
+    Render about i.e. learn more page.
+    """
+    return render_template("about.html")
+
+
 # Dashboard - visible once a user logs in -----------------------------------
 @application.route("/dashboard")
 @login_required
