@@ -35,7 +35,7 @@ def index():
 @application.route("/about")
 def about():
     """
-    Render about/learn more page.
+    Render about i.e. learn more page.
     """
     return render_template("about.html")
 
