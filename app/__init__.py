@@ -17,7 +17,7 @@ db.session.commit()
 login_manager = LoginManager()
 login_manager.init_app(application)
 
-from app import auth, dashboard, mobile
+from app.blueprints import auth, dashboard, mobile
 
 application.register_blueprint(auth.bp)
 application.register_blueprint(dashboard.bp)
