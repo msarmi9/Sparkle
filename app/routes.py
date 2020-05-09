@@ -1,26 +1,23 @@
-from io import StringIO
+from datetime import date, datetime
+import io
+import json
 import os
-from datetime import date, datetime, timedelta
-
-from app import application, db
-from app.utils import *
-from app.classes import (
-    User,
-    Patient,
-    Prescription,
-    PrescriptionForm,
-    Patient,
-    PatientForm,
-    RegistrationForm,
-    LogInForm,
-    UploadFileForm,
-    Intake,
-)
 
 from flask import render_template, redirect, url_for, request, jsonify
 from flask_login import current_user, login_user, login_required, logout_user
 import numpy as np
-import json
+
+from app import application, db
+from app.utils import *
+from app.medication import Prescription, Intake
+from app.persons import User, Patient
+from app.forms import (
+    PatientForm,
+    RegistrationForm,
+    LoginForm,
+    PrescriptionForm,
+    UploadFileForm,
+)
 
 from modeling.preprocessing import *
 
@@ -35,17 +32,16 @@ def index():
     return render_template("splash.html", message="Welcome to Sparkle!")
 
 
-# Dashboard page ------------------------------------------------------------
+# About page --------------------------------------------------------
 @application.route("/about")
 def about():
     """
-    "About Us" page.
+    Render about i.e. learn more page.
     """
-    return render_template('about.html')
+    return render_template("about.html")
 
 
-
-# Dashboard page ------------------------------------------------------------
+# Dashboard - visible once a user logs in -----------------------------------
 @application.route("/dashboard")
 @login_required
 def dashboard():
@@ -148,7 +144,7 @@ def add_prescription(patient_id):
             "duration_unit": f.get("duration_unit")[:-1],
             "refills": int(f.get("refills")),
             "time_of_day": f"{f.get('time_of_day_am')}, {f.get('time_of_day_pm')}",
-            "start_date": datetime.strptime(f.get("start_date"), "%Y-%m-%d"),
+            "start_date": datetime.strptime(f.get("start_date"), "%m/%d/%Y"),
         }
 
         # Time of day
@@ -230,9 +226,7 @@ def add_patient():
 # New user registration -----------------------------------------------------
 @application.route("/register", methods=("GET", "POST"))
 def register():
-    """
-    Registers a user from form data.
-    """
+    """Registers a new doctor (user) from form data."""
     registration_form = RegistrationForm()
     if registration_form.validate_on_submit():
         firstname = registration_form.firstname.data
@@ -245,6 +239,7 @@ def register():
             User.query.filter_by(username=username).count()
             + User.query.filter_by(email=email).count()
         )
+
         if user_count > 0:
             return "<h1>Error - Existing user : " + username + " OR " + email + "</h1>"
         else:
@@ -258,10 +253,8 @@ def register():
 # User login ------------------------------------------------------------------
 @application.route("/login", methods=["GET", "POST"])
 def login():
-    """
-    Logs in a user.
-    """
-    login_form = LogInForm()
+    """Logs in a returning doctor (user)."""
+    login_form = LoginForm()
     if login_form.validate_on_submit():
         username = login_form.username.data
         password = login_form.password.data
@@ -312,10 +305,9 @@ def adherence_model(
     """
     takes in accelerometer and gyroscope data as a string.
     """
-    raw_sensor_data = StringIO(data)
 
     # run the pill classifier process
-    X = preprocess(raw_sensor_data, regression=False)
+    X = preprocess(io.StringIO(data), regression=False)
     classifier = pickle.load(open(classifier_path, "rb"))
     classifier_pred = classifier.predict(X).item()
 
@@ -328,7 +320,7 @@ def adherence_model(
         }
     else:
         # run the regression process
-        X = preprocess(raw_sensor_data, regression=True)
+        X = preprocess(io.StringIO(data), regression=True)
 
         regressor = pickle.load(open(regressor_path, "rb"))
         predicted_pills = regressor.predict(X).round().item()

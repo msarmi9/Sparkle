@@ -21,5 +21,4 @@ login_manager = LoginManager()
 login_manager.init_app(application)
 
 # Added at the bottom to avoid circular dependencies. (Altough it violates PEP8 standards)
-from app import classes
-from app import routes
+from app import forms, persons, medication, routes
