@@ -32,7 +32,7 @@ def index():
     return render_template("splash.html", message="Welcome to Sparkle!")
 
 
-# Home / splash page --------------------------------------------------------
+# About page --------------------------------------------------------
 @application.route("/about")
 def about():
     """
@@ -46,12 +46,36 @@ def about():
 @login_required
 def dashboard():
     """
-    Render dashboard for doctors to get comprehensive view of patient
-    adherence trends and statistics.
+    Render dashboard page which includes plots/analytics of adherence trends 
+    and statistics.
+    """
+    patients = Patient.query.filter_by(doctor_id=current_user.id).all()
+    rxs = []
+    for p in patients:
+        rxs += p.prescriptions
+    adh_over_time = plot_adherence_rates_over_time(patients, rxs)
+    top_general_adh = plot_top_general_adherence_by_drug_name(rxs, n=5)
+    top_ontime_adh = plot_top_ontime_adherence_by_drug_name(rxs, n=5)
+
+    return render_template(
+        "dashboard.html",
+        adh_over_time=adh_over_time,
+        top_general_adh=top_general_adh,
+        top_ontime_adh=top_ontime_adh,
+    )
+
+
+# Patient cards display -----------------------------------------------------
+@application.route("/patients")
+@login_required
+def patients():
+    """
+    Render patient cards for doctors to quickly monitor patients who are 
+    adhering and deviating.
     """
     patients = User.query.filter_by(id=current_user.id).first().patients
     if len(patients) == 0:
-        return render_template("dashboard.html", patients=patients)
+        return render_template("patients.html", patients=patients)
     n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
     patient_adherence = round(n_adherent / len(patients) * 100)
 
@@ -70,7 +94,7 @@ def dashboard():
     )
     unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
     return render_template(
-        "dashboard.html",
+        "patients.html",
         patients=patients,
         patient_adherence=patient_adherence,
         rx_adherence=rx_adherence,
@@ -198,7 +222,7 @@ def add_patient():
         )
         db.session.add(patient)
         db.session.commit()
-        return redirect(url_for("dashboard"))
+        return redirect(url_for("patients"))
     return render_template("add_patient.html", form=patient_form)
 
 
@@ -243,7 +267,7 @@ def login():
         # Login and validate the user; take them to dashboard page.
         if user is not None and user.check_password(password):
             login_user(user)
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("patients"))
     return render_template("login.html", form=login_form)
 
 

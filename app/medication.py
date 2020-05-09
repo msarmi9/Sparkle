@@ -73,33 +73,42 @@ class Prescription(db.Model):
         """
         return datetime.now() >= self.start_date
 
-    def is_adherent(self, on_time_threshold=0.9, required_intakes_threshold=0.9):
+    def is_adherent(
+        self, on_time_threshold=0.9, required_intakes_threshold=0.9, date=datetime.now()
+    ):
         """
         Whether this Prescription is adhered to by the Patient.
         """
         return (
-            self.frac_on_time() >= on_time_threshold
-            and self.frac_required_intakes() >= required_intakes_threshold
+            self.frac_on_time(date=date) >= on_time_threshold
+            and self.frac_required_intakes(date=date) >= required_intakes_threshold
         )
 
-    def frac_on_time(self):
+    def frac_on_time(self, date=datetime.now()):
         """
         Return fraction of intakes that were on time, out of all recorded
         intakes.
+        date: datetime - get fraction on time intakes on or before this date
         """
-        if len(self.intakes) == 0:
-            return 1.0
-        on_time = Intake.query.filter_by(prescription_id=self.id, on_time=True).all()
-        return len(on_time) / len(self.intakes)
+        intakes = list(filter(lambda i: i.timestamp <= date, self.intakes))
+        if len(intakes) == 0:
+            return 0.0
+        on_time = Intake.query.filter(
+            Intake.prescription_id == self.id,
+            Intake.on_time is True,
+            Intake.timestamp <= date,
+        ).all()
+        return len(on_time) / len(intakes)
 
-    def frac_required_intakes(self):
+    def frac_required_intakes(self, date=datetime.now()):
         """
         Return fraction of recorded intakes, out of total number of intakes
         that are supposed to be recorded by this time.
+        date: datetime - get fraction on track intakes on or before this date
         """
 
-        # start of treatment until yesterday
-        days_since_start = (datetime.now() - self.start_date).days - 1
+        # start of treatment until specified date
+        days_since_start = (date - self.start_date).days - 1
         if days_since_start <= 0:
             return 1.0
         pills_per_day = int(
@@ -115,7 +124,7 @@ class Prescription(db.Model):
 
     def next_refill_date(self):
         """
-        Return next refill date based on most recent (last) refill date
+        Return next refill date based on most recent (last) refill date 
         and dosage information.
         """
         if self.refill_num == self.refills or self.refills == 0:
@@ -164,7 +173,7 @@ class Prescription(db.Model):
 
 class Intake(db.Model):
     """
-    Intake model. Intakes are created when the app receives a recording,
+    Intake model. Intakes are created when the app receives a recording, 
     indicating that a patient has taken medication.
     """
 

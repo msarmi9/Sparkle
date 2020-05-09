@@ -5,7 +5,7 @@ ENV LC_ALL=C.UTF-8 \
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-    python3.7 python3-pip python3-dev libgomp1
+    python3.7 python3-pip python3-setuptools python3-dev libgomp1
 
 WORKDIR /app
 
