@@ -12,10 +12,10 @@ Welcome to Sparkle's documentation!
 
    introduction
    tutorial
-   code
+   modules
    authors
-   requirements
 
+|
 
 Indices and tables
 ==================
