@@ -1,6 +1,6 @@
 name: docs
 
-on: pull_request
+on: [push, pull_request]
 
 jobs:
   build:
@@ -10,16 +10,25 @@ jobs:
       - name: Checkout master
         uses: actions/checkout@v1
 
-      - name: Build docs
-        uses: ammaraskar/sphinx-action@master
+      - name: Set up python version
+        uses: actions/setup-python@v1
         with:
-          docs-folder: docs
-          build-command: make html
+          python-version: 3.7
 
-      - name: Commit changes to docs
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install -r docs/requirements.txt
+          pip install -e .
+
+      - name: Build docs
+        run:
+          sphinx-build -b html docs/source docs/build
+
+      - name: Commit doc changes
         run: |
           git clone https://github.com/ammaraskar/sphinx-action-test.git --branch gh-pages --single-branch gh-pages
-          cp -r docs/build/html/* gh-pages/ && cd gh-pages
+          cp -r docs/build/* gh-pages/ && cd gh-pages
           git config --local user.email "actions@github.com"
           git config --local user.name "Github Actions"
           git add .
