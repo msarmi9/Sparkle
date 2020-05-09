@@ -145,7 +145,13 @@
 
 
 
-			<button type="submit" class="btn btn-primary">Create</button>
+			<button type="submit" class="btn btn-primary"
+			        onclick="gtag('event', 'click',
+                   				 {'event_category':'engagement',
+                   				  'event_label':'new_prescription',
+                   				  'value':1});">
+            	Create
+           	</button>
 	    </form>
 	</div>
 {% endblock %}
