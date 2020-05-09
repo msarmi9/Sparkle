@@ -151,17 +151,6 @@ struct ContentView: View {
                 }
                  .padding(50)
                 
-                ////////////////////////////////////////////////////////
-                VStack {
-                    Toggle(isOn: $showingWelcome.animation(.easeInOut(duration: 3))) {
-                        Text("Toggle label")
-                    }.padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 50))
-
-                    if showingWelcome {
-                        Text("Hello World")
-                    }
-                }
-                ////////////////////////////////////////////////////////
                 
             } else {                               // logged in
                 Toggle(isOn: $viewModel.loggedIn) {
