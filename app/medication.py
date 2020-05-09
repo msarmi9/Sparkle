@@ -95,7 +95,7 @@ class Prescription(db.Model):
             return 0.0
         on_time = Intake.query.filter(
             Intake.prescription_id == self.id,
-            Intake.on_time is True,
+            Intake.on_time,
             Intake.timestamp <= date,
         ).all()
         return len(on_time) / len(intakes)
