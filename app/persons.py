@@ -3,6 +3,7 @@ Classes to model users (doctors) and patients.
 """
 
 from collections import defaultdict
+from datetime import datetime
 import numpy as np
 
 from flask_login import UserMixin
@@ -45,9 +46,15 @@ class User(db.Model, UserMixin, BasicInfo):
         return check_password_hash(self.password_hash, password)
 
 
-class Patient(db.Model, BasicInfo):
-    """Defines a Patient, which has a foreign key pointed to a User (doctor)."""
+class Patient(db.Model):
+    """
+    Defines a Patient, which has a foreign key pointed to User (doctor).
+    """
 
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String(50), unique=False, nullable=False)
+    lastname = db.Column(db.String(50), unique=False, nullable=False)
+    email = db.Column(db.String(80), unique=True, nullable=True)
     age = db.Column(db.Integer, unique=False, nullable=False)
     weight = db.Column(db.Integer, unique=False, nullable=False)
 
@@ -72,7 +79,7 @@ class Patient(db.Model, BasicInfo):
             all_intakes += rx.intakes
         return all_intakes
 
-    def adherence_stats(self):
+    def adherence_stats(self, date=datetime.now()):
         """
         Return adherence statistics on a per-Prescription basis.
         return: dict - <prescription ID>: <details>
@@ -91,22 +98,22 @@ class Patient(db.Model, BasicInfo):
         """
         stats = defaultdict(lambda: defaultdict(float))
         for rx in self.prescriptions:
-            stats[rx.id]["frac_on_time"] = rx.frac_on_time()
-            stats[rx.id]["frac_required_intakes"] = rx.frac_required_intakes()
+            stats[rx.id]["frac_on_time"] = rx.frac_on_time(date=date)
+            stats[rx.id]["frac_required_intakes"] = rx.frac_required_intakes(date=date)
         return dict(stats)
 
     def frac_adhering_prescriptions(
         self, on_time_threshold=0.9, required_intakes_threshold=0.9
     ):
         """
-        Return fraction of prescriptions for this Patient that are deemed
+        Return fraction of prescriptions for this Patient that are deemed 
         adherent.
-        Adherence requires Intakes to be recorded on time and on track
+        Adherence requires Intakes to be recorded on time and on track 
         (i.e. medications aren't missed).
 
-        on_time_threshold: float - fraction on time Intakes needed for
+        on_time_threshold: float - fraction on time Intakes needed for 
         this prescription to be deemed adherent
-        required_intakes_threshold: float - fraction Intakes actually
+        required_intakes_threshold: float - fraction Intakes actually 
         recorded, out of all prescribed Intakes since start date.
         """
         if len(self.prescriptions) == 0:
@@ -128,17 +135,19 @@ class Patient(db.Model, BasicInfo):
         ) / len(frac_required_intakes_by_rx)
         return adherence
 
-    def is_adherent(self, on_time_threshold=0.9, required_intakes_threshold=0.9):
+    def is_adherent(
+        self, on_time_threshold=0.9, required_intakes_threshold=0.9, date=datetime.now()
+    ):
         """
-        Whether or not a patient is deemed adherent based on their
+        Whether or not a patient is deemed adherent based on their 
         prescription adherence.
 
-        on_time_threshold: float - fraction on time Intakes needed for
+        on_time_threshold: float - fraction on time Intakes needed for 
         this prescription to be deemed adherent
-        required_intakes_threshold: float - fraction Intakes actually
+        required_intakes_threshold: float - fraction Intakes actually 
         recorded, out of all prescribed Intakes since start date.
         """
-        stats = self.adherence_stats()
+        stats = self.adherence_stats(date=date)
         for rx_id, details in stats.items():
             if (
                 details["frac_on_time"] <= on_time_threshold
