@@ -160,8 +160,6 @@ def plot_adherence_rates_over_time(patients, prescriptions):
     Plot on-time and on-track adherence rates over time.
     TODO: use real data
     """
-    n_patients = len(patients)
-    n_rxs = len(prescriptions)
 
     curr_date = datetime(year=2020, month=3, day=15)
     end = datetime.now()
