@@ -26,9 +26,7 @@
                       <div class="h6 mb-0 font-weight-medium text-gray-800">Age: {{ p.age }}</div>
                       <div class="h6 mb-0 font-weight-bold text-gray-800">{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}</div>
                     </div>
-                    <div class="col-auto">
-                      <i class="fas fa-bolt fa-2x text-gray-300"></i>
-                    </div>
+
                   </div>
                   <div>
 			    	{% for rx in p.prescriptions %}
