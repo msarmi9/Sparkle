@@ -400,6 +400,16 @@ def logout():
     return redirect(url_for("index"))
 
 
+# Forgot password ------------------------------------------------------------------
+@application.route("/forgot_password")
+def forgot_password():
+    """
+    Redirects to 'forgot_password' page.
+    """
+
+    return render_template("forgot_password.html")
+
+
 # File upload ---------------------------------------------------------------
 @application.route("/upload", methods=["GET", "POST"])
 def upload():
