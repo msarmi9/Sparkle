@@ -66,12 +66,6 @@
                       <div class="h6 mb-0 font-weight-bold text-gray-800">{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}</div>
                     </div>
 
-                	<div class="col">
-                      <div class="progress progress-sm mr-2">
-                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                      </div>
-                    </div>
-
                   </div>
                   	<div style="padding-top: 10px;">
 			    	{% for rx in p.prescriptions %}

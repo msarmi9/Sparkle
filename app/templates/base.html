@@ -88,12 +88,10 @@
         <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Status:</h6>
-            <a class="collapse-item active" href={{url_for("patients")}}>All Patients</a>
-
-            <a class="collapse-item" href="/patients_unprescribed">Unprescribed</a>
-            <a class="collapse-item" href={{url_for("patients_deviating")}}>Deviating</a>
-            <a class="collapse-item" href="/patients_ontrack">On-Track</a>
-
+            <a class="collapse-item" href={{url_for("patients")}}>All Patients ({{ patients|length }})</a>
+            <a class="collapse-item" href="/patients_unprescribed">Unprescribed ({{ unprescribed_patients|length }})</a>
+            <a class="collapse-item" href={{url_for("patients_deviating")}}>Deviating ({{ nonadhering_patients|length }})</a>
+            <a class="collapse-item" href="/patients_ontrack">On-Track ({{ adhering_patients|length }})</a>
           </div>
         </div>
       </li>
