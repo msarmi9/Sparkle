@@ -46,7 +46,7 @@ def about():
 @login_required
 def dashboard():
     """
-    Render dashboard page which includes plots/analytics of adherence trends 
+    Render dashboard page which includes plots/analytics of adherence trends
     and statistics.
     """
     patients = Patient.query.filter_by(doctor_id=current_user.id).all()
@@ -65,14 +65,8 @@ def dashboard():
     )
 
 
-# Patient cards display -----------------------------------------------------
-@application.route("/patients")
-@login_required
-def patients():
-    """
-    Render patient cards for doctors to quickly monitor patients who are 
-    adhering and deviating.
-    """
+def _render_patients_page(template):
+    """Render a template for one of ontrack, deviating, and all patients."""
     patients = User.query.filter_by(id=current_user.id).first().patients
     if len(patients) == 0:
         return render_template("patients.html", patients=patients)
@@ -94,7 +88,7 @@ def patients():
     )
     unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
     return render_template(
-        "patients.html",
+        template,
         patients=patients,
         patient_adherence=patient_adherence,
         rx_adherence=rx_adherence,
@@ -102,6 +96,41 @@ def patients():
         nonadhering_patients=nonadhering_patients,
         unprescribed_patients=unprescribed_patients,
     )
+
+
+# Patient cards display -----------------------------------------------------
+@application.route("/patients")
+@login_required
+def patients():
+    """
+    Render patient cards for doctors to quickly monitor patients who are
+    adhering and deviating.
+    """
+    return _render_patients_page("patients.html")
+
+
+# Patients_deviating - visible once a user logs in -----------------------------------
+@application.route("/patients_deviating")
+@login_required
+def patients_deviating():
+    """Render patients page of the list of patients."""
+    return _render_patients_page("patients_deviating.html")
+
+
+# Patients_unprescribed - visible once a user logs in -----------------------------------
+@application.route("/patients_unprescribed")
+@login_required
+def patients_unprescribed():
+    """Render page listing unprescribed patients."""
+    return _render_patients_page("patients_unprescribed.html")
+
+
+# Patients_ontrack - visible once a user logs in -----------------------------------
+@application.route("/patients_ontrack")
+@login_required
+def patients_ontrack():
+    """Render page listing adhering patients."""
+    return _render_patients_page("patients_ontrack.html")
 
 
 # Patient profile -----------------------------------------------------------
@@ -279,6 +308,16 @@ def logout():
     """
     logout_user()
     return redirect(url_for("index"))
+
+
+# Forgot password ------------------------------------------------------------------
+@application.route("/forgot_password")
+def forgot_password():
+    """
+    Redirects to 'forgot_password' page.
+    """
+
+    return render_template("forgot_password.html")
 
 
 # File upload ---------------------------------------------------------------

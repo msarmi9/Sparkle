@@ -1,14 +1,33 @@
-{% extends "index.html" %}
-
+{% extends "base.html" %}
 {% block patient_profile %}
-	<div class="container main" id="patient-pf">
-		<h4><b>{{ patient.lastname }}</b>, {{ patient.firstname }}</h4>
-	    <p>Email: {{ patient.email }}</p>
-	    <p>Age: {{ patient.age }}</p>
-	    <p>Weight: {{ patient.weight }}</p>
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
 
-	    {% if prescriptions|length > 0 %}
-			<table class="table table-hover">
+          <!-- Page Heading -->
+          <h1 class="h3 mb-2 text-gray-800"><b>{{ patient.lastname }}</b>, {{ patient.firstname }}</h1>
+          <div>
+          	<p>Email: {{ patient.email }}</p>
+	    	<p>Age: {{ patient.age }}</p>
+	    	<p>Weight: {{ patient.weight }}</p>
+
+      		</div>
+          <!-- DataTales Example -->
+          <div class="card shadow mb-4">
+            <div class="card-header py-3 h5 mb-0 font-weight-bold text-gray-800">
+                <!-- <h6 class="m-0 font-weight-bold text-primary">Prescriptions</h6> -->
+                <!-- <div class="h5 mb-0 font-weight-bold text-gray-800"> -->
+				<p><a href="/patients/{{ patient.id }}/new-prescription"><i class="fas fa-plus text-blue-300"></i> Add prescription</a></p>
+			    <!-- </div> -->
+            </div>
+
+
+
+
+            <div class="card-body">
+            <div class="table-responsive">
+
+            {% if prescriptions|length > 0 %}
+            <table class="table table-hover table-bordered" id="dataTable" width="100%" cellspacing="0">
 			  <thead>
 			    <tr>
 			      <th scope="col">ID</th>
@@ -31,7 +50,7 @@
 				      <td>{{ rx.desc }}</td>
 				      <td>{{ rx.strength }} {{ rx.strength_unit }}</td>
 				      <td>
-				      	{{ rx.amount }} {{ rx.form }} {{ rx.route }}ly {{ rx.freq }}x 
+				      	{{ rx.amount }} {{ rx.form }} {{ rx.route }}ly {{ rx.freq }}x
 				      	{% if rx.freq_repeat == 1 and rx.freq_repeat_unit == 'day' %}
 				      		daily
 				      	{% else %}
@@ -82,10 +101,33 @@
 			</table>
 		{% endif %}
 
-		<p>
-			<a href="/patients/{{ patient.id }}/new-prescription">
-				Add a prescription
-			</a>
-	    </p>	
-	</div>	
+		</div>
+
+
+
+
+
+
+
+
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
+
 {% endblock %}
