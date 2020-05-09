@@ -10,10 +10,10 @@
         <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Status:</h6>
-            <a class="collapse-item" href={{url_for("patients")}}>All Patients</a>
-            <a class="collapse-item" href="/patients_unprescribed">Unprescribed</a>
-            <a class="collapse-item" href={{url_for("patients_deviating")}}>Deviating</a>
-            <a class="collapse-item active" href="/patients_ontrack">On-Track</a>
+            <a class="collapse-item" href={{url_for("patients")}}>All Patients ({{ patients|length }})</a>
+            <a class="collapse-item" href="/patients_unprescribed">Unprescribed ({{ unprescribed_patients|length }})</a>
+            <a class="collapse-item" href={{url_for("patients_deviating")}}>Deviating ({{ nonadhering_patients|length }})</a>
+            <a class="collapse-item active" href="/patients_ontrack">On-Track ({{ adhering_patients|length }})</a>
 
           </div>
         </div>
@@ -50,13 +50,6 @@
             <div class="h6 mb-0 mr-3 font-weight-medium text-gray-800">Age: {{ p.age }}</div>
                         <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}</div>
                     </div>
-
-                        <div class="col">
-                          <div class="progress progress-sm mr-2">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-                          </div>
-                        </div>
-
 
                     <div class="col-auto">
                       <!-- <i class="fas fa-clipboard-list fa-2x text-gray-300"></i> -->

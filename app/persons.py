@@ -147,9 +147,13 @@ class Patient(db.Model):
         required_intakes_threshold: float - fraction Intakes actually 
         recorded, out of all prescribed Intakes since start date.
         """
+        if np.all([p.start_date > datetime.now() for p in self.prescriptions]):
+            return True
         stats = self.adherence_stats(date=date)
         for rx_id, details in stats.items():
-            if (
+            if list(filter(lambda rx: rx.id == rx_id, self.prescriptions))[
+                0
+            ].start_date <= datetime.now() and (
                 details["frac_on_time"] <= on_time_threshold
                 or details["frac_required_intakes"] <= required_intakes_threshold
             ):
