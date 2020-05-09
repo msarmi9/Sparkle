@@ -5,6 +5,15 @@
 <html lang="en">
 
 <head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166039427-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-166039427-1');
+	</script>
 
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -40,7 +49,11 @@
           <form>
             <div class="form-row" style="width: 60%; margin: auto;">
               <div class="col-12 col-md-6 mb-2 mb-md-0">
-                <a class="btn btn-block btn-lg btn-primary" href="/about" role="button">Learn more</a>
+                <a class="btn btn-block btn-lg btn-primary" href="/about" role="button"
+                   target="_blank"
+                   onclick="gtag('event','click',{'event_category':'engagement', 'event_label':'about-page', 'value':1})">
+                   	Learn more
+                </a>
               </div>
               <div class="col-12 col-md-6">
                 <a class="btn btn-block btn-lg btn-primary" href="/register" role="button">Sign up</a>

@@ -2,6 +2,15 @@
 
 <html>
 	<head>
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-166039427-1"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+
+			gtag('config', 'UA-166039427-1');
+		</script>
 		<title>Sparkle Medication</title>
 		<!-- Favicon -->
 <!-- 		<link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
@@ -95,13 +104,16 @@
 		    <ul class="navbar-nav mr-auto">
 			    {% if current_user.is_authenticated %}
 			      <li class="nav-item active">
-			        <a class="nav-link" href="/dashboard">Dashboard</a>
+			        <a class="nav-link" href="/dashboard"
+			           onclick="gtag('event','click',{'event_category':'engagement', 'event_label':'dashboard-page', 'value':1})">Dashboard</a>
 			      </li>
 			      <li class="nav-item active">
-			        <a class="nav-link" href="/patients">Patients</a>
+			        <a class="nav-link" href="/patients"
+			           onclick="gtag('event','click',{'event_category':'engagement', 'event_label':'patients-page', 'value':1})">Patients</a>
 			      </li>
 			      <li class="nav-item active">
-			        <a class="nav-link" href="/about">About</a>
+			        <a class="nav-link" href="/about"
+			           onclick="gtag('event','click',{'event_category':'engagement', 'event_label':'about-page', 'value':1})">About</a>
 			      </li>
 				{% endif %}
 			</ul>
