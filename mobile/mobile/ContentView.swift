@@ -189,8 +189,14 @@ struct ContentView: View {
                     .shadow(color: Color("sparkleColor").opacity(0.7), radius: 10, x: -5, y: -5)
                     
                     VStack {
-                        Text("Record an intake")
-                            .customTitleText()
+                        
+                        HStack {
+                            Image("hand-with-a-pill")
+                                .resizable()
+                                .frame(width: 40.0, height: 40.0)
+                            Text("Record an intake")
+                                .customTitleText()
+                        }
                         
                         TextField("Prescription id",
                         text: $watchSession.prescription_id).padding(EdgeInsets(top: 0, leading: 50, bottom: 0, trailing: 50))
