@@ -3,6 +3,7 @@ Classes to model users (doctors) and patients.
 """
 
 from collections import defaultdict
+from datetime import datetime
 import numpy as np
 
 from flask_login import UserMixin
