@@ -135,9 +135,9 @@ class Patient(db.Model):
         ) / len(frac_required_intakes_by_rx)
         return adherence
 
-    def is_adherent(self, on_time_threshold=0.9,
-                    required_intakes_threshold=0.9,
-                    date=datetime.now()):
+    def is_adherent(
+        self, on_time_threshold=0.9, required_intakes_threshold=0.9, date=datetime.now()
+    ):
         """
         Whether or not a patient is deemed adherent based on their 
         prescription adherence.

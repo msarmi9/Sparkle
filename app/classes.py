@@ -130,9 +130,9 @@ class Patient(db.Model):
         ) / len(frac_required_intakes_by_rx)
         return adherence
 
-    def is_adherent(self, on_time_threshold=0.9,
-                    required_intakes_threshold=0.9,
-                    date=datetime.now()):
+    def is_adherent(
+        self, on_time_threshold=0.9, required_intakes_threshold=0.9, date=datetime.now()
+    ):
         """
         Whether or not a patient is deemed adherent based on their 
         prescription adherence.
@@ -220,8 +220,9 @@ class Prescription(db.Model):
         """
         return datetime.now() >= self.start_date
 
-    def is_adherent(self, on_time_threshold=0.9,
-                    required_intakes_threshold=0.9, date=datetime.now()):
+    def is_adherent(
+        self, on_time_threshold=0.9, required_intakes_threshold=0.9, date=datetime.now()
+    ):
         """
         Whether this Prescription is adhered to by the Patient.
         """
@@ -239,11 +240,11 @@ class Prescription(db.Model):
         intakes = list(filter(lambda i: i.timestamp <= date, self.intakes))
         if len(intakes) == 0:
             return 0.0
-        on_time = Intake.query \
-                    .filter(Intake.prescription_id == self.id,
-                            Intake.on_time is True,
-                            Intake.timestamp <= date) \
-                    .all()
+        on_time = Intake.query.filter(
+            Intake.prescription_id == self.id,
+            Intake.on_time is True,
+            Intake.timestamp <= date,
+        ).all()
         return len(on_time) / len(intakes)
 
     def frac_required_intakes(self, date=datetime.now()):
