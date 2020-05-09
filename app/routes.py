@@ -71,6 +71,158 @@ def dashboard():
     )
 
 
+# Patients - visible once a user logs in -----------------------------------
+@application.route("/patients")
+@login_required
+def patients():
+    """
+    Render patients page of the list of patients.
+    """
+    patients = User.query.filter_by(id=current_user.id).first().patients
+    if len(patients) == 0:
+        return render_template("dashboard.html", patients=patients)
+    n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
+    patient_adherence = round(n_adherent / len(patients) * 100)
+
+    rxs = Prescription.query.all()
+    if len(rxs) == 0:
+        rx_adherence = 100
+    else:
+        adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
+        rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
+
+    adhering_patients = list(
+        filter(lambda p: p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    nonadhering_patients = list(
+        filter(lambda p: not p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
+    return render_template(
+        "patients.html",
+        patients=patients,
+        patient_adherence=patient_adherence,
+        rx_adherence=rx_adherence,
+        adhering_patients=adhering_patients,
+        nonadhering_patients=nonadhering_patients,
+        unprescribed_patients=unprescribed_patients,
+    )
+
+
+# Patients_deviating - visible once a user logs in -----------------------------------
+@application.route("/patients_deviating")
+@login_required
+def patients_deviating():
+    """
+    Render patients page of the list of patients.
+    """
+    patients = User.query.filter_by(id=current_user.id).first().patients
+    if len(patients) == 0:
+        return render_template("dashboard.html", patients=patients)
+    n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
+    patient_adherence = round(n_adherent / len(patients) * 100)
+
+    rxs = Prescription.query.all()
+    if len(rxs) == 0:
+        rx_adherence = 100
+    else:
+        adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
+        rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
+
+    adhering_patients = list(
+        filter(lambda p: p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    nonadhering_patients = list(
+        filter(lambda p: not p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
+    return render_template(
+        "patients_deviating.html",
+        patients=patients,
+        patient_adherence=patient_adherence,
+        rx_adherence=rx_adherence,
+        adhering_patients=adhering_patients,
+        nonadhering_patients=nonadhering_patients,
+        unprescribed_patients=unprescribed_patients,
+    )
+
+
+# Patients_unprescribed - visible once a user logs in -----------------------------------
+@application.route("/patients_unprescribed")
+@login_required
+def patients_unprescribed():
+    """
+    Render patients page of the list of patients.
+    """
+    patients = User.query.filter_by(id=current_user.id).first().patients
+    if len(patients) == 0:
+        return render_template("dashboard.html", patients=patients)
+    n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
+    patient_adherence = round(n_adherent / len(patients) * 100)
+
+    rxs = Prescription.query.all()
+    if len(rxs) == 0:
+        rx_adherence = 100
+    else:
+        adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
+        rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
+
+    adhering_patients = list(
+        filter(lambda p: p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    nonadhering_patients = list(
+        filter(lambda p: not p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
+    return render_template(
+        "patients_unprescribed.html",
+        patients=patients,
+        patient_adherence=patient_adherence,
+        rx_adherence=rx_adherence,
+        adhering_patients=adhering_patients,
+        nonadhering_patients=nonadhering_patients,
+        unprescribed_patients=unprescribed_patients,
+    )
+
+
+# Patients_ontrack - visible once a user logs in -----------------------------------
+@application.route("/patients_ontrack")
+@login_required
+def patients_ontrack():
+    """
+    Render patients page of the list of patients.
+    """
+    patients = User.query.filter_by(id=current_user.id).first().patients
+    if len(patients) == 0:
+        return render_template("dashboard.html", patients=patients)
+    n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
+    patient_adherence = round(n_adherent / len(patients) * 100)
+
+    rxs = Prescription.query.all()
+    if len(rxs) == 0:
+        rx_adherence = 100
+    else:
+        adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
+        rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
+
+    adhering_patients = list(
+        filter(lambda p: p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    nonadhering_patients = list(
+        filter(lambda p: not p.is_adherent() and len(p.prescriptions) != 0, patients)
+    )
+    unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
+    return render_template(
+        "patients_ontrack.html",
+        patients=patients,
+        patient_adherence=patient_adherence,
+        rx_adherence=rx_adherence,
+        adhering_patients=adhering_patients,
+        nonadhering_patients=nonadhering_patients,
+        unprescribed_patients=unprescribed_patients,
+    )
+
+
 # Patient profile -----------------------------------------------------------
 @application.route("/patients/<int:patient_id>", methods=("GET", "POST"))
 @login_required
