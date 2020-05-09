@@ -47,9 +47,10 @@ struct ContentView: View {
 
 struct Title: View {
     var body: some View {
-        Image("logo")
+        Image("logo_new")
         .resizable()
         .scaledToFit()
+        .padding(5)
     }
 }
 

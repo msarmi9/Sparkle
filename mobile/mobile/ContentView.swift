@@ -118,12 +118,14 @@ struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel()
     @State private var showNext: Bool = false
     @ObservedObject var watchSession: WatchSessionManager
+    @State private var showingWelcome = false
     
     var body: some View {
         VStack {
-            Image("logo")
+            Image("logo_new")
                 .resizable()
                 .scaledToFit()
+                .padding(25)
             if self.viewModel.loggedIn == false {  // logged out
                 TextField("Enter patient id here",
                           text: $viewModel.patient_id,
@@ -148,6 +150,18 @@ struct ContentView: View {
                             .foregroundColor(.white)
                 }
                  .padding(50)
+                
+                ////////////////////////////////////////////////////////
+                VStack {
+                    Toggle(isOn: $showingWelcome.animation(.easeInOut(duration: 3))) {
+                        Text("Toggle label")
+                    }.padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 50))
+
+                    if showingWelcome {
+                        Text("Hello World")
+                    }
+                }
+                ////////////////////////////////////////////////////////
                 
             } else {                               // logged in
                 Toggle(isOn: $viewModel.loggedIn) {
@@ -198,11 +212,19 @@ struct ContentView: View {
                             .font(.title)
                             .foregroundColor(.white)
                         
+                        if self.watchSession.pred_string == "You haven't taken medication recently." {
+                            Text(watchSession.pred_string)
+                                .italic()
+                                .foregroundColor(.white)
+                                .padding(.bottom, 35)
+                        } else {
+                            Text(watchSession.pred_string)
+                                .italic()
+                                .foregroundColor(Color("sparkleColorAccent"))
+                                .padding(.bottom, 35)
+
+                        }
                         
-                        Text(watchSession.pred_string)
-                            .italic()
-                            .foregroundColor(.white)
-                            .padding(.bottom, 35)
                             
                     }
                     
