@@ -56,7 +56,7 @@ class ContentViewModel: ObservableObject {
             }
         }
     }
-    @Published var firstname: String = "" {
+    @Published var firstname: String = "Collin" {
         didSet {
             loggedIn = (firstname.count > 1)
         }
@@ -66,7 +66,7 @@ class ContentViewModel: ObservableObject {
     @Published var nextDesc: String = ""
     @Published var nextAmount: Int = 0
     @Published var attemptedLogIn: Bool = false
-    @Published var loggedIn: Bool = false
+    @Published var loggedIn: Bool = true
     
     func sendLoginPost(){
         let parameters = ["patient_id": self.patient_id]
@@ -99,10 +99,34 @@ func parseTime(ts: String) -> String {
     }
 }
 
+extension Color {
+    static let offWhite = Color(red: 225 / 255, green: 225 / 255, blue: 235 / 255)
+}
+
+extension Text {
+    func customTitleText() -> some View {
+        self
+            .fontWeight(.bold)
+            .font(.title)
+            .padding()
+            .background(Color("sparkleColor"))
+            .cornerRadius(40)
+            .foregroundColor(.white)
+            .padding(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 40)
+                    .stroke(Color("sparkleColorAccent"), lineWidth: 5)
+            )
+    }
+}
+
+
 // View
 struct ContentView: View {
     @ObservedObject var viewModel = ContentViewModel()
     @State private var showNext: Bool = false
+    @ObservedObject var watchSession: WatchSessionManager
+    
     var body: some View {
         VStack {
             Image("logo")
@@ -114,39 +138,55 @@ struct ContentView: View {
                           onCommit: { self.viewModel.sendLoginPost()
                 })
                 .textFieldStyle(RoundedBorderTextFieldStyle())
+                .padding(25)
                 
                 if self.viewModel.attemptedLogIn == true {
                     Text("It doesn't look like you're registered yet!")
                 }
                 
+                Text("Welcome!")
+                 .customTitleText()
+                 .padding(50)
                 
             } else {                               // logged in
                 Toggle(isOn: $viewModel.loggedIn) {
                     Text("You're logged in")
-                }
+                }.padding(25)
                 
                 Text("Welcome \(viewModel.firstname)!")
+                    .font(.headline)
+                    .italic()
+                    .padding(50)
                 
                 Button(action: {
                     self.showNext = true
                 }) {
                     Text("Get today's schedule")
-                        .fontWeight(.bold)
-                        .font(.title)
-                        .padding()
-                        .background(Color.purple)
-                        .cornerRadius(40)
-                        .foregroundColor(.white)
-                        .padding(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 40)
-                                .stroke(Color.purple, lineWidth: 5)
-                        )
+                        .customTitleText()
                 }
                 .alert(isPresented: $showNext) {
                     Alert(title: Text("Next medication:"), message: Text("Don't forget to take \(viewModel.nextAmount) \(viewModel.nextDrug)'s at \(parseTime(ts: viewModel.nextTime)) today!"), dismissButton: .default(Text("Got it!")))
                 }
-                SeeSensors(viewModel: viewModel)
+                
+                ZStack {
+//                    Color.offWhite
+                    RoundedRectangle(cornerRadius: 25)
+                    .fill(Color.black)
+                    .frame(width: 300, height: 300)
+                    .shadow(color: Color.white.opacity(0.2), radius: 10, x: 10, y: 10)
+                    .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+                    
+                    VStack {
+                        Text("Status:")
+                            .font(.title)
+                            .foregroundColor(.white)
+                        Text(watchSession.pred_string)
+                            .italic()
+                            .foregroundColor(.white)
+                    }
+                }
+                
+                
             }
             
             
@@ -186,6 +226,6 @@ struct SeeSensors: View {
 
 struct SensorView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(watchSession: WatchSessionManager())
     }
 }
