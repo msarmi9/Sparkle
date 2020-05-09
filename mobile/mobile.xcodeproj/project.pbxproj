@@ -126,7 +126,7 @@
 		D60AE26D242B97C000E27E46 /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = "<group>"; };
 		D6824E2C243D8F840043DEEE /* MotionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionManager.swift; sourceTree = "<group>"; };
 		D68BEB6624322AB000ECA711 /* SensorLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorLogView.swift; sourceTree = "<group>"; };
-		D6ADC59A245B2CDC0042A508 /* postPlayground.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = postPlayground.playground; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
+		D6A8154524653149004B3720 /* trying.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = trying.playground; path = "../../../../../Library/Autosave Information/trying.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		F5CA5A23333C2006E78882C2 /* Pods-mobile WatchKit Extension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-mobile WatchKit Extension.release.xcconfig"; path = "Target Support Files/Pods-mobile WatchKit Extension/Pods-mobile WatchKit Extension.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -208,7 +208,7 @@
 		D6080E50242AAB5F0037C8C4 /* mobile */ = {
 			isa = PBXGroup;
 			children = (
-				D6ADC59A245B2CDC0042A508 /* postPlayground.playground */,
+				D6A8154524653149004B3720 /* trying.playground */,
 				D6080E51242AAB5F0037C8C4 /* AppDelegate.swift */,
 				D6080E53242AAB5F0037C8C4 /* SceneDelegate.swift */,
 				D6080E55242AAB5F0037C8C4 /* ContentView.swift */,
