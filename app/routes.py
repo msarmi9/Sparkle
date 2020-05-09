@@ -47,7 +47,7 @@ def about():
 
 # Dashboard page ------------------------------------------------------------
 @application.route("/dashboard")
-# @login_required
+@login_required
 def dashboard():
     """
     Render dashboard page which includes plots/analytics of adherence trends 
@@ -60,8 +60,6 @@ def dashboard():
     adh_over_time = plot_adherence_rates_over_time(patients, rxs)
     top_general_adh = plot_top_general_adherence_by_drug_name(rxs, n=5)
     top_ontime_adh = plot_top_ontime_adherence_by_drug_name(rxs, n=5)
-
-    # print(top_ontime_adh)
 
     return render_template('dashboard.html',
                            adh_over_time=adh_over_time,
