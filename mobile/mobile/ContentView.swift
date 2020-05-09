@@ -56,7 +56,7 @@ class ContentViewModel: ObservableObject {
             }
         }
     }
-    @Published var firstname: String = "Collin" {
+    @Published var firstname: String = "" {
         didSet {
             loggedIn = (firstname.count > 1)
         }
@@ -66,7 +66,7 @@ class ContentViewModel: ObservableObject {
     @Published var nextDesc: String = ""
     @Published var nextAmount: Int = 0
     @Published var attemptedLogIn: Bool = false
-    @Published var loggedIn: Bool = true
+    @Published var loggedIn: Bool = false
     
     func sendLoginPost(){
         let parameters = ["patient_id": self.patient_id]
@@ -99,9 +99,6 @@ func parseTime(ts: String) -> String {
     }
 }
 
-extension Color {
-    static let offWhite = Color(red: 225 / 255, green: 225 / 255, blue: 235 / 255)
-}
 
 extension Text {
     func customTitleText() -> some View {
@@ -109,14 +106,9 @@ extension Text {
             .fontWeight(.bold)
             .font(.title)
             .padding()
-            .background(Color("sparkleColor"))
             .cornerRadius(40)
             .foregroundColor(.white)
             .padding(10)
-            .overlay(
-                RoundedRectangle(cornerRadius: 40)
-                    .stroke(Color("sparkleColorAccent"), lineWidth: 5)
-            )
     }
 }
 
@@ -144,46 +136,76 @@ struct ContentView: View {
                     Text("It doesn't look like you're registered yet!")
                 }
                 
-                Text("Welcome!")
-                 .customTitleText()
+                ZStack {
+                    RoundedRectangle(cornerRadius: 25)
+                    .fill(Color.black)
+                    .frame(width: 325, height: 100)
+                    .shadow(color: Color("sparkleColor").opacity(0.2), radius: 10, x: 10, y: 10)
+                    .shadow(color: Color("sparkleColor").opacity(0.7), radius: 10, x: -5, y: -5)
+                    
+                    Text("Welcome!")
+                            .font(.title)
+                            .foregroundColor(.white)
+                }
                  .padding(50)
                 
             } else {                               // logged in
                 Toggle(isOn: $viewModel.loggedIn) {
                     Text("You're logged in")
-                }.padding(25)
+                }.padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 50))
                 
-                Text("Welcome \(viewModel.firstname)!")
+                Text("Welcome, \(viewModel.firstname)!")
                     .font(.headline)
                     .italic()
-                    .padding(50)
-                
-                Button(action: {
-                    self.showNext = true
-                }) {
-                    Text("Get today's schedule")
-                        .customTitleText()
-                }
-                .alert(isPresented: $showNext) {
-                    Alert(title: Text("Next medication:"), message: Text("Don't forget to take \(viewModel.nextAmount) \(viewModel.nextDrug)'s at \(parseTime(ts: viewModel.nextTime)) today!"), dismissButton: .default(Text("Got it!")))
-                }
+                    .padding(EdgeInsets(top: 10, leading: 50, bottom: 10, trailing: 50))
                 
                 ZStack {
-//                    Color.offWhite
                     RoundedRectangle(cornerRadius: 25)
                     .fill(Color.black)
-                    .frame(width: 300, height: 300)
-                    .shadow(color: Color.white.opacity(0.2), radius: 10, x: 10, y: 10)
-                    .shadow(color: Color.white.opacity(0.7), radius: 10, x: -5, y: -5)
+                    .frame(width: 325, height: 100)
+                    .shadow(color: Color("sparkleColor").opacity(0.2), radius: 10, x: 10, y: 10)
+                    .shadow(color: Color("sparkleColor").opacity(0.7), radius: 10, x: -5, y: -5)
+                    
+                    Button(action: {
+                        self.showNext = true
+                    }) {
+                        Text("Get today's schedule")
+                            .customTitleText()
+                    }
+                    .alert(isPresented: $showNext) {
+                        Alert(title: Text("Next medication:"), message: Text("Don't forget to take \(viewModel.nextAmount) \(viewModel.nextDrug)'s at \(parseTime(ts: viewModel.nextTime)) today!"), dismissButton: .default(Text("Got it!")))
+                    }
+                }.padding(.bottom, 35)
+                
+                
+                ZStack {
+                    RoundedRectangle(cornerRadius: 25)
+                    .fill(Color.black)
+                    .frame(width: 325, height: 275)
+                    .shadow(color: Color("sparkleColor").opacity(0.2), radius: 10, x: 10, y: 10)
+                    .shadow(color: Color("sparkleColor").opacity(0.7), radius: 10, x: -5, y: -5)
                     
                     VStack {
+                        Text("Record an intake")
+                            .customTitleText()
+                        
+                        TextField("Prescription id",
+                        text: $watchSession.prescription_id).padding(EdgeInsets(top: 0, leading: 50, bottom: 0, trailing: 50))
+                        
+                        Toggle("Intake on time", isOn: $watchSession.onTime).padding(EdgeInsets(top: 0, leading: 50, bottom: 20, trailing: 50))
+                        
                         Text("Status:")
                             .font(.title)
                             .foregroundColor(.white)
+                        
+                        
                         Text(watchSession.pred_string)
                             .italic()
                             .foregroundColor(.white)
+                            .padding(.bottom, 35)
+                            
                     }
+                    
                 }
                 
                 
@@ -226,6 +248,7 @@ struct SeeSensors: View {
 
 struct SensorView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView(watchSession: WatchSessionManager())
+        ContentView(watchSession: WatchSessionManager()).background(Color(UIColor.systemBackground))
+        .environment(\.colorScheme, .dark)
     }
 }
