@@ -87,7 +87,8 @@ def least_adhered_by_drug_name(prescriptions, n=5, measure="general"):
     """
     med_adh = adherence_by_drug_name(prescriptions, measure=measure)
     sorted_adh = [
-        (name, frac) for name, frac in sorted(med_adh.items(), key=lambda x: x[1])
+        (name, frac) for name, frac in sorted(med_adh.items(), key=lambda x: x[1],
+                                              reverse=True)
     ]
     return sorted_adh[:n]
 
@@ -103,7 +104,8 @@ def most_adhered_by_drug_name(prescriptions, n=5, measure="general"):
     """
     med_adh = adherence_by_drug_name(prescriptions, measure=measure)
     sorted_adh = [
-        (name, frac) for name, frac in sorted(med_adh.items(), key=lambda x: x[1])
+        (name, frac) for name, frac in sorted(med_adh.items(), key=lambda x: x[1],
+                                              reverse=True)
     ]
     return sorted_adh[:n]
 
