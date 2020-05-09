@@ -100,7 +100,7 @@ def add_prescription(patient_id):
             "duration_unit": f.get("duration_unit")[:-1],
             "refills": int(f.get("refills")),
             "time_of_day": f"{f.get('time_of_day_am')}, {f.get('time_of_day_pm')}",
-            "start_date": datetime.fromisoformat(f.get("start_date")),
+            "start_date": datetime.strptime(f.get("start_date"), "%m/%d/%Y"),
         }
 
         # Time of day
