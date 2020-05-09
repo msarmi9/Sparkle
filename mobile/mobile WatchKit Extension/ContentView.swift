@@ -64,7 +64,9 @@ struct isRecordingFalse: View {
 
     var body: some View {
         HStack {
-            Image(systemName: "calendar")
+            Image("hand-with-a-pill")
+            .resizable()
+            .frame(width: 40.0, height: 40.0)
             
             Button(action: {
                 self.isRecording.toggle()
@@ -72,6 +74,7 @@ struct isRecordingFalse: View {
                 self.motion.startUpdates(Hz: 1.0/Double(self.Hz), pillCount: self.pillCount)
                 self.duration = 0.0
             }) {
+                
                 Text("Take a pill")
             }
         }
@@ -86,8 +89,9 @@ struct isRecordingTrue: View {
     @Binding var pillCount: String
     var body: some View {
         HStack {
-            Image(systemName: "calendar")
-                .foregroundColor(Color.green)
+            Image("hand-with-a-pill")
+            .resizable()
+            .frame(width: 40.0, height: 40.0)
             
             Button(action: {
                 // Not sure what the order of these lines of code should be
