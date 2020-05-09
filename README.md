@@ -61,7 +61,7 @@ _In development on the_ [_`mobile` branch._](https://github.com/msarmi9/Sparkle/
     - Separate view for weekly, monthly, and yearly medication intake summary & statistics.
     - Collection of gamification rewards (characters, planets, trees, etc.) based on successful medication adherence (e.g. streaks).
 
-![mobile_gif](./docs/images/mobile_apps.gif)
+![iOS_app](./docs/images/iOS_app.png)
 
 ### Web Application
 

@@ -1,156 +1,163 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
+{% block patients %}
+        <!-- Begin Page Content -->
+        <div class="container-fluid">
 
-{% block cards %}
-	<div class="container main">
-		{% if patients|length == 0 %}
-			<h5>You don't have any patients yet.</h5>
-		{% else %}
-			<h3>{{ patients|length }} patients</h3>
-			<br>
-			<div class="progress-container">
-				<div class="progress-bar-wrapper">
-					<b>Overall patient adherence</b>
-					<div class="progress dashboard-progress" style="height: 20px;">
-					  <div class="progress-bar bg-{% if patient_adherence < 33 %}danger{% elif patient_adherence < 66 %}warning{% else %}success{% endif %}" role="progressbar"
-					  	   style="width: {{ patient_adherence }}%;"
-					  	   aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-					  	{{ patient_adherence }}%
-					  </div>
-					</div>
-				</div>
-				<div class="progress-bar-wrapper">
-					<b>Prescription adherence</b>
-					<div class="progress dashboard-progress" style="height: 20px;">
-					  <div class="progress-bar bg-{% if rx_adherence < 33 %}danger{% elif rx_adherence < 66 %}warning{% else %}success{% endif %}" role="progressbar"
-					  	   style="width: {{ rx_adherence }}%;"
-					  	   aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
-					  	{{ rx_adherence }}%
-					  </div>
-					</div>
-				</div>
-			</div>
+          <!-- Page Heading -->
+          <div class="d-sm-flex align-items-center justify-content-between mb-4">
+            <h1 class="h3 mb-0 text-gray-800">All Patients</h1>
+          </div>
 
-			<ul class="nav nav-tabs" id="myTab" role="tablist">
-			  <li class="nav-item">
-			    <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"
-			    style="color: #dc3545;">
-			    	Deviating ({{ nonadhering_patients|length }})
-				</a>
-			  </li>
-			  <li class="nav-item">
-			    <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false"
-			    style="color: #17a2b8;">
-			    	On track ({{ adhering_patients|length }})
-				</a>
-			  </li>
-			  <li class="nav-item">
-			    <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"
-			    style="color: #17a2b8;">
-			    	Unprescribed ({{ unprescribed_patients|length }})
-				</a>
-			  </li>
-			</ul>
-			<div class="tab-content dashboard-tab-content" id="myTabContent">
-			  <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-			  	<div class="card-columns card-deck">
-					{% for p in nonadhering_patients %}
-						<div class="card bg-light patient-card" style="width: 18rem;">
-						  <div class="card-body">
-						    <h5 class="card-title"><b>{{ p.lastname }}</b>, {{ p.firstname }}</h5>
-						    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
-						    <h6 class="card-subtitle mb-2 text-muted">
-						    	{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}
-							</h6>
-						    <div>
-						    	{% for rx in p.prescriptions %}
-						    		{% if not rx.has_started() %}
-						    			<span class="badge badge-pill badge-secondary">
-						    				{{ rx.drug }}
-						    			</span>
-						    		{% else %}
-						    			<span class="badge badge-pill badge-{% if not rx.is_adherent() %}danger{% else %}success{% endif %}">
-						    				{{ rx.drug }}
-						    			</span>
-									{% endif %}
-								{% endfor %}
-						    </div>
-						    <div style="padding-top: 10px;">
-							    <a href="/patients/{{ p.id }}" class="card-link">Profile</a>
-							    <a href="/patients/{{ p.id }}/new-prescription" class="card-link">New prescription</a>
-							</div>
-						  </div>
-						</div>
-					{% endfor %}
-				</div>
-			  </div>
-			  <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-			  	<div class="card-columns card-deck">
-					{% for p in adhering_patients %}
-						<div class="card bg-light patient-card" style="width: 18rem;">
-						  <div class="card-body">
-						    <h5 class="card-title"><b>{{ p.lastname }}</b>, {{ p.firstname }}</h5>
-						    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
-						    <h6 class="card-subtitle mb-2 text-muted">
-						    	{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}
-							</h6>
-						    <div>
-						    	{% for rx in p.prescriptions %}
-						    		{% if not rx.has_started() %}
-						    			<span class="badge badge-pill badge-secondary">
-						    				{{ rx.drug }}
-						    			</span>
-						    		{% else %}
-						    			<span class="badge badge-pill badge-{% if not rx.is_adherent() %}danger{% else %}success{% endif %}">
-						    				{{ rx.drug }}
-						    			</span>
-									{% endif %}
-								{% endfor %}
-						    </div>
-						    <div style="padding-top: 10px;">
-							    <a href="/patients/{{ p.id }}" class="card-link">Profile</a>
-							    <a href="/patients/{{ p.id }}/new-prescription" class="card-link">New prescription</a>
-							</div>
-						  </div>
-						</div>
-					{% endfor %}
-				</div>
-			  </div>
-			  <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-			  	<div class="card-columns card-deck">
-					{% for p in unprescribed_patients %}
-						<div class="card bg-light patient-card" style="width: 18rem;">
-						  <div class="card-body">
-						    <h5 class="card-title"><b>{{ p.lastname }}</b>, {{ p.firstname }}</h5>
-						    <h6 class="card-subtitle mb-2 text-muted">Age: {{ p.age }}</h6>
-						    <h6 class="card-subtitle mb-2 text-muted">
-						    	{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}
-							</h6>
-						    <div>
-						    	{% for rx in p.prescriptions %}
-						    		{% if not rx.has_started() %}
-						    			<span class="badge badge-pill badge-secondary">
-						    				{{ rx.drug }}
-						    			</span>
-						    		{% else %}
-						    			<span class="badge badge-pill badge-{% if not rx.is_adherent() %}danger{% else %}success{% endif %}">
-						    				{{ rx.drug }}
-						    			</span>
-									{% endif %}
-								{% endfor %}
-						    </div>
-						    <div style="padding-top: 10px;">
-							    <a href="/patients/{{ p.id }}" class="card-link">Profile</a>
-							    <a href="/patients/{{ p.id }}/new-prescription" class="card-link">New prescription</a>
-							</div>
-						  </div>
-						</div>
-					{% endfor %}
-				</div>
-			  </div>
-			</div>
-		{% endif %}
-		<div>
-			<p><a href="/new-patient">Add patient</a></p>
+        <div class="h5 mb-0 font-weight-bold text-gray-800">
+			<p><a href="/new-patient">
+				<i class="fas fa-plus text-blue-300"></i> Add patient</a></p>
 		</div>
-	</div>  <!-- end main container -->
+
+          <div class="row">
+
+            <!-- Unprescribed -->
+            {% for p in unprescribed_patients %}
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                      <div class="text-s font-weight-bold text-warning text-uppercase mb-1"><b>{{ p.lastname }}</b>, {{ p.firstname }}</div>
+                      <div class="h6 mb-0 font-weight-medium text-gray-800">Age: {{ p.age }}</div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800">{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}</div>
+                    </div>
+
+                  </div>
+                  <div>
+			    	{% for rx in p.prescriptions %}
+			    		{% if not rx.has_started() %}
+			    			<span class="badge badge-pill badge-secondary">
+			    				{{ rx.drug }}
+			    			</span>
+			    		{% else %}
+			    			<span class="badge badge-pill badge-{% if not rx.is_adherent() %}danger{% else %}success{% endif %}">
+			    				{{ rx.drug }}
+			    			</span>
+						{% endif %}
+					{% endfor %}
+				    </div>
+				    <div style="padding-top: 35px;" class="text-s font-weight-bold text-warning">
+					    <a href="/patients/{{ p.id }}" class="card-link">Profile</a>
+					    <a href="/patients/{{ p.id }}/new-prescription" class="card-link">New prescription</a>
+					</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+
+
+
+            <!-- Non-adhering -->
+            {% for p in nonadhering_patients %}
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+
+                    <div class="col mr-2">
+                      <div class="text-s font-weight-bold text-danger text-uppercase mb-1"><b>{{ p.lastname }}</b>, {{ p.firstname }}</div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800">Age: {{ p.age }}</div>
+                      <div class="h6 mb-0 font-weight-bold text-gray-800">{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}</div>
+                    </div>
+
+                	<div class="col">
+                      <div class="progress progress-sm mr-2">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                      </div>
+                    </div>
+
+                  </div>
+                  	<div style="padding-top: 10px;">
+			    	{% for rx in p.prescriptions %}
+			    		{% if not rx.has_started() %}
+			    			<span class="badge badge-pill badge-secondary">
+			    				{{ rx.drug }}
+			    			</span>
+			    		{% else %}
+			    			<span class="badge badge-pill badge-{% if not rx.is_adherent() %}danger{% else %}success{% endif %}">
+			    				{{ rx.drug }}
+			    			</span>
+						{% endif %}
+					{% endfor %}
+			    	</div>
+				    <div style="padding-top: 10px;" class="text-s font-weight-bold text-warning">
+					    <a href="/patients/{{ p.id }}" class="card-link">Profile</a>
+					    <a href="/patients/{{ p.id }}/new-prescription" class="card-link">New prescription</a>
+					</div>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+
+
+
+
+            <!-- adhering_patients -->
+            {% for p in adhering_patients %}
+            <div class="col-xl-3 col-md-6 mb-4">
+              <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                  <div class="row no-gutters align-items-center">
+
+                    <div class="col mr-2">
+                        <div class="text-s font-weight-bold text-success text-uppercase mb-1"><b>{{ p.lastname }}</b>, {{ p.firstname }}</div>
+						<div class="h6 mb-0 mr-3 font-weight-medium text-gray-800">Age: {{ p.age }}</div>
+                        <div class="h6 mb-0 mr-3 font-weight-bold text-gray-800">{{ p.prescriptions|length }} prescription{{'' if p.prescriptions|length == 1 else 's' }}</div>
+                    </div>
+
+                        <div class="col">
+                          <div class="progress progress-sm mr-2">
+                            <div class="progress-bar bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                          </div>
+                        </div>
+
+
+                    <div class="col-auto">
+                      <!-- <i class="fas fa-clipboard-list fa-2x text-gray-300"></i> -->
+                    </div>
+
+                </div>
+					<div style="padding-top: 10px;">
+					{% for rx in p.prescriptions %}
+						{% if not rx.has_started() %}
+							<span class="badge badge-pill badge-secondary">
+								{{ rx.drug }}
+							</span>
+						{% else %}
+							<span class="badge badge-pill badge-{% if not rx.is_adherent() %}danger{% else %}success{% endif %}">
+								{{ rx.drug }}
+							</span>
+						{% endif %}
+					{% endfor %}
+					</div>
+				    <div style="padding-top: 10px;" class="text-s font-weight-bold text-warning">
+					    <a href="/patients/{{ p.id }}" class="card-link">Profile</a>
+					    <a href="/patients/{{ p.id }}/new-prescription" class="card-link">New prescription</a>
+					</div>
+                </div>
+
+              </div>
+            </div>
+            {% endfor %}
+
+        </div>
+        <!-- /.container-fluid -->
+
+      </div>
+      <!-- End of Main Content -->
+
+
+    </div>
+    <!-- End of Content Wrapper -->
+
+  </div>
+  <!-- End of Page Wrapper -->
+
+
 {% endblock %}
