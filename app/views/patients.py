@@ -1,15 +1,17 @@
+from flask import Blueprint
 from flask import redirect
 from flask import render_template
 from flask import url_for
 from flask_login import current_user
 from flask_login import login_required
 
-from . import bp
 from app import db
 from app.models.forms import PatientForm
 from app.models.medication import Prescription
 from app.models.persons import Patient
 from app.models.persons import User
+
+bp = Blueprint("patients", __name__)
 
 
 @bp.route("/patients")
@@ -19,28 +21,28 @@ def patients():
     Render patient cards for doctors to quickly monitor patients who are
     adhering and deviating.
     """
-    return _render_patients_page("patients.html")
+    return _render_patients_page("patients/patients.html")
 
 
 @bp.route("/patients_deviating")
 @login_required
 def patients_deviating():
     """Render patients page of the list of patients."""
-    return _render_patients_page("patients_deviating.html")
+    return _render_patients_page("patients/patients_deviating.html")
 
 
 @bp.route("/patients_unprescribed")
 @login_required
 def patients_unprescribed():
     """Render page listing unprescribed patients."""
-    return _render_patients_page("patients_unprescribed.html")
+    return _render_patients_page("patients/patients_unprescribed.html")
 
 
 @bp.route("/patients_ontrack")
 @login_required
 def patients_ontrack():
     """Render page listing adhering patients."""
-    return _render_patients_page("patients_ontrack.html")
+    return _render_patients_page("patients/patients_ontrack.html")
 
 
 @bp.route("/patients/<int:patient_id>", methods=("GET", "POST"))
@@ -50,7 +52,7 @@ def patient_profile(patient_id):
     patient = Patient.query.filter_by(id=patient_id).first()
     prescriptions = patient.prescriptions
     return render_template(
-        "patient_profile.html", patient=patient, prescriptions=prescriptions
+        "patients/patient_profile.html", patient=patient, prescriptions=prescriptions
     )
 
 
@@ -76,14 +78,14 @@ def add_patient():
         db.session.add(patient)
         db.session.commit()
         return redirect(url_for(".patients"))
-    return render_template("add_patient.html", form=patient_form)
+    return render_template("patients/add_patient.html", form=patient_form)
 
 
 def _render_patients_page(template):
     """Render a template for one of ontrack, deviating, and all patients."""
     patients = User.query.filter_by(id=current_user.id).first().patients
     if len(patients) == 0:
-        return render_template("patients.html", patients=patients)
+        return render_template("patients/patients.html", patients=patients)
     n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
     patient_adherence = round(n_adherent / len(patients) * 100)
 

@@ -1,15 +1,17 @@
 import json
 from datetime import datetime
 
+from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-from . import bp
 from app import db
-from app.medication import Intake
-from app.medication import Prescription
-from app.persons import Patient
-from modeling.adherence import adherence_model
+from app.adherence import adherence_model
+from app.models.medication import Intake
+from app.models.medication import Prescription
+from app.models.persons import Patient
+
+bp = Blueprint("mobile", __name__)
 
 
 @bp.route("/send-data", methods=["POST"])

@@ -1,10 +1,12 @@
+from flask import Blueprint
 from flask import render_template
 from flask_login import current_user
 from flask_login import login_required
 
-from . import bp
 from app import ploting
 from app.models.persons import Patient
+
+bp = Blueprint("dashboard", __name__)
 
 
 @bp.route("/dashboard")
@@ -20,7 +22,7 @@ def dashboard():
     top_ontime_adh = ploting.plot_top_ontime_adherence_by_drug_name(rxs, n=5)
 
     return render_template(
-        "dashboard.html",
+        "dashboard/dashboard.html",
         adh_over_time=adh_over_time,
         top_general_adh=top_general_adh,
         top_ontime_adh=top_ontime_adh,

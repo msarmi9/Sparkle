@@ -1,17 +1,19 @@
 from datetime import datetime
 
+from flask import Blueprint
 from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
 from flask_login import login_required
 
-from . import bp
 from app import adherence
 from app import db
 from app.models.forms import PrescriptionForm
 from app.models.medication import Prescription
 from app.models.persons import Patient
+
+bp = Blueprint("prescriptions", __name__)
 
 
 @bp.route("/patients/<int:patient_id>/new-prescription", methods=("GET", "POST"))
@@ -90,4 +92,6 @@ def add_prescription(patient_id):
 
         return redirect(url_for("patients.patient_profile", patient_id=patient_id))
     print(rx_form.errors)
-    return render_template("add_prescription.html", patient=patient, form=rx_form)
+    return render_template(
+        "prescriptions/add_prescription.html", patient=patient, form=rx_form
+    )

@@ -20,16 +20,16 @@ db.session.commit()
 login_manager = LoginManager()
 login_manager.init_app(application)
 
-from app import auth
-from app import dashboard
-from app import home
 from app import mobile
-from app import patients
-from app import prescriptions
+from app.views import auth
+from app.views import dashboard
+from app.views import home
+from app.views import patients
+from app.views import prescriptions
 
+application.register_blueprint(mobile.bp)
 application.register_blueprint(auth.bp)
 application.register_blueprint(dashboard.bp)
 application.register_blueprint(home.bp)
-application.register_blueprint(mobile.bp)
 application.register_blueprint(patients.bp)
 application.register_blueprint(prescriptions.bp)

@@ -1,14 +1,16 @@
+from flask import Blueprint
 from flask import redirect
 from flask import render_template
 from flask import url_for
 from flask_login import login_user
 from flask_login import logout_user
 
-from . import bp
 from app import db
 from app.models.forms import LoginForm
 from app.models.forms import RegistrationForm
 from app.models.persons import User
+
+bp = Blueprint("auth", __name__)
 
 
 @bp.route("/register", methods=("GET", "POST"))
@@ -34,7 +36,7 @@ def register():
             db.session.add(user)
             db.session.commit()
             return redirect(url_for(".login"))
-    return render_template("register.html", form=registration_form)
+    return render_template("auth/register.html", form=registration_form)
 
 
 @bp.route("/login", methods=["GET", "POST"])
@@ -51,7 +53,7 @@ def login():
         if user is not None and user.check_password(password):
             login_user(user)
             return redirect(url_for("patients.patients"))
-    return render_template("login.html", form=login_form)
+    return render_template("auth/login.html", form=login_form)
 
 
 @bp.route("/logout")
@@ -64,4 +66,4 @@ def logout():
 @bp.route("/forgot_password")
 def forgot_password():
     """Render form for users to reset their password."""
-    return render_template("forgot_password.html")
+    return render_template("auth/forgot_password.html")
