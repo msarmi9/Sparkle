@@ -20,7 +20,7 @@ db.session.commit()
 login_manager = LoginManager()
 login_manager.init_app(application)
 
-from app import mobile
+from app.api import mobile
 from app.views import auth
 from app.views import dashboard
 from app.views import home

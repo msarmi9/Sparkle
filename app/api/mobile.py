@@ -1,3 +1,6 @@
+"""
+Public API for communicating with mobile clients.
+"""
 import json
 from datetime import datetime
 
