@@ -9,7 +9,6 @@ from app import db
 from app.medication import Intake
 from app.medication import Prescription
 from app.persons import Patient
-from app.utils import *
 from modeling.adherence import adherence_model
 
 

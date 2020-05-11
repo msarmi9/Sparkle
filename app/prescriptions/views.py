@@ -5,11 +5,11 @@ from flask import url_for
 from flask_login import login_required
 
 from . import bp
+from app import adherence
 from app import db
 from app.models.forms import PrescriptionForm
 from app.models.medication import Prescription
 from app.models.persons import Patient
-from app.utils import *
 
 
 @bp.route("/patients/<int:patient_id>/new-prescription", methods=("GET", "POST"))
@@ -52,7 +52,7 @@ def add_prescription(patient_id):
         rx_fields["time_of_day"] = tod
 
         # Translate dosage to frequency info
-        freq_info = DOSAGE_TO_FREQ[f.get("dosage")]
+        freq_info = adherence.DOSAGE_TO_FREQ[f.get("dosage")]
         rx_fields["freq"] = freq_info["freq"]
         rx_fields["freq_repeat"] = freq_info["freq_repeat"]
         rx_fields["freq_repeat_unit"] = freq_info["freq_repeat_unit"]
@@ -64,7 +64,7 @@ def add_prescription(patient_id):
         rx_fields["patient"] = patient
 
         # Next refill day, days until next refill
-        next_refill_date = get_next_refill_date(
+        next_refill_date = adherence.get_next_refill_date(
             rx_fields["start_date"],
             rx_fields["duration"],
             rx_fields["duration_unit"],
@@ -73,7 +73,9 @@ def add_prescription(patient_id):
         )
         rx_fields["next_refill_date"] = next_refill_date
 
-        days_until_refill = get_days_until_refill(datetime.now(), next_refill_date)
+        days_until_refill = adherence.get_days_until_refill(
+            datetime.now(), next_refill_date
+        )
         rx_fields["days_until_refill"] = days_until_refill
 
         for k, v in rx_fields.items():

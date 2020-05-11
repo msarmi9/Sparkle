@@ -2,8 +2,8 @@ import numpy as np
 
 from app import db
 from app import login_manager
+from app.adherence import DOSAGE_TO_FREQ
 from app.models.persons import User
-from app.utils import *
 
 
 class Prescription(db.Model):
