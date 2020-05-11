@@ -1,9 +1,10 @@
 import math
+import pickle
+
 import numpy as np
 import pandas as pd
-import pickle
-from sklearn.feature_selection import SelectFromModel
 import xgboost as xgb
+from sklearn.feature_selection import SelectFromModel
 
 
 def initializeDf(data):
@@ -75,11 +76,11 @@ def pivotData(df):
 def selectFeatures(X):
     """
 	Loads pre-fit selection object and applies to input, reducing feature space.
-	The output is an dataframe of numeric features ready for XGB regression. 
+	The output is an dataframe of numeric features ready for XGB regression.
 	"""
 
     # select the top features according to previous analysis
-    select = pickle.load(open("modeling/selection.pkl", "rb"))
+    select = pickle.load(open("modeling/models/selection.pkl", "rb"))
     X_select = select.transform(X)
 
     return X_select
