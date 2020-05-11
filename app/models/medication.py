@@ -1,8 +1,9 @@
 import numpy as np
 
+from app import db
+from app import login_manager
+from app.models.persons import User
 from app.utils import *
-from app.persons import User
-from app import db, login_manager
 
 
 class Prescription(db.Model):
@@ -122,7 +123,7 @@ class Prescription(db.Model):
 
     def next_refill_date(self):
         """
-        Return next refill date based on most recent (last) refill date 
+        Return next refill date based on most recent (last) refill date
         and dosage information.
         """
         if self.refill_num == self.refills or self.refills == 0:
@@ -171,7 +172,7 @@ class Prescription(db.Model):
 
 class Intake(db.Model):
     """
-    Intake model. Intakes are created when the app receives a recording, 
+    Intake model. Intakes are created when the app receives a recording,
     indicating that a patient has taken medication.
     """
 
