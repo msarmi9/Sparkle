@@ -1,8 +1,11 @@
+from datetime import datetime
+from datetime import timedelta
+
 import numpy as np
 
 from app import db
 from app import login_manager
-from app.adherence import DOSAGE_TO_FREQ
+from app.adherence import DAY_STD
 from app.models.persons import User
 
 
@@ -128,7 +131,7 @@ class Prescription(db.Model):
         """
         if self.refill_num == self.refills or self.refills == 0:
             return None
-        days_per_cycle = math.floor(
+        days_per_cycle = np.floor(
             self.duration * DAY_STD[self.duration_unit] / (self.refills + 1)
         )
         return self.last_refill_date + timedelta(days=days_per_cycle)
