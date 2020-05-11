@@ -4,14 +4,12 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_sqlalchemy import SQLAlchemy
 
-from config import Config
-
 
 # Initialization
 # Create an application instance (an object of class Flask) which handles all requests.
 application = Flask(__name__)
 application.secret_key = os.urandom(33)  # For CSRF token
-application.config.from_object(Config)
+application.config.from_object("app.config.Config")
 
 # Create DB
 db = SQLAlchemy(application)
