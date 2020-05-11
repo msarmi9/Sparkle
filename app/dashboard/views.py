@@ -3,7 +3,6 @@ from flask_login import current_user
 from flask_login import login_required
 
 from . import bp
-from app import adherence
 from app import ploting
 from app.models.persons import Patient
 

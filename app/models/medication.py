@@ -4,9 +4,7 @@ from datetime import timedelta
 import numpy as np
 
 from app import db
-from app import login_manager
 from app.adherence import DAY_STD
-from app.models.persons import User
 
 
 class Prescription(db.Model):
