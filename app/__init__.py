@@ -1,8 +1,10 @@
-from config import Config
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
 import os
+
+from flask import Flask
+from flask_login import LoginManager
+from flask_sqlalchemy import SQLAlchemy
+
+from config import Config
 
 
 # Initialization
@@ -20,5 +22,16 @@ db.session.commit()
 login_manager = LoginManager()
 login_manager.init_app(application)
 
-# Added at the bottom to avoid circular dependencies. (Altough it violates PEP8 standards)
-from app import forms, persons, medication, routes
+from app import auth
+from app import dashboard
+from app import home
+from app import mobile
+from app import patients
+from app import prescriptions
+
+application.register_blueprint(auth.bp)
+application.register_blueprint(dashboard.bp)
+application.register_blueprint(home.bp)
+application.register_blueprint(mobile.bp)
+application.register_blueprint(patients.bp)
+application.register_blueprint(prescriptions.bp)
