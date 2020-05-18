@@ -5,15 +5,7 @@ from app.persons import Patient
 from app.persons import User
 
 
-doctor = User("Charlotte", "Bronte", "cbronte", "charlotte@me.com", "emily")
-patient = Patient(
-    firstname="Jane",
-    lastname="Eyre",
-    email="jane@me.com",
-    age=23,
-    weight=123,
-    user=doctor,
-)
+patient = Patient("Jane", "Eyre", "jane@me.com", age=23, weight=123)
 
 # Prescription with an expired start date
 # Treatment has also ended, as all medication should have been consumed prior to today.

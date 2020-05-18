@@ -1,11 +1,10 @@
 """
 Classes to model users (doctors) and patients.
 """
-
 from collections import defaultdict
 from datetime import datetime
-import numpy as np
 
+import numpy as np
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
@@ -46,23 +45,23 @@ class User(db.Model, UserMixin, BasicInfo):
         return check_password_hash(self.password_hash, password)
 
 
-class Patient(db.Model):
+class Patient(db.Model, BasicInfo):
     """
     Defines a Patient, which has a foreign key pointed to User (doctor).
     """
-
-    id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(50), unique=False, nullable=False)
-    lastname = db.Column(db.String(50), unique=False, nullable=False)
-    email = db.Column(db.String(80), unique=True, nullable=True)
-    age = db.Column(db.Integer, unique=False, nullable=False)
-    weight = db.Column(db.Integer, unique=False, nullable=False)
 
     # Foreign key
     doctor_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     # One-to-many relationship
     prescriptions = db.relationship("Prescription", backref="patient", lazy=True)
+
+    def __init__(self, firstname, lastname, email, age, weight):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.email = email
+        self.age = age
+        self.weight = weight
 
     def all_intakes(self, start=None, end=None):
         """
@@ -106,14 +105,14 @@ class Patient(db.Model):
         self, on_time_threshold=0.9, required_intakes_threshold=0.9
     ):
         """
-        Return fraction of prescriptions for this Patient that are deemed 
+        Return fraction of prescriptions for this Patient that are deemed
         adherent.
-        Adherence requires Intakes to be recorded on time and on track 
+        Adherence requires Intakes to be recorded on time and on track
         (i.e. medications aren't missed).
 
-        on_time_threshold: float - fraction on time Intakes needed for 
+        on_time_threshold: float - fraction on time Intakes needed for
         this prescription to be deemed adherent
-        required_intakes_threshold: float - fraction Intakes actually 
+        required_intakes_threshold: float - fraction Intakes actually
         recorded, out of all prescribed Intakes since start date.
         """
         if len(self.prescriptions) == 0:
@@ -139,12 +138,12 @@ class Patient(db.Model):
         self, on_time_threshold=0.9, required_intakes_threshold=0.9, date=datetime.now()
     ):
         """
-        Whether or not a patient is deemed adherent based on their 
+        Whether or not a patient is deemed adherent based on their
         prescription adherence.
 
-        on_time_threshold: float - fraction on time Intakes needed for 
+        on_time_threshold: float - fraction on time Intakes needed for
         this prescription to be deemed adherent
-        required_intakes_threshold: float - fraction Intakes actually 
+        required_intakes_threshold: float - fraction Intakes actually
         recorded, out of all prescribed Intakes since start date.
         """
         if np.all([p.start_date > datetime.now() for p in self.prescriptions]):
