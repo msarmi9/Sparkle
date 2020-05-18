@@ -1,11 +1,11 @@
+"""
+Tests each class in the ``app.medication`` module.
+"""
+
 from datetime import datetime
 
 from app.medication import Prescription
-from app.persons import Patient
-from app.persons import User
 
-
-patient = Patient("Jane", "Eyre", "jane@me.com", age=23, weight=123)
 
 # Prescription with an expired start date
 # Treatment has also ended, as all medication should have been consumed prior to today.
@@ -27,7 +27,6 @@ rx_past = Prescription(
     time_of_day="AM",
     start_date=datetime.fromisoformat("2000-01-01"),
     created=datetime.fromisoformat("2000-01-01"),
-    patient=patient,
 )
 
 # Prescription with future start date
@@ -49,12 +48,11 @@ rx_future = Prescription(
     time_of_day="AM",
     start_date=datetime.fromisoformat("2999-12-31"),
     created=datetime.fromisoformat("2999-12-31"),
-    patient=patient,
 )
 
 
 class TestPrescription:
-    """Final class for testing methods for ``Patient`` class."""
+    """Tests for ``medication.Prescription`` class."""
 
     def test_has_started(self):
         """Only prescriptions with expired start date are marked as started."""
