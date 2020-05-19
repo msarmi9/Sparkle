@@ -1,8 +1,10 @@
+from datetime import datetime
+from datetime import timedelta
+
 import numpy as np
 
-from app.utils import *
-from app.persons import User
-from app import db, login_manager
+from app import db
+from app.adherence import DAY_STD
 
 
 class Prescription(db.Model):
@@ -122,12 +124,12 @@ class Prescription(db.Model):
 
     def next_refill_date(self):
         """
-        Return next refill date based on most recent (last) refill date 
+        Return next refill date based on most recent (last) refill date
         and dosage information.
         """
         if self.refill_num == self.refills or self.refills == 0:
             return None
-        days_per_cycle = math.floor(
+        days_per_cycle = np.floor(
             self.duration * DAY_STD[self.duration_unit] / (self.refills + 1)
         )
         return self.last_refill_date + timedelta(days=days_per_cycle)
@@ -171,7 +173,7 @@ class Prescription(db.Model):
 
 class Intake(db.Model):
     """
-    Intake model. Intakes are created when the app receives a recording, 
+    Intake model. Intakes are created when the app receives a recording,
     indicating that a patient has taken medication.
     """
 
