@@ -1,0 +1,17 @@
+{% extends "index.html" %}
+
+{% block analytics %}
+	<div class="container main">
+		<div>
+			{{ adh_over_time|safe }}
+		</div>
+		<div class="row">
+			<div class="col-md-6">
+				{{ top_general_adh|safe }}
+			</div>
+			<div class="col-md-6">
+				{{ top_ontime_adh|safe }}
+			</div>
+		</div>
+	</div>
+{% endblock %}
