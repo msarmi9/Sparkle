@@ -3,6 +3,8 @@ Tests each class in the ``app.medication`` module.
 """
 from datetime import datetime
 
+import pytest
+
 from sparkle.models.medication import Prescription
 
 
@@ -50,6 +52,7 @@ rx_future = Prescription(
 )
 
 
+@pytest.mark.usefixtures("client")
 class TestPrescription:
     """Tests for ``medication.Prescription`` class."""
 
