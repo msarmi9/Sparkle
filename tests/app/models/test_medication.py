@@ -1,10 +1,9 @@
 """
 Tests each class in the ``app.medication`` module.
 """
-
 from datetime import datetime
 
-from app.medication import Prescription
+from sparkle.medication import Prescription
 
 
 # Prescription with an expired start date
