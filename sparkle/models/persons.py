@@ -45,23 +45,23 @@ class User(db.Model, UserMixin, BasicInfo):
         return check_password_hash(self.password_hash, password)
 
 
-class Patient(db.Model):
+class Patient(db.Model, BasicInfo):
     """
     Defines a Patient, which has a foreign key pointed to User (doctor).
     """
-
-    id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String(50), unique=False, nullable=False)
-    lastname = db.Column(db.String(50), unique=False, nullable=False)
-    email = db.Column(db.String(80), unique=True, nullable=True)
-    age = db.Column(db.Integer, unique=False, nullable=False)
-    weight = db.Column(db.Integer, unique=False, nullable=False)
 
     # Foreign key
     doctor_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
 
     # One-to-many relationship
     prescriptions = db.relationship("Prescription", backref="patient", lazy=True)
+
+    def __init__(self, firstname, lastname, email, age, weight):
+        self.firstname = firstname
+        self.lastname = lastname
+        self.email = email
+        self.age = age
+        self.weight = weight
 
     def all_intakes(self, start=None, end=None):
         """
