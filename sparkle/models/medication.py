@@ -187,7 +187,3 @@ class Intake(db.Model):
     prescription_id = db.Column(
         db.Integer, db.ForeignKey("prescription.id"), nullable=False
     )
-
-
-db.create_all()
-db.session.commit()
