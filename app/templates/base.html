@@ -61,7 +61,7 @@
         </div>
         <!-- <div class="sidebar-brand-text mx-3">Sparkle.ai</div> -->
         <div style="padding-left: 10px;">
-        <img src={{url_for("static", filename="logo.png")}} height="33">
+        <img src={{url_for("static", filename="img/logo.png")}} height="33">
         </div>
       </a>
 
@@ -74,7 +74,7 @@
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>About</span></a>
 
-          <a class="nav-link" href={{url_for("dashboard")}}>
+          <a class="nav-link" href={{url_for("dashboard.dashboard")}}>
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
 
@@ -98,9 +98,9 @@
         <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Status:</h6>
-            <a class="collapse-item" href={{url_for("patients")}}>All Patients ({{ patients|length }})</a>
+            <a class="collapse-item" href={{url_for("patients.patients")}}>All Patients ({{ patients|length }})</a>
             <a class="collapse-item" href="/patients_unprescribed">Unprescribed ({{ unprescribed_patients|length }})</a>
-            <a class="collapse-item" href={{url_for("patients_deviating")}}>Deviating ({{ nonadhering_patients|length }})</a>
+            <a class="collapse-item" href={{url_for("patients.patients_deviating")}}>Deviating ({{ nonadhering_patients|length }})</a>
             <a class="collapse-item" href="/patients_ontrack">On-Track ({{ adhering_patients|length }})</a>
           </div>
         </div>

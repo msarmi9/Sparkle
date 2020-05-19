@@ -1,7 +1,6 @@
-"""
-Note: This is an updated test to reflect a direct test of preprocess. 
-"""
-from modeling.preprocessing import *
+import numpy as np
+
+from modeling.preprocessing import preprocess
 
 
 def test_preprocess():
