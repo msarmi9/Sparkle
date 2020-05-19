@@ -3,7 +3,7 @@ Tests each class in the ``app.medication`` module.
 """
 from datetime import datetime
 
-from sparkle.medication import Prescription
+from app.models.medication import Prescription
 
 
 # Prescription with an expired start date
