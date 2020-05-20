@@ -1,5 +1,5 @@
 """
-Tests each class in the ``app.medication`` module.
+Tests each class in the ``sparkle.medication`` module.
 """
 from datetime import datetime
 
