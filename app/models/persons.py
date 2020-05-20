@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash
 
 from app import db
 from app import login_manager
+from app.models.medication import Prescription
 
 
 class BasicInfo:
