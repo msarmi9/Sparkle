@@ -16,8 +16,7 @@ from app.models.persons import User
 def init_db_patient():
     """Add a sample patient to the database."""
     doctor = User("Charlotte", "Bronte", "cbronte", "charlotte@me.com", "emily")
-    patient = Patient("Jane", "Eyre", "jane@me.com", age=23, weight=123)
-    patient.user = doctor
+    patient = Patient("Jane", "Eyre", "jane@me.com", age=23, weight=123, user=doctor)
     patient.id = 0
 
     db.session.add(patient)
