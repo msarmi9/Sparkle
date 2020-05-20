@@ -16,4 +16,5 @@ class TestConfig(Config):
     """Configure Flask app for running tests."""
 
     TESTING = True
+    WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
