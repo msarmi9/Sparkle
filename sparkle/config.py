@@ -9,7 +9,7 @@ class Config(object):
 
     SECRET_KEY = os.urandom(33)
     SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "sparkle.db")
-    SQLALCHEMY_TRACK_MODIFICATIONS = True
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class TestConfig(Config):
