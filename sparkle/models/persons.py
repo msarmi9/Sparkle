@@ -11,6 +11,7 @@ from werkzeug.security import generate_password_hash
 
 from sparkle import db
 from sparkle import login_manager
+from sparkle.models.medication import Prescription
 
 
 class BasicInfo:
