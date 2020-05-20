@@ -35,6 +35,11 @@ class TestRegisterFlow:
         response = client.post("/register", data=user_data, follow_redirects=True)
         assert b"Error" in response.data
 
+    def test_forgot_password(self, client):
+        """Forgot password view is rendered."""
+        response = client.get("/forgot_password")
+        assert b"Forgot Password" in response.data
+
 
 class TestLoginLogoutFlow:
     """Test login/logout flow for new and existing users."""
