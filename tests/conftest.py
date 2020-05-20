@@ -7,9 +7,9 @@ from app import create_app
 from app import db
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 def app():
-    """Configure a new instance of a Flask application for testing."""
+    """Configure a fresh Flask app instance and db for testing."""
     app = create_app()
     app.config.from_object("app.config.TestConfig")
     with app.app_context():
