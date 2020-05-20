@@ -3,6 +3,7 @@ from flask import Blueprint
 from flask import redirect
 from flask import render_template
 from flask import url_for
+from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
 
@@ -61,6 +62,7 @@ def login():
 
 
 @bp.route("/logout")
+@login_required
 def logout():
     """Log out the current user."""
     logout_user()
