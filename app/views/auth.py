@@ -1,3 +1,4 @@
+from flask import abort
 from flask import Blueprint
 from flask import redirect
 from flask import render_template
@@ -50,9 +51,12 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         # Login and validate the user; take them to dashboard page.
-        if user is not None and user.check_password(password):
-            login_user(user)
-            return redirect(url_for("patients.patients"))
+        if user:
+            if user.check_password(password):
+                login_user(user)
+                return redirect(url_for("patients.patients"))
+            abort(401)
+        abort(401)
     return render_template("auth/login.html", form=login_form)
 
 
