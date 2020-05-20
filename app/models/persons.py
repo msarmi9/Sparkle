@@ -57,12 +57,13 @@ class Patient(db.Model, BasicInfo):
     # One-to-many relationship
     prescriptions = db.relationship("Prescription", backref="patient", lazy=True)
 
-    def __init__(self, firstname, lastname, email, age, weight):
+    def __init__(self, firstname, lastname, email, age, weight, user=None):
         self.firstname = firstname
         self.lastname = lastname
         self.email = email
         self.age = age
         self.weight = weight
+        self.user = user
 
     def all_intakes(self, start=None, end=None):
         """
