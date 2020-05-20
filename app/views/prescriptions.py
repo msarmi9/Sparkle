@@ -7,11 +7,11 @@ from flask import request
 from flask import url_for
 from flask_login import login_required
 
-from sparkle import adherence
-from sparkle import db
-from sparkle.models.forms import PrescriptionForm
-from sparkle.models.medication import Prescription
-from sparkle.models.persons import Patient
+from app import adherence
+from app import db
+from app.models.forms import PrescriptionForm
+from app.models.medication import Prescription
+from app.models.persons import Patient
 
 bp = Blueprint("prescriptions", __name__)
 

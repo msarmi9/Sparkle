@@ -3,9 +3,9 @@ Tests for adding Users (doctors) and Patients to a database.
 """
 import pytest
 
-from sparkle import db
-from sparkle.models.persons import Patient
-from sparkle.models.persons import User
+from app import db
+from app.models.persons import Patient
+from app.models.persons import User
 
 
 @pytest.mark.usefixtures("client")

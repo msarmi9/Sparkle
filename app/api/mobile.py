@@ -8,11 +8,11 @@ from flask import Blueprint
 from flask import jsonify
 from flask import request
 
-from sparkle import db
-from sparkle.adherence import adherence_model
-from sparkle.models.medication import Intake
-from sparkle.models.medication import Prescription
-from sparkle.models.persons import Patient
+from app import db
+from app.adherence import adherence_model
+from app.models.medication import Intake
+from app.models.medication import Prescription
+from app.models.persons import Patient
 
 bp = Blueprint("mobile", __name__)
 

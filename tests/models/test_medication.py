@@ -5,9 +5,9 @@ from datetime import datetime
 
 import pytest
 
-from sparkle.models.medication import Prescription
-from sparkle.models.persons import Patient
-from sparkle.models.persons import User
+from app.models.medication import Prescription
+from app.models.persons import Patient
+from app.models.persons import User
 
 
 @pytest.fixture(scope="class")

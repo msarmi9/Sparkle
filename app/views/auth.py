@@ -5,10 +5,10 @@ from flask import url_for
 from flask_login import login_user
 from flask_login import logout_user
 
-from sparkle import db
-from sparkle.models.forms import LoginForm
-from sparkle.models.forms import RegistrationForm
-from sparkle.models.persons import User
+from app import db
+from app.models.forms import LoginForm
+from app.models.forms import RegistrationForm
+from app.models.persons import User
 
 bp = Blueprint("auth", __name__)
 

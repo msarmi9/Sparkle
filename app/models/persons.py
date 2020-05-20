@@ -9,9 +9,9 @@ from flask_login import UserMixin
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
-from sparkle import db
-from sparkle import login_manager
-from sparkle.models.medication import Prescription
+from app import db
+from app import login_manager
+from app.models.medication import Prescription
 
 
 class BasicInfo:

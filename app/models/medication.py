@@ -3,8 +3,8 @@ from datetime import timedelta
 
 import numpy as np
 
-from sparkle import db
-from sparkle.adherence import DAY_STD
+from app import db
+from app.adherence import DAY_STD
 
 
 class Prescription(db.Model):

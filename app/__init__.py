@@ -16,17 +16,17 @@ def create_app():
     """Create and configure an instance of the Flask app."""
     app = Flask(__name__)
     app.secret_key = os.urandom(33)  # For CSRF token
-    app.config.from_object("sparkle.config.Config")
+    app.config.from_object("app.config.Config")
 
     login_manager.init_app(app)
     db.init_app(app)
 
-    from sparkle.api import mobile
-    from sparkle.views import auth
-    from sparkle.views import dashboard
-    from sparkle.views import home
-    from sparkle.views import patients
-    from sparkle.views import prescriptions
+    from app.api import mobile
+    from app.views import auth
+    from app.views import dashboard
+    from app.views import home
+    from app.views import patients
+    from app.views import prescriptions
 
     app.register_blueprint(mobile.bp)
     app.register_blueprint(auth.bp)

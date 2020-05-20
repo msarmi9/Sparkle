@@ -3,8 +3,8 @@ from flask import render_template
 from flask_login import current_user
 from flask_login import login_required
 
-from sparkle import ploting
-from sparkle.models.persons import Patient
+from app import ploting
+from app.models.persons import Patient
 
 bp = Blueprint("dashboard", __name__)
 

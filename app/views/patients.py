@@ -5,11 +5,11 @@ from flask import url_for
 from flask_login import current_user
 from flask_login import login_required
 
-from sparkle import db
-from sparkle.models.forms import PatientForm
-from sparkle.models.medication import Prescription
-from sparkle.models.persons import Patient
-from sparkle.models.persons import User
+from app import db
+from app.models.forms import PatientForm
+from app.models.medication import Prescription
+from app.models.persons import Patient
+from app.models.persons import User
 
 bp = Blueprint("patients", __name__)
 
