@@ -60,7 +60,7 @@ def sample_prescription(request):
     request.cls.rx_future = rx_future
 
 
-@pytest.mark.usefixtures("client", "sample_prescription")
+@pytest.mark.usefixtures("sample_prescription")
 class TestPrescription:
     """Tests for ``medication.Prescription`` class."""
 
