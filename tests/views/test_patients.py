@@ -8,7 +8,6 @@ from dateutil.relativedelta import relativedelta
 
 from app import db
 from app.models.medication import Intake
-from app.models.persons import Patient
 from tests.utils import captured_templates
 
 

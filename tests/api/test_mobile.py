@@ -2,14 +2,8 @@
 Tests api for communicating with mobile clients.
 """
 import json
-from datetime import datetime
 
 import pytest
-
-from app import db
-from app.models.medication import Prescription
-from app.models.persons import Patient
-from app.models.persons import User
 
 
 @pytest.fixture
