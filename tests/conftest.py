@@ -60,9 +60,17 @@ def login_user(client, user_data, init_user):
 
 
 @pytest.fixture
-def patient(user):
+def patient_data(user):
+    """Return data for creating a sample Patient associated with the default user."""
+    keys = ["firstname", "lastname", "email", "age", "weight", "user"]
+    values = ["Jane", "Eyre", "jane@me.com", "23", "123", user]
+    return dict(zip(keys, values))
+
+
+@pytest.fixture
+def patient(patient_data):
     """Return a Patient belonging to the default user."""
-    return Patient("Jane", "Eyre", "jane@me.com", age=23, weight=123, user=user)
+    return Patient(**patient_data)
 
 
 @pytest.fixture
