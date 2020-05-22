@@ -32,7 +32,7 @@ def register():
         )
 
         if user_count > 0:
-            return "<h1>Error - Existing user : " + username + " OR " + email + "</h1>"
+            return f"<h1>Error! Existing user: {username} OR e-mail: {email} </h1>", 401
         else:
             user = User(firstname, lastname, username, email, password)
             db.session.add(user)
