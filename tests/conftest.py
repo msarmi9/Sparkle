@@ -91,75 +91,51 @@ def init_patient_with_rxs(rx_past, rx_current, rx_future, patient, init_patient)
 
 
 @pytest.fixture
-def rx_past():
+def rx_past(rx_data):
     """Return a prescription with a long past start date (treatment has ended)."""
     start = datetime.fromisoformat("2000-01-01")
-    return Prescription(
-        drug="Vitamin D",
-        desc="Sunshine!",
-        strength=30,
-        strength_unit="mg",
-        quantity=30,
-        form="tab",
-        amount=1,
-        route="oral",
-        freq=1,
-        freq_repeat=1,
-        freq_repeat_unit="day",
-        duration=60,
-        duration_unit="month",
-        refills=1,
-        time_of_day="AM",
-        start_date=start,
-        created=start,
-    )
+    rx_data["start_date"] = start
+    rx_data["created"] = start
+    return Prescription(**rx_data)
 
 
 @pytest.fixture
-def rx_current():
+def rx_current(rx_data):
     """Return a prescription with yesterday as the start date."""
     yesterday = datetime.now() - relativedelta(days=1)
-    return Prescription(
-        drug="Vitamin C++",
-        desc="Improve hacking skills?",
-        strength=30,
-        strength_unit="mg",
-        quantity=30,
-        form="tab",
-        amount=1,
-        route="oral",
-        freq=1,
-        freq_repeat=1,
-        freq_repeat_unit="day",
-        duration=1,
-        duration_unit="month",
-        refills=0,
-        time_of_day="PM",
-        start_date=yesterday,
-        created=yesterday,
-    )
+    rx_data["start_date"] = yesterday
+    rx_data["created"] = yesterday
+    return Prescription(**rx_data)
 
 
 @pytest.fixture
-def rx_future():
+def rx_future(rx_data):
     """Return a prescription with a future start date."""
     start = datetime.fromisoformat("2999-12-31")
-    return Prescription(
-        drug="Python++",
-        desc="Improve hacking skills!",
-        strength=30,
-        strength_unit="mg",
-        quantity=30,
-        form="tab",
-        amount=1,
-        route="oral",
-        freq=1,
-        freq_repeat=1,
-        freq_repeat_unit="day",
-        duration=1,
-        duration_unit="month",
-        refills=0,
-        time_of_day="PM",
-        start_date=start,
-        created=start,
-    )
+    rx_data["start_date"] = start
+    rx_data["created"] = start
+    return Prescription(**rx_data)
+
+
+@pytest.fixture
+def rx_data():
+    """Return data for creating a new Prescription."""
+    return {
+        "drug": "Vitamin C++",
+        "desc": "Improve hacking skills?",
+        "strength": 30,
+        "strength_unit": "mg",
+        "quantity": 30,
+        "form": "tab",
+        "amount": 1,
+        "route": "oral",
+        "freq": 1,
+        "freq_repeat": 1,
+        "freq_repeat_unit": "day",
+        "duration": 1,
+        "duration_unit": "month",
+        "refills": 0,
+        "time_of_day": "PM",
+        "start_date": "01/01/2020",
+        "created": "01/01/2020",
+    }
