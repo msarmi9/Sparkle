@@ -1,17 +1,28 @@
 """
 Tests home and about pages render correctly.
 """
+import pytest
+
+from tests.utils import captured_templates
 
 
-def test_index(client):
+views = ["/", "/home"]
+
+
+@pytest.mark.parametrize("view", views)
+def test_index(app, client, view):
     """Index (home) page renders."""
-    response = client.get("/")
-    assert response.status_code == 200
-    assert b"Lift off to better health outcomes" in response.data
+    with captured_templates(app) as templates:
+        response = client.get(view)
+        template, context = templates[0]
+        assert response.status_code == 200
+        assert template.name == "home/splash.html"
 
 
-def test_about(client):
+def test_about(app, client):
     """About page renders."""
-    response = client.get("/about")
-    assert response.status_code == 200
-    assert b"About Sparkle.ai" in response.data
+    with captured_templates(app) as templates:
+        response = client.get("/about")
+        template, context = templates[0]
+        assert response.status_code == 200
+        assert template.name == "home/about.html"
