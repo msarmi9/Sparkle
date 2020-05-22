@@ -33,7 +33,7 @@ def add_prescription(patient_id):
             "strength": int(f.get("strength")),
             "strength_unit": f.get("strength_unit"),
             "quantity": int(f.get("quantity")),
-            "form": f.get("drug_form"),
+            "form": f.get("form"),
             "amount": int(f.get("amount")),
             "route": f.get("route"),
             "duration": int(f.get("duration")),
