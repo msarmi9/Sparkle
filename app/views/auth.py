@@ -1,7 +1,9 @@
+from flask import abort
 from flask import Blueprint
 from flask import redirect
 from flask import render_template
 from flask import url_for
+from flask_login import login_required
 from flask_login import login_user
 from flask_login import logout_user
 
@@ -30,7 +32,7 @@ def register():
         )
 
         if user_count > 0:
-            return "<h1>Error - Existing user : " + username + " OR " + email + "</h1>"
+            return f"<h1>Error! Existing user: {username} OR e-mail: {email} </h1>", 401
         else:
             user = User(firstname, lastname, username, email, password)
             db.session.add(user)
@@ -50,13 +52,17 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         # Login and validate the user; take them to dashboard page.
-        if user is not None and user.check_password(password):
-            login_user(user)
-            return redirect(url_for("patients.patients"))
+        if user:
+            if user.check_password(password):
+                login_user(user)
+                return redirect(url_for("patients.patients"))
+            abort(401)
+        abort(401)
     return render_template("auth/login.html", form=login_form)
 
 
 @bp.route("/logout")
+@login_required
 def logout():
     """Log out the current user."""
     logout_user()

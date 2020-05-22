@@ -85,13 +85,13 @@ def _render_patients_page(template):
     """Render a template for one of ontrack, deviating, and all patients."""
     patients = User.query.filter_by(id=current_user.id).first().patients
     if len(patients) == 0:
-        return render_template("patients/patients.html", patients=patients)
+        return render_template(template, patients=patients)
     n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
     patient_adherence = round(n_adherent / len(patients) * 100)
 
     rxs = Prescription.query.all()
     if len(rxs) == 0:
-        rx_adherence = 100
+        rx_adherence = None
     else:
         adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
         rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
