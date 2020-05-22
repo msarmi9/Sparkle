@@ -25,7 +25,7 @@ class TestRegisterFlow:
             response = client.post("/register", data=user_data, follow_redirects=True)
             template, context = templates[0]
             assert response.status_code == 200
-            assert User.query.filter_by(username=user_data["username"])
+            assert User.query.filter_by(username=user_data["username"]).count() == 1
             assert template.name == "auth/login.html"
 
     def test_error_on_existing_username_or_email(self, client, user_data, init_user):
