@@ -13,17 +13,6 @@ from app.models.persons import User
 
 
 @pytest.fixture
-def init_patient():
-    """Add a sample patient to the database."""
-    doctor = User("Charlotte", "Bronte", "cbronte", "charlotte@me.com", "emily")
-    patient = Patient("Jane", "Eyre", "jane@me.com", age=23, weight=123, user=doctor)
-    patient.id = 0
-
-    db.session.add(patient)
-    db.session.commit()
-
-
-@pytest.fixture
 def sensor_json():
     """Return a json payload of watch sensor data sent by a mobile client."""
     test_file = "tests/data/2020-04-27_21_00_19_2.csv"
@@ -38,7 +27,7 @@ def sensor_json():
 @pytest.fixture
 def login_json():
     """Return a json payload sent by a mobile client to login to the web api."""
-    return {"patient_id": "0"}
+    return {"patient_id": "1"}
 
 
 class TestMobile:

@@ -7,14 +7,6 @@ from app import db
 from app.models.persons import User
 
 
-@pytest.fixture
-def login_user(client, user_data, init_user):
-    """Return the response from logging in an existing user."""
-    data = {"username": user_data["username"], "password": user_data["password"]}
-    response = client.post("/login", data=data, follow_redirects=True)
-    return response
-
-
 class TestRegisterFlow:
     """Test registration flow for new and existing users."""
 
