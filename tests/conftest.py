@@ -82,12 +82,12 @@ def init_patient(client, patient):
 
 
 @pytest.fixture
-def init_patient_with_rxs(client, rx_past, rx_future, patient, init_patient):
+def init_patient_with_rxs(client, rx_past, rx_new, patient, init_patient):
     """Add sample patient with two prescriptions to the database."""
     rx_past.patient = patient
-    rx_future.patient = patient
+    rx_new.patient = patient
     db.session.add(rx_past)
-    db.session.add(rx_future)
+    db.session.add(rx_new)
     db.session.commit()
 
 
@@ -118,7 +118,7 @@ def rx_past(rx_data):
 
 @pytest.fixture
 def rx_current(rx_data):
-    """Return a prescription with yesterday as the start date."""
+    """Return a prescription with yesterday as the start date (treatment begins)."""
     yesterday = datetime.now() - relativedelta(days=1)
     rx_data["start_date"] = yesterday
     rx_data["created"] = yesterday
@@ -126,9 +126,9 @@ def rx_current(rx_data):
 
 
 @pytest.fixture
-def rx_future(rx_data):
-    """Return a prescription with a future start date."""
-    start = datetime.fromisoformat("2999-12-31")
+def rx_new(rx_data):
+    """Return a newly created prescription with today as the start date."""
+    start = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
     rx_data["start_date"] = start
     rx_data["created"] = start
     return Prescription(**rx_data)
