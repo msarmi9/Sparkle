@@ -24,3 +24,13 @@ class TestPrescription:
         """Completed treatments have no required intakes; new treatments do."""
         assert rx_past.frac_required_intakes() == 0
         assert rx_new.frac_required_intakes() == 1
+
+    def test_next_refill_date(self, rx_past, rx_new):
+        """Past prescriptions have no refill date; new ones with refills > 0 do."""
+        assert not rx_past.next_refill_date()
+        assert rx_new.next_refill_date() > rx_new.start_date
+
+    def test_days_until_refill(self, rx_past, rx_new):
+        """Past treatments have no refills remaining; new ones with refills > 0 do."""
+        assert not rx_past.days_until_refill()
+        assert rx_new.days_until_refill() > 0

@@ -131,6 +131,8 @@ def rx_new(rx_data):
     start = datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)
     rx_data["start_date"] = start
     rx_data["created"] = start
+    rx_data["last_refill_date"] = start
+    rx_data["refills"] = 1
     return Prescription(**rx_data)
 
 
