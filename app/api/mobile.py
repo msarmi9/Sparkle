@@ -9,10 +9,11 @@ from flask import jsonify
 from flask import request
 
 from app import db
-from app.adherence import adherence_model
 from app.models.medication import Intake
 from app.models.medication import Prescription
 from app.models.persons import Patient
+from modeling.predict import adherence_model
+
 
 bp = Blueprint("mobile", __name__)
 
