@@ -1,5 +1,10 @@
 """
 Models for predicting medication adherence from smartwatch sensor data.
+
+Models take as input strings of sensor data recorded by a smartwatch and output:
+    1. A prediction for whether the activity is pill-taking (1) or not (0).
+    2. If an activity is classified as pill-taking, a prediction for the number of pills
+    present in the prescription bottle at the time the recording was made.
 """
 import io
 import pickle
