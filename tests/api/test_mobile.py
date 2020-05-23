@@ -9,8 +9,8 @@ import pytest
 @pytest.fixture
 def sensor_json():
     """Return a json payload of watch sensor data sent by a mobile client."""
-    test_file = "tests/data/2020-04-27_21_00_19_2.csv"
-    with open(test_file, "r") as f:
+    train_path = "tests/data/train/2020-04-27_21_00_19_2.csv"
+    with open(train_path, "r") as f:
         sensor_data = f.read()
 
     keys = ["id", "s3_url", "recording_data", "on_time", "timestamp"]
