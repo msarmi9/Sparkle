@@ -34,7 +34,11 @@ class TestMobile:
         assert response.status_code == 200
         assert set(pred_dict.keys()) == {"pred_string", "pred_type", "pred"}
 
-    def test_mobile_login(self, client, init_patient, login_json):
+    def test_mobile_login(self, client, login_json, init_patient_with_rxs):
         """Current day's medication schedule is returned when mobile clients log in."""
         response = client.post("mobile-login", json=login_json)
+        schedule = response.get_json()
         assert response.status_code == 200
+        assert len(schedule) == 1
+        assert schedule[0]["drug"] == "Vitamin C++"
+        assert schedule[0]["firstname"] == "Jane"
