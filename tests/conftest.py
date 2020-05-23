@@ -8,6 +8,7 @@ from dateutil.relativedelta import relativedelta
 
 from app import create_app
 from app import db
+from app.models.medication import Intake
 from app.models.medication import Prescription
 from app.models.persons import Patient
 from app.models.persons import User
@@ -45,7 +46,7 @@ def user(user_data):
 
 
 @pytest.fixture
-def init_user(user):
+def init_user(client, user):
     """Add a sample user (doctor) to the database."""
     db.session.add(user)
     db.session.commit()
@@ -74,20 +75,36 @@ def patient(patient_data):
 
 
 @pytest.fixture
-def init_patient(patient):
+def init_patient(client, patient):
     """Add a sample patient to the database belonging to the default user."""
     db.session.add(patient)
     db.session.commit()
 
 
 @pytest.fixture
-def init_patient_with_rxs(rx_past, rx_current, rx_future, patient, init_patient):
+def init_patient_with_rxs(client, rx_past, rx_future, patient, init_patient):
     """Add sample patient with two prescriptions to the database."""
     rx_past.patient = patient
-    rx_current.patient = patient
+    rx_future.patient = patient
     db.session.add(rx_past)
+    db.session.add(rx_future)
+    db.session.commit()
+
+
+@pytest.fixture
+def init_perfect_patient(client, rx_current, intake, patient, init_patient):
+    """Add an Patient with a 100% adherence record to the db."""
+    rx_current.patient = patient
+    intake.prescription = rx_current
     db.session.add(rx_current)
     db.session.commit()
+
+
+@pytest.fixture
+def intake():
+    """Return an on-time Intake."""
+    yesterday = datetime.now() - relativedelta(days=1)
+    return Intake(timestamp=yesterday, on_time=True)
 
 
 @pytest.fixture
