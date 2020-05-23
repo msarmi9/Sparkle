@@ -7,11 +7,12 @@ from flask import request
 from flask import url_for
 from flask_login import login_required
 
-from app import adherence
 from app import db
 from app.models.forms import PrescriptionForm
 from app.models.medication import Prescription
 from app.models.persons import Patient
+from app.utils import adherence
+
 
 bp = Blueprint("prescriptions", __name__)
 
