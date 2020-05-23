@@ -8,7 +8,7 @@ import numpy as np
 import plotly
 import plotly.graph_objects as go
 
-from app import adherence
+from app.utils import adherence
 
 
 def plot_top_general_adherence_by_drug_name(prescriptions, n=5):

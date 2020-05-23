@@ -7,7 +7,6 @@ import pytest
 from dateutil.relativedelta import relativedelta
 
 from app import db
-from app.models.medication import Intake
 from tests.utils import captured_templates
 
 
@@ -17,22 +16,6 @@ views = [
     "/patients_deviating",
     "/patients_ontrack",
 ]
-
-
-@pytest.fixture
-def intake():
-    """Return an ontime Intake."""
-    yesterday = datetime.now() - relativedelta(days=1)
-    return Intake(timestamp=yesterday, on_time=True)
-
-
-@pytest.fixture
-def init_perfect_patient(rx_current, intake, patient, init_patient):
-    """Add an Patient with a 100% adherence record to the db."""
-    rx_current.patient = patient
-    intake.prescription = rx_current
-    db.session.add(rx_current)
-    db.session.commit()
 
 
 class TestPatientViews:

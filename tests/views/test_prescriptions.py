@@ -1,7 +1,7 @@
 """
 Tests views for adding new patient prescriptions.
 """
-from app import adherence
+from app.utils import adherence
 from tests.utils import captured_templates
 
 
