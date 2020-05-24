@@ -67,13 +67,22 @@ class TestPatientViews:
             assert template.name == "patients/patients_ontrack.html"
 
     def test_patient_profile(self, app, client, login_user, init_perfect_patient):
-        """Detail view for single patient view is rendered."""
+        """Detail view for a single patient is rendered when patient card is clicked."""
         with captured_templates(app) as templates:
             response = client.get("/patients/1")
             template, context = templates[0]
             assert response.status_code == 200
             assert context["patient"].id == 1
             assert context["prescriptions"][0].drug == "Vitamin C++"
+            assert template.name == "patients/patient_profile.html"
+
+    def test_patient_search(self, app, client, login_user, patient, init_patient):
+        """Detail view for a single patient is rendered when searched for."""
+        name = f"{patient.firstname} {patient.lastname}"
+        with captured_templates(app) as templates:
+            r = client.get(f"/patients/search?name={name}", follow_redirects=True)
+            template, context = templates[0]
+            assert r.status_code == 200
             assert template.name == "patients/patient_profile.html"
 
 

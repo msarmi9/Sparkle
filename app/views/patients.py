@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import redirect
 from flask import render_template
+from flask import request
 from flask import url_for
 from flask_login import current_user
 from flask_login import login_required
@@ -43,6 +44,18 @@ def patients_unprescribed():
 def patients_ontrack():
     """Render page listing adhering patients."""
     return _render_patients_page("patients/patients_ontrack.html")
+
+
+@bp.route("/patients/search")
+@login_required
+def search():
+    """Redirect to a patient profile page given first and last names."""
+    try:
+        first, last = request.args.get("name").split()
+        patient_id = Patient.query.filter_by(firstname=first, lastname=last).first().id
+    except:
+        return redirect(url_for(".patients"))
+    return redirect(url_for(".patient_profile", patient_id=patient_id))
 
 
 @bp.route("/patients/<int:patient_id>", methods=("GET", "POST"))
