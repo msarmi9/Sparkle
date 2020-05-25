@@ -4,6 +4,8 @@
 
 
 # _Sparkle_: A Multi-Platform System for Combating Medication Non-adherence with Machine Learning
+[![Sparkle.ai](https://yt-embed.herokuapp.com/embed?v=3HuoyBIA94o)](https://www.youtube.com/watch?v=3HuoyBIA94o "")
+
 
 
 #### _Team Members_:
