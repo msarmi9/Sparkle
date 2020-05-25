@@ -47,9 +47,10 @@ class User(db.Model, UserMixin, BasicInfo):
 
 
 class Patient(db.Model, BasicInfo):
-    """
-    Defines a Patient, which has a foreign key pointed to User (doctor).
-    """
+    """Defines a Patient, which has a foreign key pointed to User (doctor)."""
+
+    age = db.Column(db.Integer, unique=False, nullable=False)
+    weight = db.Column(db.Integer, unique=False, nullable=False)
 
     # Foreign key
     doctor_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
