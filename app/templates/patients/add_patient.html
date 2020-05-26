@@ -1,8 +1,9 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 
 {% block add_patient %}
-	<div class="container main">
-		<h3>New patient</h3>
+	<div class="container main col-md-4 float-md-left">
+		<h3 class="text-gray-800">New patient</h3>
+		<br>
 	    <form method="POST">
 	    	{{ form.csrf_token }}
 	    	<div class="form-group">
@@ -25,6 +26,7 @@
 	    		<label for="weight">{{ form.weight.label }}</label>
 	    		<input id="weight" class="form-control" name="weight">
 			</div>
+			<br>
 			<button type="submit" class="btn btn-primary">Add patient</button>
 	    </form>
 	</div>
