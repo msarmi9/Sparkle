@@ -91,7 +91,7 @@ def add_prescription(patient_id):
         db.session.add(rx)
         db.session.commit()
 
-        return redirect(url_for("patients.patient_profile", patient_id=patient_id))
+        return redirect(url_for("patients.profile", patient_id=patient_id))
     print(rx_form.errors)
     return render_template(
         "prescriptions/add_prescription.html", patient=patient, form=rx_form
