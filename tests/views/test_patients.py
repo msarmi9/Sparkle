@@ -10,32 +10,22 @@ from app import db
 from tests.utils import captured_templates
 
 
-views = [
-    "/patients",
-    "/patients_unprescribed",
-    "/patients_deviating",
-    "/patients_ontrack",
-]
-
-
 class TestPatientViews:
     """Tests for views for all, unprescribed, deviating, and ontrack patients."""
 
-    @pytest.mark.parametrize("view", views)
-    def test_patient_view_requires_login(self, client, view):
+    def test_patient_view_requires_login(self, client):
         """All patient views require users (doctors) to be logged in."""
-        response = client.get(view)
+        response = client.get("/patients")
         assert response.status_code == 401
 
-    @pytest.mark.parametrize("view", views)
-    def test_empty_view_if_no_patients(self, app, client, login_user, view):
+    def test_empty_view_if_no_patients(self, app, client, login_user):
         """Patient view is empty if there are no patients."""
         with captured_templates(app) as templates:
-            response = client.get(view)
+            response = client.get("/patients")
             template, context = templates[0]
             assert response.status_code == 200
             assert not context["patients"]
-            assert template.name == f"patients{view}.html"
+            assert template.name == "patients/patients.html"
 
     def test_patients_unprescribed(self, app, client, login_user, init_patient):
         """Only unprescribed patients are shown (with null adherence)."""
@@ -43,9 +33,8 @@ class TestPatientViews:
             response = client.get("/patients_unprescribed")
             template, context = templates[0]
             assert response.status_code == 200
-            assert context["patients"]
-            assert not context["rx_adherence"]
-            assert template.name == "patients/patients_unprescribed.html"
+            assert all(map(lambda p: not p.prescriptions, context["patients"]))
+            assert template.name == "patients/patients.html"
 
     def test_patients_deviating(self, app, client, login_user, init_patient_with_rxs):
         """Only deviating patients are shown and are marked as non-adherent."""
@@ -54,7 +43,7 @@ class TestPatientViews:
             template, context = templates[0]
             assert response.status_code == 200
             assert all(map(lambda p: not p.is_adherent(), context["patients"]))
-            assert template.name == "patients/patients_deviating.html"
+            assert template.name == "patients/patients.html"
 
     def test_patients_adhering(self, app, client, login_user, init_perfect_patient):
         """Only adherent patients are shown and are marked as adherent."""
@@ -62,9 +51,8 @@ class TestPatientViews:
             response = client.get("/patients_ontrack")
             template, context = templates[0]
             assert response.status_code == 200
-            assert context["rx_adherence"] == 100
             assert all(map(lambda p: p.is_adherent(), context["patients"]))
-            assert template.name == "patients/patients_ontrack.html"
+            assert template.name == "patients/patients.html"
 
     def test_patient_profile(self, app, client, login_user, init_perfect_patient):
         """Detail view for a single patient is rendered when patient card is clicked."""
@@ -74,7 +62,7 @@ class TestPatientViews:
             assert response.status_code == 200
             assert context["patient"].id == 1
             assert context["prescriptions"][0].drug == "Vitamin C++"
-            assert template.name == "patients/patient_profile.html"
+            assert template.name == "patients/profile.html"
 
     def test_patient_search(self, app, client, login_user, patient, init_patient):
         """Detail view for a single patient is rendered when searched for."""
@@ -83,7 +71,7 @@ class TestPatientViews:
             r = client.get(f"/patients/search?name={name}", follow_redirects=True)
             template, context = templates[0]
             assert r.status_code == 200
-            assert template.name == "patients/patient_profile.html"
+            assert template.name == "patients/profile.html"
 
 
 class TestAddPatient:
