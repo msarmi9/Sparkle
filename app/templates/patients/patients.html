@@ -17,7 +17,7 @@
     <div class="row">
 
     <!-- All Patients -->
-    {% for p in patients | sort(attribute="lastname,firstname") %}
+    {% for p in view_patients %}
     <div class="col-xl-3 col-md-6 mb-4" style="padding-bottom: 10px">
         {% set highlight = "warning" if not p.prescriptions else "success" if p.is_adherent() else "danger" %}
         <div class="card border-left-{{ highlight }} shadow h-100 py-2">

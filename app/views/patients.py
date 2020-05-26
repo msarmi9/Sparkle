@@ -9,6 +9,7 @@ from flask_login import login_required
 from app import db
 from app.models.forms import PatientForm
 from app.models.persons import Patient
+from app.utils import adherence
 
 
 bp = Blueprint("patients", __name__)
@@ -17,36 +18,33 @@ bp = Blueprint("patients", __name__)
 @bp.route("/patients")
 @login_required
 def patients():
-    """Render page listing unprescribed, deviating, and adhering patients. """
-    patients = current_user.patients
-    return render_template("patients/patients.html", patients=patients)
+    """Display unprescribed, deviating, and adhering patients (in order). """
+    patients = adherence.get_all_patients(current_user)
+    return _render_patients_view(patients)
 
 
 @bp.route("/patients_unprescribed")
 @login_required
 def patients_unprescribed():
     """Render page listing unprescribed patients."""
-    patients = current_user.patients
-    unprescribed = [p for p in patients if not p.prescriptions]
-    return render_template("patients/patients.html", patients=unprescribed)
+    unprescribed = adherence.get_unprescribed_patients(current_user)
+    return _render_patients_view(unprescribed)
 
 
 @bp.route("/patients_deviating")
 @login_required
 def patients_deviating():
     """Render page listing deviating patients."""
-    patients = current_user.patients
-    deviating = [p for p in patients if p.prescriptions and not p.is_adherent()]
-    return render_template("patients/patients.html", patients=deviating)
+    deviating = adherence.get_deviating_patients(current_user)
+    return _render_patients_view(deviating)
 
 
 @bp.route("/patients_ontrack")
 @login_required
 def patients_ontrack():
     """Render page listing adhering patients."""
-    patients = current_user.patients
-    adhering = [p for p in patients if p.prescriptions and p.is_adherent()]
-    return render_template("patients/patients.html", patients=adhering)
+    adhering = adherence.get_adhering_patients(current_user)
+    return _render_patients_view(adhering)
 
 
 @bp.route("/patients/search")
@@ -86,3 +84,15 @@ def add_patient():
         db.session.commit()
         return redirect(url_for(".patients"))
     return render_template("patients/add_patient.html", form=patient_form)
+
+
+def _render_patients_view(patients_to_view):
+    """List the given patients (and show the number of each patient type in sidebar)."""
+    return render_template(
+        "patients/patients.html",
+        view_patients=patients_to_view,
+        patients=current_user.patients,
+        unprescribed=adherence.get_unprescribed_patients(current_user),
+        deviating=adherence.get_deviating_patients(current_user),
+        adhering=adherence.get_adhering_patients(current_user),
+    )
