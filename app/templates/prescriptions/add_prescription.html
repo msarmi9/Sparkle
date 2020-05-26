@@ -1,20 +1,43 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 
 {% block add_prescription %}
-	<div class="container main">
-		<h3>New prescription for <i>{{ patient.lastname }}, {{ patient.firstname }}</i></h3>
+	<div class="container main float-md-left">
+		<h3 class="text-gray-800">New prescription for <b><i>{{ patient.lastname }}, {{ patient.firstname }}</i></h3>
+		<br>
 	    <form method="POST">
 	    	{{ form.csrf_token }}
+
 
 			<div class="form-row">
 		    	<div class="form-group col-md-4">
 		    		<label for="drug">Drug</label>
 		    		<input id="drug" class="form-control" name="drug" placeholder="Amoxicillin" required>
 				</div>
-				<div class="form-group col-md-6">
+			</div>
+			<div class="form-row">
+				<div class="form-group col-md-4">
 		    		<label for="desc">Indication</label>
 		    		<input id="desc" class="form-control" name="desc" placeholder="Reduce infection" required>
 				</div>
+			</div>
+
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="start_date">Start date</label>
+		            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+
+		                <input id="start_date" name="start_date" type="text"
+		                       class="form-control datetimepicker-input"
+		                       data-target="#datetimepicker1" required>
+		                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+		                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+		                </div>
+		            </div>
+	        	</div>
+	    	</div>
+
+
+			<div class="form-row">
 				<div class="form-group col-md-1">
 		    		<label for="strength">Strength</label>
 		    		<input id="strength" class="form-control" name="strength" required>
@@ -33,12 +56,12 @@
 		    		<label for="quantity">Quantity</label>
 		    		<input id="quantity" class="form-control" name="quantity" placeholder="10" required>
 				</div>
-				<div class="form-group col-md-2">
-		    		<label for="drug_form">Form</label>
+				<div class="form-group col-md-1">
+		    		<label for="drug_form">&nbsp;</label>
 		    		<select class="form-control" id="drug_form" name="drug_form" required>
-				      <option>tab</option>
-				      <option>chew tab</option>
-				      <option>cap</option>
+				      <option>Tab</option>
+				      <option>Chew Tab</option>
+				      <option>Cap</option>
 				    </select>
 				</div>
 			</div>
@@ -52,7 +75,7 @@
 		    		  {% endfor %}
 				    </select>
 				</div>
-				<div class="form-group col-md-2">
+				<div class="form-group col-md-1">
 		    		<label for="route">Route</label>
 		    		<select class="form-control" id="route" name="route" required>
 				      <option>oral</option>
@@ -88,9 +111,9 @@
 				<div class="form-group col-md-1">
 		    		<label for="duration_unit">&nbsp;</label>
 		    		<select class="form-control" id="duration_unit" name="duration_unit" required>
-		    			<option>days</option>
-						<option>weeks</option>
-						<option>months</option>
+		    			<option>Days</option>
+						<option>Weeks</option>
+						<option>Months</option>
 				    </select>
 				</div>
 				<div class="form-group col-md-1">
@@ -103,55 +126,26 @@
 				</div>
 			</div>
 
-			<!-- <div class="form-row">
-				<div class="form-group col-md-2">
-		    		<label for="start_date">Start date</label>
-		    		<input id="start_date" class="form-control" name="start_date" required>
-				</div>
-			</div> -->
 
-
-			<div class="container">
-
-			    <div class="row">
-			    	<label for="start_date">Start date</label>
-			        <div class="col-sm-6">
-
-			            <div class="form-group">
-
-			                <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-
-			                    <input id="start_date" name="start_date" type="text"
-			                           class="form-control datetimepicker-input"
-			                           data-target="#datetimepicker1" required>
-			                    <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-			                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-			                    </div>
-			                </div>
-			            </div>
-			        </div>
-			        <script type="text/javascript">
-			            $(function () {
-			                $('#datetimepicker1').datetimepicker({
-			                	format: 'L'
-
-			                });
-			            });
-			        </script>
-			    </div>
-			</div>
-
-
-
-
-
+			<br>
 			<button type="submit" class="btn btn-primary"
-			        onclick="gtag('event', 'click',
-                   				 {'event_category':'engagement',
-                   				  'event_label':'new_prescription',
-                   				  'value':1});">
-            	Create
-           	</button>
+        		onclick="gtag('event', 'click',
+                   			  {'event_category':'engagement',
+                   			   'event_label':'new_prescription',
+                   			   'value':1});">
+            	Add prescription
+        	</button>
+
+
+	        <script type="text/javascript">
+	            $(function () {
+	                $('#datetimepicker1').datetimepicker({
+	                	format: 'L'
+	                });
+	            });
+	        </script>
+
+
 	    </form>
 	</div>
 {% endblock %}
