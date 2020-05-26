@@ -108,3 +108,29 @@ def most_adhered_by_drug_name(prescriptions, n=5, measure="general"):
         for name, frac in sorted(med_adh.items(), key=lambda x: x[1], reverse=True)
     ]
     return sorted_adh[:n]
+
+
+def get_unprescribed_patients(user):
+    """Return the list of patients currently without any prescriptions."""
+    unprescribed = [p for p in user.patients if not p.prescriptions]
+    return sorted(unprescribed, key=lambda p: (p.lastname, p.firstname))
+
+
+def get_deviating_patients(user):
+    """Return the list of patients currently deviating from their prescriptions."""
+    deviating = [p for p in user.patients if p.prescriptions and not p.is_adherent()]
+    return sorted(deviating, key=lambda p: (p.lastname, p.firstname))
+
+
+def get_adhering_patients(user):
+    """Return the list of patients currently taking all medication on time."""
+    adhering = [p for p in user.patients if p.prescriptions and p.is_adherent()]
+    return sorted(adhering, key=lambda p: (p.lastname, p.firstname))
+
+
+def get_all_patients(user):
+    """Return unprescribed, deviating, and adhering patients (in order)."""
+    patients = get_unprescribed_patients(user)
+    patients += get_deviating_patients(user)
+    patients += get_adhering_patients(user)
+    return patients
