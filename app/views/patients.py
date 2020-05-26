@@ -8,9 +8,8 @@ from flask_login import login_required
 
 from app import db
 from app.models.forms import PatientForm
-from app.models.medication import Prescription
 from app.models.persons import Patient
-from app.models.persons import User
+
 
 bp = Blueprint("patients", __name__)
 
@@ -18,32 +17,36 @@ bp = Blueprint("patients", __name__)
 @bp.route("/patients")
 @login_required
 def patients():
-    """
-    Render patient cards for doctors to quickly monitor patients who are
-    adhering and deviating.
-    """
-    return _render_patients_page("patients/patients.html")
-
-
-@bp.route("/patients_deviating")
-@login_required
-def patients_deviating():
-    """Render patients page of the list of patients."""
-    return _render_patients_page("patients/patients_deviating.html")
+    """Render page listing unprescribed, deviating, and adhering patients. """
+    patients = current_user.patients
+    return render_template("patients/patients.html", patients=patients)
 
 
 @bp.route("/patients_unprescribed")
 @login_required
 def patients_unprescribed():
     """Render page listing unprescribed patients."""
-    return _render_patients_page("patients/patients_unprescribed.html")
+    patients = current_user.patients
+    unprescribed = [p for p in patients if not p.prescriptions]
+    return render_template("patients/patients.html", patients=unprescribed)
+
+
+@bp.route("/patients_deviating")
+@login_required
+def patients_deviating():
+    """Render page listing deviating patients."""
+    patients = current_user.patients
+    deviating = [p for p in patients if p.prescriptions and not p.is_adherent()]
+    return render_template("patients/patients.html", patients=deviating)
 
 
 @bp.route("/patients_ontrack")
 @login_required
 def patients_ontrack():
     """Render page listing adhering patients."""
-    return _render_patients_page("patients/patients_ontrack.html")
+    patients = current_user.patients
+    adhering = [p for p in patients if p.prescriptions and p.is_adherent()]
+    return render_template("patients/patients.html", patients=adhering)
 
 
 @bp.route("/patients/search")
@@ -55,18 +58,16 @@ def search():
         patient_id = Patient.query.filter_by(firstname=first, lastname=last).first().id
     except:
         return redirect(url_for(".patients"))
-    return redirect(url_for(".patient_profile", patient_id=patient_id))
+    return redirect(url_for(".profile", patient_id=patient_id))
 
 
 @bp.route("/patients/<int:patient_id>", methods=("GET", "POST"))
 @login_required
-def patient_profile(patient_id):
+def profile(patient_id):
     """Detail view for a single patient patient."""
     patient = Patient.query.filter_by(id=patient_id).first()
-    prescriptions = patient.prescriptions
-    return render_template(
-        "patients/patient_profile.html", patient=patient, prescriptions=prescriptions
-    )
+    rxs = patient.prescriptions
+    return render_template("patients/profile.html", patient=patient, prescriptions=rxs)
 
 
 @bp.route("/new-patient", methods=("GET", "POST"))
@@ -80,49 +81,8 @@ def add_patient():
         age = patient_form.age.data
         weight = patient_form.weight.data
 
-        patient = Patient(
-            firstname=firstname,
-            lastname=lastname,
-            email=email,
-            age=age,
-            weight=weight,
-            user=current_user,
-        )
+        patient = Patient(firstname, lastname, email, age, weight, user=current_user)
         db.session.add(patient)
         db.session.commit()
         return redirect(url_for(".patients"))
     return render_template("patients/add_patient.html", form=patient_form)
-
-
-def _render_patients_page(template):
-    """Render a template for one of ontrack, deviating, and all patients."""
-    patients = User.query.filter_by(id=current_user.id).first().patients
-    if len(patients) == 0:
-        return render_template(template, patients=patients)
-    n_adherent = len(list(filter(lambda p: p.is_adherent(), patients)))
-    patient_adherence = round(n_adherent / len(patients) * 100)
-
-    rxs = Prescription.query.all()
-    if len(rxs) == 0:
-        rx_adherence = None
-    else:
-        adherent_rxs = list(filter(lambda rx: rx.is_adherent(), rxs))
-        rx_adherence = round(len(adherent_rxs) / len(rxs) * 100)
-
-    adhering_patients = list(
-        filter(lambda p: p.is_adherent() and len(p.prescriptions) != 0, patients)
-    )
-    nonadhering_patients = list(
-        filter(lambda p: not p.is_adherent() and len(p.prescriptions) != 0, patients)
-    )
-    unprescribed_patients = list(filter(lambda p: len(p.prescriptions) == 0, patients))
-
-    return render_template(
-        template,
-        patients=patients,
-        patient_adherence=patient_adherence,
-        rx_adherence=rx_adherence,
-        adhering_patients=adhering_patients,
-        nonadhering_patients=nonadhering_patients,
-        unprescribed_patients=unprescribed_patients,
-    )
