@@ -6,125 +6,137 @@
 		<br>
 	    <form method="POST">
 	    	{{ form.csrf_token }}
+	    	<div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">Prescription</h6>
+                </div>
+                <div class="card-body">
+                	<div class="form-row">
+				    	<div class="form-group col-md-4">
+				    		<label for="drug">Drug</label>
+				    		<input id="drug" class="form-control" name="drug" placeholder="Amoxicillin" required>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-4">
+				    		<label for="desc">Indication</label>
+				    		<input id="desc" class="form-control" name="desc" placeholder="Reduce infection" required>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-md-4">
+							<label for="start_date">Start date</label>
+				            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+
+				                <input id="start_date" name="start_date" type="text"
+				                       class="form-control datetimepicker-input"
+				                       data-target="#datetimepicker1" required>
+				                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+				                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+				                </div>
+				            </div>
+			        	</div>
+			    	</div>
+
+			    	<div class="form-row">
+
+						<div class="form-group col-md-1">
+				    		<label for="strength">Strength</label>
+				    		<input id="strength" class="form-control" name="strength" required>
+						</div>
+						<div class="form-group col-md-1">
+				    		<label for="strength_unit">&nbsp;</label>
+				    		<select class="form-control" id="strength_unit" name="strength_unit" required>
+						      <option>mg</option>
+						      <option>ug</option>
+						    </select>
+						</div>
 
 
-			<div class="form-row">
-		    	<div class="form-group col-md-4">
-		    		<label for="drug">Drug</label>
-		    		<input id="drug" class="form-control" name="drug" placeholder="Amoxicillin" required>
-				</div>
-			</div>
-			<div class="form-row">
-				<div class="form-group col-md-4">
-		    		<label for="desc">Indication</label>
-		    		<input id="desc" class="form-control" name="desc" placeholder="Reduce infection" required>
-				</div>
-			</div>
 
-			<div class="form-row">
-				<div class="form-group col-md-4">
-					<label for="start_date">Start date</label>
-		            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+						<div class="form-group col-md-1">
+				    		<label for="quantity">Quantity</label>
+				    		<input id="quantity" class="form-control" name="quantity" placeholder="10" required>
+						</div>
+						<div class="form-group col-md-1">
+				    		<label for="drug_form">&nbsp;</label>
+				    		<select class="form-control" id="drug_form" name="drug_form" required>
+						      <option>Tab</option>
+						      <option>Chew Tab</option>
+						      <option>Cap</option>
+						    </select>
+						</div>
 
-		                <input id="start_date" name="start_date" type="text"
-		                       class="form-control datetimepicker-input"
-		                       data-target="#datetimepicker1" required>
-		                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-		                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-		                </div>
-		            </div>
-	        	</div>
-	    	</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-md-1">
+				    		<label for="amount">Amount</label>
+				    		<select class="form-control" id="amount" name="amount" required>
+				    		  {% for i in range(1, 6) %}
+				    		  	<option>{{ i }}</option>
+				    		  {% endfor %}
+						    </select>
+						</div>
+						<div class="form-group col-md-1">
+				    		<label for="route">Route</label>
+				    		<select class="form-control" id="route" name="route" required>
+						      <option>oral</option>
+						    </select>
+						</div>
+						<div class="form-group col-md-2">
+				    		<label for="dosage">Dosage</label>
+				    		<select class="form-control" id="dosage" name="dosage" required>
+				    			<option>QD - 1x per day</option>
+								<option>BID	- 2x per day</option>
+								<option>TID	- 3x per day</option>
+								<option>QID	- 4x per day</option>
+						    </select>
+						</div>
+						<div class="form-group col-md-4">
+							<p>Time of day</p>
+						    <div class="form-check form-check-inline">
+						      <input class="form-check-input" type="checkbox" id="time_of_day_am" name="time_of_day_am" value='AM'>
+						      <label class="form-check-label" for="time_of_day_am">AM</label>
+						    </div>
+						    <div class="form-check form-check-inline">
+						      <input class="form-check-input" type="checkbox" id="time_of_day_pm" name="time_of_day_pm" value='PM'>
+						      <label class="form-check-label" for="time_of_day_pm">PM</label>
+						    </div>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-md-1">
+				    		<label for="duration">Duration</label>
+				    		<input id="duration" class="form-control" name="duration" placeholder="2" required>
+						</div>
+						<div class="form-group col-md-1">
+				    		<label for="duration_unit">&nbsp;</label>
+				    		<select class="form-control" id="duration_unit" name="duration_unit" required>
+				    			<option>days</option>
+								<option>weeks</option>
+								<option>months</option>
+						    </select>
+						</div>
+						<div class="form-group col-md-1">
+				    		<label for="refills">Refills</label>
+				    		<select class="form-control" id="refills" name="refills" required>
+				    			{% for i in range(11) %}
+				    		  		<option>{{ i }}</option>
+				    		  	{% endfor %}
+						    </select>
+						</div>
+					</div>
 
 
-			<div class="form-row">
-				<div class="form-group col-md-1">
-		    		<label for="strength">Strength</label>
-		    		<input id="strength" class="form-control" name="strength" required>
-				</div>
-				<div class="form-group col-md-1">
-		    		<label for="strength_unit">&nbsp;</label>
-		    		<select class="form-control" id="strength_unit" name="strength_unit" required>
-				      <option>mg</option>
-				      <option>ug</option>
-				    </select>
-				</div>
-			</div>
 
-			<div class="form-row">
-				<div class="form-group col-md-1">
-		    		<label for="quantity">Quantity</label>
-		    		<input id="quantity" class="form-control" name="quantity" placeholder="10" required>
-				</div>
-				<div class="form-group col-md-1">
-		    		<label for="drug_form">&nbsp;</label>
-		    		<select class="form-control" id="drug_form" name="drug_form" required>
-				      <option>Tab</option>
-				      <option>Chew Tab</option>
-				      <option>Cap</option>
-				    </select>
-				</div>
-			</div>
 
-			<div class="form-row">
-				<div class="form-group col-md-1">
-		    		<label for="amount">Amount</label>
-		    		<select class="form-control" id="amount" name="amount" required>
-		    		  {% for i in range(1, 6) %}
-		    		  	<option>{{ i }}</option>
-		    		  {% endfor %}
-				    </select>
-				</div>
-				<div class="form-group col-md-1">
-		    		<label for="route">Route</label>
-		    		<select class="form-control" id="route" name="route" required>
-				      <option>oral</option>
-				    </select>
-				</div>
-				<div class="form-group col-md-4">
-		    		<label for="dosage">Dosage</label>
-		    		<select class="form-control" id="dosage" name="dosage" required>
-		    			<option>QD - 1x per day</option>
-						<option>BID	- 2x per day</option>
-						<option>TID	- 3x per day</option>
-						<option>QID	- 4x per day</option>
-				    </select>
-				</div>
-				<div class="form-group col-md-4">
-					<p>Time of day</p>
-				    <div class="form-check form-check-inline">
-				      <input class="form-check-input" type="checkbox" id="time_of_day_am" name="time_of_day_am" value='AM'>
-				      <label class="form-check-label" for="time_of_day_am">AM</label>
-				    </div>
-				    <div class="form-check form-check-inline">
-				      <input class="form-check-input" type="checkbox" id="time_of_day_pm" name="time_of_day_pm" value='PM'>
-				      <label class="form-check-label" for="time_of_day_pm">PM</label>
-				    </div>
-				</div>
-			</div>
+                </div>
+            </div>
 
-			<div class="form-row">
-				<div class="form-group col-md-1">
-		    		<label for="duration">Duration</label>
-		    		<input id="duration" class="form-control" name="duration" placeholder="2" required>
-				</div>
-				<div class="form-group col-md-1">
-		    		<label for="duration_unit">&nbsp;</label>
-		    		<select class="form-control" id="duration_unit" name="duration_unit" required>
-		    			<option>Days</option>
-						<option>Weeks</option>
-						<option>Months</option>
-				    </select>
-				</div>
-				<div class="form-group col-md-1">
-		    		<label for="refills">Refills</label>
-		    		<select class="form-control" id="refills" name="refills" required>
-		    			{% for i in range(11) %}
-		    		  		<option>{{ i }}</option>
-		    		  	{% endfor %}
-				    </select>
-				</div>
-			</div>
+
 
 
 			<br>
