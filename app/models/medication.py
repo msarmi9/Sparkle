@@ -44,7 +44,7 @@ class Prescription(db.Model):
     strength = db.Column(db.Integer, unique=False, nullable=False)
     strength_unit = db.Column(db.String(20), unique=False, nullable=False)
     quantity = db.Column(db.Integer, unique=False, nullable=False)
-    form = db.Column(db.String(20), unique=False, nullable=False)
+    drug_form = db.Column(db.String(20), unique=False, nullable=False)
     amount = db.Column(db.Integer, unique=False, nullable=False)
     route = db.Column(db.String(10), unique=False, nullable=False)
     freq = db.Column(db.Integer, unique=False, nullable=False)
