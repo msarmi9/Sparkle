@@ -54,10 +54,3 @@ class PrescriptionForm(FlaskForm):
     #       At least one field is needed for this FlaskForm so
     #       that's why `drug` is still here.
     drug = StringField("Drug name", validators=[DataRequired()])
-
-
-class UploadFileForm(FlaskForm):
-    """Form to upload a file."""
-
-    file_selector = FileField("File", validators=[FileRequired()])
-    submit = SubmitField("Submit")

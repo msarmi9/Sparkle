@@ -53,7 +53,8 @@ def search():
     """Redirect to a patient profile page given first and last names."""
     try:
         first, last = request.args.get("name").split()
-        patient_id = Patient.query.filter_by(firstname=first, lastname=last).first().id
+        q1, q2 = Patient.firstname.ilike(first), Patient.lastname.ilike(last)
+        patient_id = Patient.query.filter(q1, q2).first().id
     except:
         return redirect(url_for(".patients"))
     return redirect(url_for(".profile", patient_id=patient_id))

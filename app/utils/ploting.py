@@ -29,10 +29,7 @@ def plot_top_general_adherence_by_drug_name(prescriptions, n=5):
     )
 
     fig.update_layout(
-        title="Top adhered medications",
-        xaxis_title="Date",
-        yaxis_title="Adherence %",
-        font=dict(color="#7f7f7f"),
+        xaxis_title="Date", yaxis_title="Adherence %", font=dict(color="#7f7f7f"),
     )
 
     output = plotly.offline.plot(fig, include_plotlyjs=False, output_type="div")
@@ -55,10 +52,7 @@ def plot_top_ontime_adherence_by_drug_name(prescriptions, n=5):
     )
 
     fig.update_layout(
-        title="Top on-time medications",
-        xaxis_title="Date",
-        yaxis_title="On time %",
-        font=dict(color="#7f7f7f"),
+        xaxis_title="Date", yaxis_title="On time %", font=dict(color="#7f7f7f"),
     )
 
     output = plotly.offline.plot(fig, include_plotlyjs=False, output_type="div")
@@ -91,10 +85,7 @@ def plot_adherence_rates_over_time(patients, prescriptions):
     fig.add_trace(go.Scatter(x=dates, y=rx_adh, mode="lines", name="On-time"))
 
     fig.update_layout(
-        title="Adherence rates over time",
-        xaxis_title="Date",
-        yaxis_title="Adherence %",
-        font=dict(color="#7f7f7f"),
+        xaxis_title="Date", yaxis_title="Adherence %", font=dict(color="#7f7f7f"),
     )
 
     fig.update_xaxes(
