@@ -24,7 +24,7 @@
   <!-- Custom fonts for this template-->
   <link href={{url_for("static", filename="vendor/fontawesome-free/css/all.min.css")}} rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
-  <!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css"> -->
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
 
 
   <link href={{url_for("static", filename="css/sb-admin-2.min.css")}} rel="stylesheet">
@@ -41,8 +41,10 @@
   <script src={{url_for("static", filename="vendor/datatables/dataTables.bootstrap4.min.js")}}></script>
   <link href={{url_for("static", filename="vendor/datatables/dataTables.bootstrap4.min.css")}} rel="stylesheet">
   <script src={{url_for("static", filename="js/demo/datatables-demo.js")}}></script>
-
-
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/css/tempusdominus-bootstrap-4.min.css" />
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
 </head>
 
@@ -73,13 +75,14 @@
           <a class="nav-link" href="/about">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>About</span></a>
-
+      </li>
+      {% block dashboard_sidebar %}
+      <li class="nav-item">
           <a class="nav-link" href={{url_for("dashboard.dashboard")}}>
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span></a>
-
       </li>
-
+      {% endblock %}
       <!-- Divider -->
       <hr class="sidebar-divider">
 
@@ -98,7 +101,7 @@
         <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Status:</h6>
-            <a class="collapse-item" href={{url_for("patients.patients")}}>All Patients ({{ patients|length }})</a>
+            <a class="collapse-item active" href={{url_for("patients.patients")}}>All Patients ({{ patients|length }})</a>
             <a class="collapse-item" href="/patients_unprescribed">Unprescribed ({{ unprescribed_patients|length }})</a>
             <a class="collapse-item" href={{url_for("patients.patients_deviating")}}>Deviating ({{ nonadhering_patients|length }})</a>
             <a class="collapse-item" href="/patients_ontrack">On-Track ({{ adhering_patients|length }})</a>
@@ -106,39 +109,14 @@
         </div>
       </li>
       {% endblock %}
-      <!-- Divider -->
-      <hr class="sidebar-divider">
+
 
       <!-- Heading -->
       <div class="sidebar-heading">
         <!-- ?????? -->
       </div>
 
-      <!-- Nav Item - Pages Collapse Menu -->
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-          <i class="fas fa-fw fa-info-circle"></i>
-          <span>Help</span>
-        </a>
-        <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">Login Screens:</h6>
-            <a class="collapse-item" href="login.html">Login</a>
-            <a class="collapse-item" href="register.html">Register</a>
-            <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-          <div class="collapse-divider"></div>
-            <h6 class="collapse-header">Other Pages:</h6>
-            <a class="collapse-item" href="404.html">404 Page</a>
-            <a class="collapse-item" href="blank.html">Blank Page</a>
-          </div>
-        </div>
-      </li>
 
-
-      <!-- Sidebar Toggler (Sidebar) -->
-      <div class="text-center d-none d-md-inline">
-        <button class="rounded-circle border-0" id="sidebarToggle"></button>
-      </div>
 
     </ul>
     <!-- End of Sidebar -->
@@ -227,6 +205,7 @@
         {% block patient_profile %} {% endblock %}
         {% block add_prescription %} {% endblock %}
         {% block cards %} {% endblock %}
+        {% block dashboard %} {% endblock %}
         </div>
         <!-- /.container-fluid -->
 

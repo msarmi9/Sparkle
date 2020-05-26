@@ -1,17 +1,63 @@
-{% extends "index.html" %}
+{% extends "base.html" %}
 
-{% block analytics %}
-	<div class="container main">
-		<div>
-			{{ adh_over_time|safe }}
-		</div>
+{% block dashboard_sidebar %}
+      <li class="nav-item active">
+          <a class="nav-link" href={{url_for("dashboard.dashboard")}}>
+          <i class="fas fa-fw fa-tachometer-alt"></i>
+          <span>Dashboard</span></a>
+      </li>
+      {% endblock %}
+
+{% block patients_sidebar %}
+      <!-- Nav Item - Pages Collapse Menu -->
+      <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+          <i class="fas fa-fw fa-user"></i>
+          <span>Patients</span>
+        </a>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Status:</h6>
+            <a class="collapse-item active" href={{url_for("patients.patients")}}>All Patients ({{ patients|length }})</a>
+            <a class="collapse-item" href="/patients_unprescribed">Unprescribed ({{ unprescribed_patients|length }})</a>
+            <a class="collapse-item" href={{url_for("patients.patients_deviating")}}>Deviating ({{ nonadhering_patients|length }})</a>
+            <a class="collapse-item" href="/patients_ontrack">On-Track ({{ adhering_patients|length }})</a>
+          </div>
+        </div>
+      </li>
+{% endblock %}
+
+{% block dashboard %}
+	<div class="container main float-md-left" >
+        <div class="card shadow mb-4">
+	        <div class="card-header py-3">
+	          <h6 class="m-0 font-weight-bold text-primary">Adherence Rates Over Time</h6>
+	        </div>
+	        <div class="card-body">
+	        	{{ adh_over_time|safe }}
+	        </div>
+        </div>
 		<div class="row">
-			<div class="col-md-6">
-				{{ top_general_adh|safe }}
-			</div>
-			<div class="col-md-6">
-				{{ top_ontime_adh|safe }}
-			</div>
+			<div class="col-lg-6" >
+		        <div class="card shadow mb-4" >
+			        <div class="card-header py-3">
+			          <h6 class="m-0 font-weight-bold text-primary">Top Adhered Medications</h6>
+			        </div>
+			        <div class="card-body">
+			        	{{ top_general_adh|safe }}
+			        </div>
+		        </div>
+		    </div>
+		    <div class="col-lg-6">
+		        <div class="card shadow mb-4">
+			        <div class="card-header py-3">
+			          <h6 class="m-0 font-weight-bold text-primary">Top On-time Medications</h6>
+			        </div>
+			        <div class="card-body">
+			        	{{ top_ontime_adh|safe }}
+			        </div>
+		        </div>
+		    </div>
 		</div>
 	</div>
 {% endblock %}
