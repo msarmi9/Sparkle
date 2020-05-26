@@ -34,4 +34,4 @@ class TestPrescriptionView:
             assert patient.id == 1
             assert len(patient.prescriptions) == 1
             assert patient.prescriptions[0].drug == rx_data["drug"]
-            assert template.name == "patients/patient_profile.html"
+            assert template.name == "patients/profile.html"

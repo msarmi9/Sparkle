@@ -101,10 +101,10 @@
         <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Status:</h6>
-            <a class="collapse-item active" href={{url_for("patients.patients")}}>All Patients ({{ patients|length }})</a>
-            <a class="collapse-item" href="/patients_unprescribed">Unprescribed ({{ unprescribed_patients|length }})</a>
-            <a class="collapse-item" href={{url_for("patients.patients_deviating")}}>Deviating ({{ nonadhering_patients|length }})</a>
-            <a class="collapse-item" href="/patients_ontrack">On-Track ({{ adhering_patients|length }})</a>
+            <a class="collapse-item" href={{url_for("patients.patients")}}>All Patients ({{ patients | length }})</a>
+            <a class="collapse-item" href="/patients_unprescribed">Unprescribed ({{unprescribed | length }})</a>
+            <a class="collapse-item" href={{url_for("patients.patients_deviating")}}>Deviating ({{ deviating | length }})</a>
+            <a class="collapse-item" href="/patients_ontrack">On-Track ({{ adhering | length }})</a>
           </div>
         </div>
       </li>
@@ -202,7 +202,7 @@
         {% block patients_deviating %} {% endblock %}
         {% block patients_ontrack %} {% endblock %}
         {% block patients_unprescribed %} {% endblock %}
-        {% block patient_profile %} {% endblock %}
+        {% block profile %} {% endblock %}
         {% block add_prescription %} {% endblock %}
         {% block cards %} {% endblock %}
         {% block dashboard %} {% endblock %}
