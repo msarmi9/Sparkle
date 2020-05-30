@@ -2,7 +2,6 @@ version: "3"
 services:
   web:
     build: .
-    command: python3.7 -m flask run --host=0.0.0.0
     env_file:
       - .env
     volumes:
