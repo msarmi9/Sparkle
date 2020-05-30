@@ -12,11 +12,14 @@ db = SQLAlchemy()
 login_manager = LoginManager()
 
 
-def create_app():
+def create_app(testing=False):
     """Create and configure an instance of the Flask app."""
     app = Flask(__name__)
     app.secret_key = os.urandom(33)  # For CSRF token
     app.config.from_object("app.config.Config")
+
+    if testing:
+        app.config.from_object("app.config.TestConfig")
 
     login_manager.init_app(app)
     db.init_app(app)

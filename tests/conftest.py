@@ -17,8 +17,7 @@ from app.models.persons import User
 @pytest.fixture
 def app():
     """Configure a new Flask app instance and db for each test."""
-    app = create_app()
-    app.config.from_object("app.config.TestConfig")
+    app = create_app(testing=True)
     with app.app_context():
         db.create_all()
         yield app

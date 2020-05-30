@@ -8,7 +8,7 @@ class Config(object):
     """Base class for Flask configuration."""
 
     SECRET_KEY = os.urandom(33)
-    SQLALCHEMY_DATABASE_URI = os.environ["POSTGRES_URL"]
+    SQLALCHEMY_DATABASE_URI = os.getenv("POSTGRES_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
