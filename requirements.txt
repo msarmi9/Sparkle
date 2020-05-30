@@ -7,7 +7,6 @@ numpy==1.18.2
 pandas==1.0.3
 pickleshare==0.7.5
 plotly==4.6.0
-psycopg2-binary==2.8.5
 pytest==5.4.1
 requests==2.23.0
 scikit-learn==0.22.1
