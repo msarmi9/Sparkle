@@ -2,11 +2,9 @@ version: "3"
 services:
   web:
     build: .
-    command: python3.7 -m flask run --host=0.0.0.0 --port=5000
-    environment:
-      - FLASK_APP=app
-      - FLASK_ENV
-      - POSTGRES_URL
+    command: python3.7 -m flask run --host=0.0.0.0
+    env_file:
+      - .env
     volumes:
       - .:/app
     ports:
@@ -16,9 +14,7 @@ services:
 
   db:
     image: postgres
-    environment:
-      - POSTGRES_DB
-      - POSTGRES_USER
-      - POSTGRES_PASSWORD
+    env_file:
+      - .env
     volumes:
       - ./data/database:/var/lib/postgresql/data

@@ -1,3 +1,6 @@
+# Ignore secrets
+.env
+
 # Ignore project data
 data/
 
