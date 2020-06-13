@@ -18,4 +18,4 @@ COPY . /app
 
 EXPOSE 8080
 
-CMD gunicorn --preload --worker-tmp-dir /dev/shm -w 3 --threads 4 -k gthread -b 0.0.0.0:8080 "app:create_app()"
+CMD gunicorn --preload --worker-tmp-dir /dev/shm -w 3 -b 0.0.0.0:8080 "app:create_app()"
