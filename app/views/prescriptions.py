@@ -83,16 +83,12 @@ def add_prescription(patient_id):
         )
         rx_fields["days_until_refill"] = days_until_refill
 
-        for k, v in rx_fields.items():
-            print(f"{k}: {v}")
-
         # Create Rx
         rx = Prescription(**rx_fields)
         db.session.add(rx)
         db.session.commit()
 
         return redirect(url_for("patients.profile", patient_id=patient_id))
-    print(rx_form.errors)
     return render_template(
         "prescriptions/add_prescription.html", patient=patient, form=rx_form
     )
