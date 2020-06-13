@@ -1,6 +1,7 @@
 FROM ubuntu:18.04
 
-ENV LC_ALL=C.UTF-8 \
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    LC_ALL=C.UTF-8 \
     LANG=C.UTF-8
 
 RUN apt-get update && \
@@ -15,6 +16,6 @@ RUN python3.7 -m pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 
-EXPOSE 5000
+EXPOSE 8080
 
-ENTRYPOINT ["flask", "run", "--host=0.0.0.0"]
+CMD gunicorn --preload --worker-tmp-dir /dev/shm -w 3 --threads 4 -k gthread -b 0.0.0.0:8080 "app:create_app()"

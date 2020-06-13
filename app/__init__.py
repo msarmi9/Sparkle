@@ -40,5 +40,6 @@ def create_app(test=False):
 
     with app.app_context():
         db.create_all()
+        db.engine.dispose()
 
     return app
