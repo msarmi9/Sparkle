@@ -145,7 +145,7 @@ def rx_data():
         "strength": 30,
         "strength_unit": "mg",
         "quantity": 30,
-        "drug_form": "tab",
+        "form": "tab",
         "amount": 1,
         "route": "oral",
         "freq": 1,
