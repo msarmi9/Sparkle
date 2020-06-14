@@ -1,14 +1,11 @@
 import os
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-
-
 class Config(object):
     """Base class for Flask configuration."""
 
     SECRET_KEY = os.urandom(33)
-    SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "sparkle.db")
+    SQLALCHEMY_DATABASE_URI = os.getenv("POSTGRES_URL")
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
