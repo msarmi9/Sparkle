@@ -1,5 +1,5 @@
 [![codecov](https://codecov.io/gh/msarmi9/Sparkle/branch/master/graph/badge.svg)](https://codecov.io/gh/msarmi9/Sparkle)
-![build](https://github.com/msarmi9/Sparkle/workflows/build/badge.svg)
+[![build](https://github.com/msarmi9/Sparkle/workflows/build/badge.svg)](http://www.sparklemed.com)
 [![docs](https://github.com/msarmi9/Sparkle/workflows/docs/badge.svg)](https://msarmi9.github.io/Sparkle/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
