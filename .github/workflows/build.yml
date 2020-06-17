@@ -23,7 +23,7 @@ jobs:
         application_name: Sparkle
         environment_name: sparkle
         version_label: ${{ github.SHA }}
-        version_description: ${{ github.REF }}
         region: us-west-2
         deployment_package: deploy.zip
+        use_existing_version_if_available: true
         wait_for_environment_recovery: "60"
