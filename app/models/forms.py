@@ -2,8 +2,6 @@
 Forms for registering doctors, patients, and prescriptions.
 """
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileRequired
-from wtforms import FileField
 from wtforms import IntegerField
 from wtforms import PasswordField
 from wtforms import StringField
