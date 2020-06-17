@@ -22,7 +22,8 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: Sparkle
         environment_name: sparkle
-        version_label: ${{ github.SHA }}
+        version_label: ${{ github.REF }}
+        version_description: ${{ github.SHA }}
         region: us-west-2
         deployment_package: deploy.zip
         wait_for_environment_recovery: "60"

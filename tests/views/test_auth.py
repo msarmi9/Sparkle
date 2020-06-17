@@ -1,8 +1,6 @@
 """
 Tests user registration and login/logout.
 """
-import pytest
-
 from app.models.persons import User
 from tests.utils import captured_templates
 

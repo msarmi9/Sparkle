@@ -1,5 +1,5 @@
-Sparkle
-=======
+app
+===
 
 .. toctree::
    :maxdepth: 4

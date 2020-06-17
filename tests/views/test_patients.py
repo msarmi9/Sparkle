@@ -1,12 +1,6 @@
 """
 Tests patients views and patient registration flow.
 """
-from datetime import datetime
-
-import pytest
-from dateutil.relativedelta import relativedelta
-
-from app import db
 from tests.utils import captured_templates
 
 

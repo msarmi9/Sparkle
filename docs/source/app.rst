@@ -5,14 +5,22 @@ app package
    :members:
    :show-inheritance:
 
-Submodules
-----------
+Subpackages
+-----------
 
 .. toctree::
    :maxdepth: 4
 
-   app.forms
-   app.medication
-   app.persons
-   app.routes
+   app.models
    app.utils
+   app.views
+
+Submodules
+----------
+
+app.config module
+-----------------
+
+.. automodule:: app.config
+   :members:
+   :show-inheritance:
