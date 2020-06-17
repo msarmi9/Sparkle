@@ -1,8 +1,6 @@
 """
 Tests for adding Users (doctors) and Patients to a database.
 """
-import pytest
-
 from app.models.persons import User
 
 
