@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app.utils package &#8212; Sparkle 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="app.views package" href="app.views.html" />
+    <link rel="prev" title="app.models package" href="app.models.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-app.utils">
+<span id="app-utils-package"></span><h1>app.utils package<a class="headerlink" href="#module-app.utils" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-app.utils.adherence">
+<span id="app-utils-adherence-module"></span><h2>app.utils.adherence module<a class="headerlink" href="#module-app.utils.adherence" title="Permalink to this headline">¶</a></h2>
+<p>Module for monitoring patient medication adherence.</p>
+<dl class="py function">
+<dt id="app.utils.adherence.adherence_by_drug_name">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">adherence_by_drug_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prescriptions</span></em>, <em class="sig-param"><span class="n">measure</span><span class="o">=</span><span class="default_value">'general'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#adherence_by_drug_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.adherence_by_drug_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return average adherence rates by drug name.
+e.g. {‘Acetominophen: 0.89’, ‘Ibuprofen: 0.73’}
+prescriptions: list - list of Prescription objects
+measure: string - measure of adherence, either ‘general’</p>
+<blockquote>
+<div><p>(taking the right number of pills expected)
+or ‘ontime’ (taking pills at the right time)</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.utils.adherence.get_adhering_patients">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">get_adhering_patients</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#get_adhering_patients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.get_adhering_patients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of patients currently taking all medication on time.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.utils.adherence.get_all_patients">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">get_all_patients</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#get_all_patients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.get_all_patients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return unprescribed, deviating, and adhering patients (in order).</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.utils.adherence.get_days_until_refill">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">get_days_until_refill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">curr_date</span></em>, <em class="sig-param"><span class="n">next_refill_date</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#get_days_until_refill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.get_days_until_refill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of days until next refill.
+If curr_date &gt; next_refill_date, for instance, if refill was not fulfilled</p>
+<blockquote>
+<div><p>in time, then days until refill is still 0.</p>
+</div></blockquote>
+<p>curr_date: datetime - the date against which next refill date is compared
+next_refill_date: datetime</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.utils.adherence.get_deviating_patients">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">get_deviating_patients</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#get_deviating_patients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.get_deviating_patients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of patients currently deviating from their prescriptions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.utils.adherence.get_next_refill_date">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">get_next_refill_date</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">last_refill_date</span></em>, <em class="sig-param"><span class="n">duration</span></em>, <em class="sig-param"><span class="n">duration_unit</span></em>, <em class="sig-param"><span class="n">refills</span></em>, <em class="sig-param"><span class="n">refill_num</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#get_next_refill_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.get_next_refill_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return next refill date based on most recent (last) refill date
+and dosage information.</p>
+<p>last_refill_date: datetime
+duration: int
+duration_unit: string - either ‘day’, ‘week’, or ‘month’
+refills: int - number of refills for entire treatment
+refill_num: int - the refill the patient is currently on</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.utils.adherence.get_unprescribed_patients">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">get_unprescribed_patients</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">user</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#get_unprescribed_patients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.get_unprescribed_patients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the list of patients currently without any prescriptions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.utils.adherence.least_adhered_by_drug_name">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">least_adhered_by_drug_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prescriptions</span></em>, <em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">measure</span><span class="o">=</span><span class="default_value">'general'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#least_adhered_by_drug_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.least_adhered_by_drug_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get least adhered to medications by drug name.
+prescriptions: list - list of Prescription objects
+n: int - how many to return
+measure: string - measure of adherence, either ‘general’</p>
+<blockquote>
+<div><p>(taking the right number of pills expected)
+or ‘ontime’ (taking pills at the right time)</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.utils.adherence.most_adhered_by_drug_name">
+<code class="sig-prename descclassname">app.utils.adherence.</code><code class="sig-name descname">most_adhered_by_drug_name</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">prescriptions</span></em>, <em class="sig-param"><span class="n">n</span><span class="o">=</span><span class="default_value">5</span></em>, <em class="sig-param"><span class="n">measure</span><span class="o">=</span><span class="default_value">'general'</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/adherence.html#most_adhered_by_drug_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.adherence.most_adhered_by_drug_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get most adhered to medications by drug name.
+prescriptions: list - list of Prescription objects
+n: int - how many to return
+measure: string - measure of adherence, either ‘general’</p>
+<blockquote>
+<div><p>(taking the right number of pills expected)
+or ‘ontime’ (taking pills at the right time)</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.utils.ploting">
+<span id="app-utils-ploting-module"></span><h2>app.utils.ploting module<a class="headerlink" href="#module-app.utils.ploting" title="Permalink to this headline">¶</a></h2>
+<p>Module for plotting adherence trends and analytics.</p>
+<dl class="py function">
+<dt id="app.utils.ploting.plot_adherence_rates_over_time">
+<code class="sig-prename descclassname">app.utils.ploting.</code><code class="sig-name descname">plot_adherence_rates_over_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">patients</span></em>, <em class="sig-param"><span class="n">prescriptions</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/utils/ploting.html#plot_adherence_rates_over_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.utils.ploting.plot_adherence_rates_over_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot on-time and on-track adherence rates over time.
+TODO: use real data</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sparkle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">app</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="app.html">app package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">app</a><ul>
+  <li><a href="app.html">app package</a><ul>
+      <li>Previous: <a href="app.models.html" title="previous chapter">app.models package</a></li>
+      <li>Next: <a href="app.views.html" title="next chapter">app.views package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Andy Cheon, Stephanie Jung, Collin Prather, Matt Sarmiento, Kevin Wong.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/app.utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app package &#8212; Sparkle 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="app.models package" href="app.models.html" />
+    <link rel="prev" title="app" href="modules.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-app">
+<span id="app-package"></span><h1>app package<a class="headerlink" href="#module-app" title="Permalink to this headline">¶</a></h1>
+<p>Marks dir as package and returns a configured instance of the Flask app.</p>
+<dl class="py function">
+<dt id="app.create_app">
+<code class="sig-prename descclassname">app.</code><code class="sig-name descname">create_app</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app.html#create_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.create_app" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create and configure an instance of the Flask app.</p>
+</dd></dl>
+
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="app.models.html">app.models package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app.models.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.models.html#module-app.models.forms">app.models.forms module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.models.html#module-app.models.medication">app.models.medication module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.models.html#module-app.models.persons">app.models.persons module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="app.utils.html">app.utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app.utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.utils.html#module-app.utils.adherence">app.utils.adherence module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.utils.html#module-app.utils.ploting">app.utils.ploting module</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="app.views.html">app.views package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app.views.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.views.html#module-app.views.auth">app.views.auth module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.views.html#module-app.views.dashboard">app.views.dashboard module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.views.html#module-app.views.home">app.views.home module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.views.html#module-app.views.patients">app.views.patients module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.views.html#module-app.views.prescriptions">app.views.prescriptions module</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-app.config">
+<span id="app-config-module"></span><h2>app.config module<a class="headerlink" href="#module-app.config" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="app.config.Config">
+<em class="property">class </em><code class="sig-prename descclassname">app.config.</code><code class="sig-name descname">Config</code><a class="reference internal" href="_modules/app/config.html#Config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.config.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for Flask configuration.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.config.TestConfig">
+<em class="property">class </em><code class="sig-prename descclassname">app.config.</code><code class="sig-name descname">TestConfig</code><a class="reference internal" href="_modules/app/config.html#TestConfig"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.config.TestConfig" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.config.Config" title="app.config.Config"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.config.Config</span></code></a></p>
+<p>Configure Flask app for running tests.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sparkle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">app</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">app package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">app</a><ul>
+      <li>Previous: <a href="modules.html" title="previous chapter">app</a></li>
+      <li>Next: <a href="app.models.html" title="next chapter">app.models package</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Andy Cheon, Stephanie Jung, Collin Prather, Matt Sarmiento, Kevin Wong.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/app.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

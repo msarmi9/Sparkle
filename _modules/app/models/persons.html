@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app.models.persons &#8212; Sparkle 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for app.models.persons</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Classes to model users (doctors) and patients.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">flask_login</span> <span class="kn">import</span> <span class="n">UserMixin</span>
+<span class="kn">from</span> <span class="nn">werkzeug.security</span> <span class="kn">import</span> <span class="n">check_password_hash</span>
+<span class="kn">from</span> <span class="nn">werkzeug.security</span> <span class="kn">import</span> <span class="n">generate_password_hash</span>
+
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">login_manager</span>
+
+
+<div class="viewcode-block" id="BasicInfo"><a class="viewcode-back" href="../../../app.models.html#app.models.persons.BasicInfo">[docs]</a><span class="k">class</span> <span class="nc">BasicInfo</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Base class for modeling users and patients.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">primary_key</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">lastname</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">50</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">80</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../../app.models.html#app.models.persons.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span> <span class="n">UserMixin</span><span class="p">,</span> <span class="n">BasicInfo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;User model with functions to set and check password when logging in.&quot;&quot;&quot;</span>
+
+    <span class="n">username</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">20</span><span class="p">),</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">password_hash</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">String</span><span class="p">(</span><span class="mi">120</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># One-to-many relationship</span>
+    <span class="n">patients</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Patient&quot;</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">firstname</span><span class="p">,</span> <span class="n">lastname</span><span class="p">,</span> <span class="n">username</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firstname</span> <span class="o">=</span> <span class="n">firstname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastname</span> <span class="o">=</span> <span class="n">lastname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_password</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">password_hash</span> <span class="o">=</span> <span class="n">generate_password_hash</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">check_password</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">check_password_hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">password_hash</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Patient"><a class="viewcode-back" href="../../../app.models.html#app.models.persons.Patient">[docs]</a><span class="k">class</span> <span class="nc">Patient</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Model</span><span class="p">,</span> <span class="n">BasicInfo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Defines a Patient, which has a foreign key pointed to User (doctor).&quot;&quot;&quot;</span>
+
+    <span class="n">age</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># Foreign key</span>
+    <span class="n">doctor_id</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">db</span><span class="o">.</span><span class="n">Integer</span><span class="p">,</span> <span class="n">db</span><span class="o">.</span><span class="n">ForeignKey</span><span class="p">(</span><span class="s2">&quot;user.id&quot;</span><span class="p">),</span> <span class="n">nullable</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># One-to-many relationship</span>
+    <span class="n">prescriptions</span> <span class="o">=</span> <span class="n">db</span><span class="o">.</span><span class="n">relationship</span><span class="p">(</span><span class="s2">&quot;Prescription&quot;</span><span class="p">,</span> <span class="n">backref</span><span class="o">=</span><span class="s2">&quot;patient&quot;</span><span class="p">,</span> <span class="n">lazy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">firstname</span><span class="p">,</span> <span class="n">lastname</span><span class="p">,</span> <span class="n">email</span><span class="p">,</span> <span class="n">age</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">user</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">firstname</span> <span class="o">=</span> <span class="n">firstname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lastname</span> <span class="o">=</span> <span class="n">lastname</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">email</span> <span class="o">=</span> <span class="n">email</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">age</span> <span class="o">=</span> <span class="n">age</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">weight</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="n">user</span>
+
+<div class="viewcode-block" id="Patient.all_intakes"><a class="viewcode-back" href="../../../app.models.html#app.models.persons.Patient.all_intakes">[docs]</a>    <span class="k">def</span> <span class="nf">all_intakes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return Intake objects associated with this Patient.</span>
+<span class="sd">        start: datetime - optional start date for filtering</span>
+<span class="sd">        end: datetime - optional end date for filtering</span>
+
+<span class="sd">        TODO: Implement start, end filtering</span>
+<span class="sd">        NOTE: There&#39;s probably a better way of doing this. Perhaps setting Patient</span>
+<span class="sd">              as a foreign key in Intake?</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">all_intakes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">rx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prescriptions</span><span class="p">:</span>
+            <span class="n">all_intakes</span> <span class="o">+=</span> <span class="n">rx</span><span class="o">.</span><span class="n">intakes</span>
+        <span class="k">return</span> <span class="n">all_intakes</span></div>
+
+<div class="viewcode-block" id="Patient.adherence_stats"><a class="viewcode-back" href="../../../app.models.html#app.models.persons.Patient.adherence_stats">[docs]</a>    <span class="k">def</span> <span class="nf">adherence_stats</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return adherence statistics on a per-Prescription basis.</span>
+<span class="sd">        return: dict - &lt;prescription ID&gt;: &lt;details&gt;</span>
+<span class="sd">        Example:</span>
+<span class="sd">        {</span>
+<span class="sd">            1: {</span>
+<span class="sd">                &#39;frac_on_time&#39;: 0.932,</span>
+<span class="sd">                &#39;frac_required_intakes&#39;: 0.976</span>
+<span class="sd">            },</span>
+<span class="sd">            19: {</span>
+<span class="sd">                &#39;frac_on_time&#39;: 0.389,</span>
+<span class="sd">                &#39;frac_required_intakes&#39;: 1.0</span>
+<span class="sd">            },</span>
+<span class="sd">            ...</span>
+<span class="sd">        }</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">float</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">rx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prescriptions</span><span class="p">:</span>
+            <span class="n">stats</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s2">&quot;frac_on_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rx</span><span class="o">.</span><span class="n">frac_on_time</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">)</span>
+            <span class="n">stats</span><span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">id</span><span class="p">][</span><span class="s2">&quot;frac_required_intakes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rx</span><span class="o">.</span><span class="n">frac_required_intakes</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">stats</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Patient.frac_adhering_prescriptions"><a class="viewcode-back" href="../../../app.models.html#app.models.persons.Patient.frac_adhering_prescriptions">[docs]</a>    <span class="k">def</span> <span class="nf">frac_adhering_prescriptions</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">on_time_threshold</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">required_intakes_threshold</span><span class="o">=</span><span class="mf">0.9</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return fraction of prescriptions for this Patient that are deemed</span>
+<span class="sd">        adherent.</span>
+<span class="sd">        Adherence requires Intakes to be recorded on time and on track</span>
+<span class="sd">        (i.e. medications aren&#39;t missed).</span>
+
+<span class="sd">        on_time_threshold: float - fraction on time Intakes needed for</span>
+<span class="sd">        this prescription to be deemed adherent</span>
+<span class="sd">        required_intakes_threshold: float - fraction Intakes actually</span>
+<span class="sd">        recorded, out of all prescribed Intakes since start date.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">prescriptions</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="n">adherence</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">frac_on_time_by_rx</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">frac_required_intakes_by_rx</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adherence_stats</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">rx_id</span><span class="p">,</span> <span class="n">details</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">frac_on_time_by_rx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">details</span><span class="p">[</span><span class="s2">&quot;frac_on_time&quot;</span><span class="p">])</span>
+            <span class="n">frac_required_intakes_by_rx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">details</span><span class="p">[</span><span class="s2">&quot;frac_required_intakes&quot;</span><span class="p">])</span>
+
+        <span class="n">adherence</span><span class="p">[</span><span class="s2">&quot;on_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frac_on_time_by_rx</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">on_time_threshold</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">frac_on_time_by_rx</span><span class="p">)</span>
+
+        <span class="n">adherence</span><span class="p">[</span><span class="s2">&quot;required_intakes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">frac_required_intakes_by_rx</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">required_intakes_threshold</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">frac_required_intakes_by_rx</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">adherence</span></div>
+
+<div class="viewcode-block" id="Patient.is_adherent"><a class="viewcode-back" href="../../../app.models.html#app.models.persons.Patient.is_adherent">[docs]</a>    <span class="k">def</span> <span class="nf">is_adherent</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">on_time_threshold</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">required_intakes_threshold</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+    <span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Whether or not a patient is deemed adherent based on their</span>
+<span class="sd">        prescription adherence.</span>
+
+<span class="sd">        on_time_threshold: float - fraction on time Intakes needed for</span>
+<span class="sd">        this prescription to be deemed adherent</span>
+<span class="sd">        required_intakes_threshold: float - fraction Intakes actually</span>
+<span class="sd">        recorded, out of all prescribed Intakes since start date.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">start_date</span> <span class="o">&gt;</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">prescriptions</span><span class="p">]):</span>
+            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">stats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">adherence_stats</span><span class="p">(</span><span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rx_id</span><span class="p">,</span> <span class="n">details</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">rx</span><span class="p">:</span> <span class="n">rx</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">rx_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">prescriptions</span><span class="p">))[</span>
+                <span class="mi">0</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">start_date</span> <span class="o">&lt;=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span>
+                <span class="n">details</span><span class="p">[</span><span class="s2">&quot;frac_on_time&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">on_time_threshold</span>
+                <span class="ow">or</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;frac_required_intakes&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">required_intakes_threshold</span>
+            <span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div></div>
+
+
+<span class="c1"># Load user object from user ID stored in the current session</span>
+<div class="viewcode-block" id="load_user"><a class="viewcode-back" href="../../../app.models.html#app.models.persons.load_user">[docs]</a><span class="nd">@login_manager</span><span class="o">.</span><span class="n">user_loader</span>
+<span class="k">def</span> <span class="nf">load_user</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This callback is used to reload the user object</span>
+<span class="sd">    from the user ID stored in the session.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">User</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">id</span><span class="p">))</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Sparkle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../app.html">app</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Andy Cheon, Stephanie Jung, Collin Prather, Matt Sarmiento, Kevin Wong.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app.models package &#8212; Sparkle 0.0.0 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="app.utils package" href="app.utils.html" />
+    <link rel="prev" title="app package" href="app.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-app.models">
+<span id="app-models-package"></span><h1>app.models package<a class="headerlink" href="#module-app.models" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-app.models.forms">
+<span id="app-models-forms-module"></span><h2>app.models.forms module<a class="headerlink" href="#module-app.models.forms" title="Permalink to this headline">¶</a></h2>
+<p>Forms for registering doctors, patients, and prescriptions.</p>
+<dl class="py class">
+<dt id="app.models.forms.InfoForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.forms.</code><code class="sig-name descname">InfoForm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/forms.html#InfoForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.forms.InfoForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_wtf.form.FlaskForm</span></code></p>
+<p>Base class for registering names and email.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.models.forms.LoginForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.forms.</code><code class="sig-name descname">LoginForm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/forms.html#LoginForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.forms.LoginForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.models.forms.UserForm" title="app.models.forms.UserForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.models.forms.UserForm</span></code></a></p>
+<p>Final class for logging in existing users (doctors).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.models.forms.PatientForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.forms.</code><code class="sig-name descname">PatientForm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/forms.html#PatientForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.forms.PatientForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.models.forms.InfoForm" title="app.models.forms.InfoForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.models.forms.InfoForm</span></code></a></p>
+<p>Final class for registering new patients.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.models.forms.PrescriptionForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.forms.</code><code class="sig-name descname">PrescriptionForm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/forms.html#PrescriptionForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.forms.PrescriptionForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_wtf.form.FlaskForm</span></code></p>
+<p>Form for creating new prescriptions.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.models.forms.RegistrationForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.forms.</code><code class="sig-name descname">RegistrationForm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/forms.html#RegistrationForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.forms.RegistrationForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.models.forms.InfoForm" title="app.models.forms.InfoForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.models.forms.InfoForm</span></code></a>, <a class="reference internal" href="#app.models.forms.UserForm" title="app.models.forms.UserForm"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.models.forms.UserForm</span></code></a></p>
+<p>Final class for registering new users (doctors).</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.models.forms.UserForm">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.forms.</code><code class="sig-name descname">UserForm</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/forms.html#UserForm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.forms.UserForm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_wtf.form.FlaskForm</span></code></p>
+<p>Base class for registering a username and password.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.models.medication">
+<span id="app-models-medication-module"></span><h2>app.models.medication module<a class="headerlink" href="#module-app.models.medication" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt id="app.models.medication.Intake">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.medication.</code><code class="sig-name descname">Intake</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Intake"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Intake" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<p>Intake model. Intakes are created when the app receives a recording,
+indicating that a patient has taken medication.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.models.medication.Prescription">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.medication.</code><code class="sig-name descname">Prescription</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Prescription"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Prescription" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code></p>
+<p>Prescription model.</p>
+<p>drug = name of drug
+desc = purpose/description of drug/prescription (aka “indication”)
+strength = how much of the drug per tablet (e.g. 30mg)
+strength_unit = unit for strength (e.g. mg, ug)
+quantity = number of tablets per fill cycle
+form = form factor of pill (for now, only tablet aka ‘tab’)
+amount = number of units taken per intake
+route = how it gets into the body (only oral for now)
+freq = how many times per freq_repeat_unit
+freq_repeat = every &lt;freq_repeat&gt; &lt;freq_repeat_unit&gt;
+freq_repeat_unit = how often a day of intake repeats (e.g. every 3 days)
+duration = length of entire treatment
+refills = number of expected refills throughout duration
+time_of_day = time pill(s) should be taken (e.g. AM, PM)</p>
+<p>created = date this Prescription was created; auto-filled
+start_date = start date of first intake (regardless of refill)
+last_refill_date = date of most recent refill
+next_refill = date of next refill; auto-filled field
+days_until_refill = days until next refill; auto-filled field</p>
+<p>patient_id = patient ID for which this Prescription is for
+intakes = collection of Intakes for this Prescription (one to many field)</p>
+<dl class="py method">
+<dt id="app.models.medication.Prescription.days_until_refill">
+<code class="sig-name descname">days_until_refill</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Prescription.days_until_refill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Prescription.days_until_refill" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return number of days until next refill.
+If curr_date &gt; next_refill_date, for instance, if refill was not fulfilled</p>
+<blockquote>
+<div><p>in time, then days until refill is still 0.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.medication.Prescription.frac_on_time">
+<code class="sig-name descname">frac_on_time</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="o">=</span><span class="default_value">datetime.datetime(2020, 6, 18, 9, 6, 24, 706605)</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Prescription.frac_on_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Prescription.frac_on_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return fraction of intakes that were on time, out of all recorded
+intakes.
+date: datetime - get fraction on time intakes on or before this date</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.medication.Prescription.frac_required_intakes">
+<code class="sig-name descname">frac_required_intakes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="o">=</span><span class="default_value">datetime.datetime(2020, 6, 18, 9, 6, 24, 706606)</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Prescription.frac_required_intakes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Prescription.frac_required_intakes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return fraction of recorded intakes, out of total number of intakes
+that are supposed to be recorded by this time.
+date: datetime - get fraction on track intakes on or before this date</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.medication.Prescription.generate_schedule">
+<code class="sig-name descname">generate_schedule</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Prescription.generate_schedule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Prescription.generate_schedule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the schedule which is a list of rx’s, where each
+rx is a list of dictionaries with key being the date and value being
+another dictionary of metadata.</p>
+<p>Currently only works for the case when freq_repeat = 1 and
+freq_repeat_unit = day</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.medication.Prescription.has_started">
+<code class="sig-name descname">has_started</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Prescription.has_started"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Prescription.has_started" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether this Prescription is active, according to start date.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.medication.Prescription.is_adherent">
+<code class="sig-name descname">is_adherent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">on_time_threshold</span><span class="o">=</span><span class="default_value">0.9</span></em>, <em class="sig-param"><span class="n">required_intakes_threshold</span><span class="o">=</span><span class="default_value">0.9</span></em>, <em class="sig-param"><span class="n">date</span><span class="o">=</span><span class="default_value">datetime.datetime(2020, 6, 18, 9, 6, 24, 706595)</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Prescription.is_adherent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Prescription.is_adherent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether this Prescription is adhered to by the Patient.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.medication.Prescription.next_refill_date">
+<code class="sig-name descname">next_refill_date</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/medication.html#Prescription.next_refill_date"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.medication.Prescription.next_refill_date" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return next refill date based on most recent (last) refill date
+and dosage information.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-app.models.persons">
+<span id="app-models-persons-module"></span><h2>app.models.persons module<a class="headerlink" href="#module-app.models.persons" title="Permalink to this headline">¶</a></h2>
+<p>Classes to model users (doctors) and patients.</p>
+<dl class="py class">
+<dt id="app.models.persons.BasicInfo">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.persons.</code><code class="sig-name descname">BasicInfo</code><a class="reference internal" href="_modules/app/models/persons.html#BasicInfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.persons.BasicInfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for modeling users and patients.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.models.persons.Patient">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.persons.</code><code class="sig-name descname">Patient</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">firstname</span></em>, <em class="sig-param"><span class="n">lastname</span></em>, <em class="sig-param"><span class="n">email</span></em>, <em class="sig-param"><span class="n">age</span></em>, <em class="sig-param"><span class="n">weight</span></em>, <em class="sig-param"><span class="n">user</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/persons.html#Patient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.persons.Patient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code>, <a class="reference internal" href="#app.models.persons.BasicInfo" title="app.models.persons.BasicInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.models.persons.BasicInfo</span></code></a></p>
+<p>Defines a Patient, which has a foreign key pointed to User (doctor).</p>
+<dl class="py method">
+<dt id="app.models.persons.Patient.adherence_stats">
+<code class="sig-name descname">adherence_stats</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="o">=</span><span class="default_value">datetime.datetime(2020, 6, 18, 9, 6, 24, 717736)</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/persons.html#Patient.adherence_stats"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.persons.Patient.adherence_stats" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return adherence statistics on a per-Prescription basis.
+return: dict - &lt;prescription ID&gt;: &lt;details&gt;
+Example:
+{</p>
+<blockquote>
+<div><dl class="simple">
+<dt>1: {</dt><dd><p>‘frac_on_time’: 0.932,
+‘frac_required_intakes’: 0.976</p>
+</dd>
+</dl>
+<p>},
+19: {</p>
+<blockquote>
+<div><p>‘frac_on_time’: 0.389,
+‘frac_required_intakes’: 1.0</p>
+</div></blockquote>
+</div></blockquote>
+<p>}</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.persons.Patient.all_intakes">
+<code class="sig-name descname">all_intakes</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/persons.html#Patient.all_intakes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.persons.Patient.all_intakes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return Intake objects associated with this Patient.
+start: datetime - optional start date for filtering
+end: datetime - optional end date for filtering</p>
+<p>TODO: Implement start, end filtering
+NOTE: There’s probably a better way of doing this. Perhaps setting Patient</p>
+<blockquote>
+<div><p>as a foreign key in Intake?</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.persons.Patient.frac_adhering_prescriptions">
+<code class="sig-name descname">frac_adhering_prescriptions</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">on_time_threshold</span><span class="o">=</span><span class="default_value">0.9</span></em>, <em class="sig-param"><span class="n">required_intakes_threshold</span><span class="o">=</span><span class="default_value">0.9</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/persons.html#Patient.frac_adhering_prescriptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.persons.Patient.frac_adhering_prescriptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return fraction of prescriptions for this Patient that are deemed
+adherent.
+Adherence requires Intakes to be recorded on time and on track
+(i.e. medications aren’t missed).</p>
+<p>on_time_threshold: float - fraction on time Intakes needed for
+this prescription to be deemed adherent
+required_intakes_threshold: float - fraction Intakes actually
+recorded, out of all prescribed Intakes since start date.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="app.models.persons.Patient.is_adherent">
+<code class="sig-name descname">is_adherent</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">on_time_threshold</span><span class="o">=</span><span class="default_value">0.9</span></em>, <em class="sig-param"><span class="n">required_intakes_threshold</span><span class="o">=</span><span class="default_value">0.9</span></em>, <em class="sig-param"><span class="n">date</span><span class="o">=</span><span class="default_value">datetime.datetime(2020, 6, 18, 9, 6, 24, 717742)</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/persons.html#Patient.is_adherent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.persons.Patient.is_adherent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether or not a patient is deemed adherent based on their
+prescription adherence.</p>
+<p>on_time_threshold: float - fraction on time Intakes needed for
+this prescription to be deemed adherent
+required_intakes_threshold: float - fraction Intakes actually
+recorded, out of all prescribed Intakes since start date.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="app.models.persons.User">
+<em class="property">class </em><code class="sig-prename descclassname">app.models.persons.</code><code class="sig-name descname">User</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">firstname</span></em>, <em class="sig-param"><span class="n">lastname</span></em>, <em class="sig-param"><span class="n">username</span></em>, <em class="sig-param"><span class="n">email</span></em>, <em class="sig-param"><span class="n">password</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/persons.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.persons.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">sqlalchemy.ext.declarative.api.Model</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">flask_login.mixins.UserMixin</span></code>, <a class="reference internal" href="#app.models.persons.BasicInfo" title="app.models.persons.BasicInfo"><code class="xref py py-class docutils literal notranslate"><span class="pre">app.models.persons.BasicInfo</span></code></a></p>
+<p>User model with functions to set and check password when logging in.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="app.models.persons.load_user">
+<code class="sig-prename descclassname">app.models.persons.</code><code class="sig-name descname">load_user</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/models/persons.html#load_user"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#app.models.persons.load_user" title="Permalink to this definition">¶</a></dt>
+<dd><p>This callback is used to reload the user object
+from the user ID stored in the session.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">Sparkle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">app</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="app.html">app package</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  <li><a href="modules.html">app</a><ul>
+  <li><a href="app.html">app package</a><ul>
+      <li>Previous: <a href="app.html" title="previous chapter">app package</a></li>
+      <li>Next: <a href="app.utils.html" title="next chapter">app.utils package</a></li>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Andy Cheon, Stephanie Jung, Collin Prather, Matt Sarmiento, Kevin Wong.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/app.models.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

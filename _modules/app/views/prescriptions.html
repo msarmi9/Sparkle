@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app.views.prescriptions &#8212; Sparkle 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for app.views.prescriptions</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">redirect</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">render_template</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">url_for</span>
+<span class="kn">from</span> <span class="nn">flask_login</span> <span class="kn">import</span> <span class="n">login_required</span>
+
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">app.models.forms</span> <span class="kn">import</span> <span class="n">PrescriptionForm</span>
+<span class="kn">from</span> <span class="nn">app.models.medication</span> <span class="kn">import</span> <span class="n">Prescription</span>
+<span class="kn">from</span> <span class="nn">app.models.persons</span> <span class="kn">import</span> <span class="n">Patient</span>
+<span class="kn">from</span> <span class="nn">app.utils</span> <span class="kn">import</span> <span class="n">adherence</span>
+
+
+<span class="n">bp</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s2">&quot;prescriptions&quot;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="add_prescription"><a class="viewcode-back" href="../../../app.views.html#app.views.prescriptions.add_prescription">[docs]</a><span class="nd">@bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/patients/&lt;int:patient_id&gt;/new-prescription&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;POST&quot;</span><span class="p">))</span>
+<span class="nd">@login_required</span>
+<span class="k">def</span> <span class="nf">add_prescription</span><span class="p">(</span><span class="n">patient_id</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Route to add a patient prescription via a form.&quot;&quot;&quot;</span>
+    <span class="n">rx_form</span> <span class="o">=</span> <span class="n">PrescriptionForm</span><span class="p">()</span>
+    <span class="n">patient</span> <span class="o">=</span> <span class="n">Patient</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">patient_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;POST&quot;</span><span class="p">:</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">form</span>
+
+        <span class="c1"># Basic data directly from form input</span>
+        <span class="n">rx_fields</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;drug&quot;</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;drug&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;desc&quot;</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;desc&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;strength&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;strength&quot;</span><span class="p">)),</span>
+            <span class="s2">&quot;strength_unit&quot;</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;strength_unit&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;quantity&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;quantity&quot;</span><span class="p">)),</span>
+            <span class="s2">&quot;form&quot;</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;form&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;amount&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;amount&quot;</span><span class="p">)),</span>
+            <span class="s2">&quot;route&quot;</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;route&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;duration&quot;</span><span class="p">)),</span>
+            <span class="s2">&quot;duration_unit&quot;</span><span class="p">:</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;duration_unit&quot;</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s2">&quot;refills&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;refills&quot;</span><span class="p">)),</span>
+            <span class="s2">&quot;time_of_day&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;time_of_day_am&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;time_of_day_pm&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;start_date&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;start_date&quot;</span><span class="p">),</span> <span class="s2">&quot;%m/</span><span class="si">%d</span><span class="s2">/%Y&quot;</span><span class="p">),</span>
+        <span class="p">}</span>
+
+        <span class="c1"># Time of day</span>
+        <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;time_of_day_am&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;time_of_day_pm&quot;</span><span class="p">):</span>
+                <span class="n">tod</span> <span class="o">=</span> <span class="s2">&quot;AM, PM&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tod</span> <span class="o">=</span> <span class="s2">&quot;AM&quot;</span>
+        <span class="k">elif</span> <span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;time_of_day_pm&quot;</span><span class="p">):</span>
+            <span class="n">tod</span> <span class="o">=</span> <span class="s2">&quot;PM&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">tod</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;time_of_day&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tod</span>
+
+        <span class="c1"># Translate dosage to frequency info</span>
+        <span class="n">freq_info</span> <span class="o">=</span> <span class="n">adherence</span><span class="o">.</span><span class="n">DOSAGE_TO_FREQ</span><span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;dosage&quot;</span><span class="p">)]</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;freq&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq_info</span><span class="p">[</span><span class="s2">&quot;freq&quot;</span><span class="p">]</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;freq_repeat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq_info</span><span class="p">[</span><span class="s2">&quot;freq_repeat&quot;</span><span class="p">]</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;freq_repeat_unit&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">freq_info</span><span class="p">[</span><span class="s2">&quot;freq_repeat_unit&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Non-form data; autofilled</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;created&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;refill_num&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;last_refill_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">]</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;patient&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">patient</span>
+
+        <span class="c1"># Next refill day, days until next refill</span>
+        <span class="n">next_refill_date</span> <span class="o">=</span> <span class="n">adherence</span><span class="o">.</span><span class="n">get_next_refill_date</span><span class="p">(</span>
+            <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;start_date&quot;</span><span class="p">],</span>
+            <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">],</span>
+            <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;duration_unit&quot;</span><span class="p">],</span>
+            <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;refills&quot;</span><span class="p">],</span>
+            <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;refill_num&quot;</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;next_refill_date&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">next_refill_date</span>
+
+        <span class="n">days_until_refill</span> <span class="o">=</span> <span class="n">adherence</span><span class="o">.</span><span class="n">get_days_until_refill</span><span class="p">(</span>
+            <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(),</span> <span class="n">next_refill_date</span>
+        <span class="p">)</span>
+        <span class="n">rx_fields</span><span class="p">[</span><span class="s2">&quot;days_until_refill&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">days_until_refill</span>
+
+        <span class="c1"># Create Rx</span>
+        <span class="n">rx</span> <span class="o">=</span> <span class="n">Prescription</span><span class="p">(</span><span class="o">**</span><span class="n">rx_fields</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">rx</span><span class="p">)</span>
+        <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">redirect</span><span class="p">(</span><span class="n">url_for</span><span class="p">(</span><span class="s2">&quot;patients.profile&quot;</span><span class="p">,</span> <span class="n">patient_id</span><span class="o">=</span><span class="n">patient_id</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span>
+        <span class="s2">&quot;prescriptions/add_prescription.html&quot;</span><span class="p">,</span> <span class="n">patient</span><span class="o">=</span><span class="n">patient</span><span class="p">,</span> <span class="n">form</span><span class="o">=</span><span class="n">rx_form</span>
+    <span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Sparkle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../app.html">app</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Andy Cheon, Stephanie Jung, Collin Prather, Matt Sarmiento, Kevin Wong.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

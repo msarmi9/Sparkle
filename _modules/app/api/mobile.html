@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app.api.mobile &#8212; Sparkle 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for app.api.mobile</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Public API for communicating with mobile clients.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Blueprint</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">jsonify</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">request</span>
+
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">db</span>
+<span class="kn">from</span> <span class="nn">app.models.medication</span> <span class="kn">import</span> <span class="n">Intake</span>
+<span class="kn">from</span> <span class="nn">app.models.medication</span> <span class="kn">import</span> <span class="n">Prescription</span>
+<span class="kn">from</span> <span class="nn">app.models.persons</span> <span class="kn">import</span> <span class="n">Patient</span>
+<span class="kn">from</span> <span class="nn">modeling.predict</span> <span class="kn">import</span> <span class="n">adherence_model</span>
+
+
+<span class="n">bp</span> <span class="o">=</span> <span class="n">Blueprint</span><span class="p">(</span><span class="s2">&quot;mobile&quot;</span><span class="p">,</span> <span class="vm">__name__</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="send_data"><a class="viewcode-back" href="../../../app.api.html#app.api.mobile.send_data">[docs]</a><span class="nd">@bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/send-data&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">send_data</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Endpoint for receving json sensor data and returning json response.&quot;&quot;&quot;</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+
+    <span class="c1"># retrieving data for Intake table from json</span>
+    <span class="nb">id</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>  <span class="c1"># request.headers[&quot;User-Agent&quot;]</span>
+    <span class="n">s3_url</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;s3_url&quot;</span><span class="p">]</span>
+    <span class="n">recording_data</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;recording_data&quot;</span><span class="p">]</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">_%H:%M:%S&quot;</span><span class="p">)</span>
+    <span class="n">on_time</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">content</span><span class="p">[</span><span class="s2">&quot;on_time&quot;</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;data received: </span><span class="si">{</span><span class="n">recording_data</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># saving data to Intake table</span>
+    <span class="c1"># rx = Prescription.query.filter_by(id=my_prescription_id).first()</span>
+    <span class="c1"># note: this _requires_ there to be a prescription already in db!</span>
+    <span class="n">intake</span> <span class="o">=</span> <span class="n">Intake</span><span class="p">(</span>
+        <span class="n">s3_url</span><span class="o">=</span><span class="n">s3_url</span><span class="p">,</span>
+        <span class="n">recording_data</span><span class="o">=</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">content</span><span class="p">),</span>
+        <span class="n">timestamp</span><span class="o">=</span><span class="n">timestamp</span><span class="p">,</span>
+        <span class="n">on_time</span><span class="o">=</span><span class="n">on_time</span><span class="p">,</span>
+        <span class="n">prescription_id</span><span class="o">=</span><span class="nb">id</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">intake</span><span class="p">)</span>
+    <span class="n">db</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">commit</span><span class="p">()</span>
+
+    <span class="n">model_pred_dict</span> <span class="o">=</span> <span class="n">adherence_model</span><span class="p">(</span><span class="n">recording_data</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">model_pred_dict</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="mobile_login"><a class="viewcode-back" href="../../../app.api.html#app.api.mobile.mobile_login">[docs]</a><span class="nd">@bp</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/mobile-login&quot;</span><span class="p">,</span> <span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;POST&quot;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">mobile_login</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Log in mobile users and return the current day&#39;s medication schedule.&quot;&quot;&quot;</span>
+    <span class="c1"># retrieving data from json request</span>
+    <span class="n">content</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="n">get_json</span><span class="p">()</span>
+    <span class="n">patient_id</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="s2">&quot;patient_id&quot;</span><span class="p">]</span>
+
+    <span class="c1"># getting all prescriptions for all schedules</span>
+    <span class="n">rxs</span> <span class="o">=</span> <span class="n">Prescription</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="n">patient_id</span><span class="o">=</span><span class="n">patient_id</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">schedules</span> <span class="o">=</span> <span class="p">[</span><span class="n">rx</span><span class="o">.</span><span class="n">generate_schedule</span><span class="p">()</span> <span class="k">for</span> <span class="n">rx</span> <span class="ow">in</span> <span class="n">rxs</span><span class="p">]</span>
+
+    <span class="c1"># getting only prescription for today (this can probably be optimized)</span>
+    <span class="n">today</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">today</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">minute</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">second</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">microsecond</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">todays_schedule</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">[</span><span class="n">metadata</span> <span class="k">for</span> <span class="n">date</span><span class="p">,</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">day</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">date</span> <span class="o">==</span> <span class="n">today</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">schedule</span> <span class="ow">in</span> <span class="n">schedules</span>
+        <span class="k">for</span> <span class="n">day</span> <span class="ow">in</span> <span class="n">schedule</span>
+    <span class="p">]</span>
+
+    <span class="c1"># getting name from Patient Table</span>
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">Patient</span><span class="o">.</span><span class="n">query</span><span class="o">.</span><span class="n">filter_by</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">patient_id</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span><span class="o">.</span><span class="n">firstname</span>
+
+    <span class="c1"># flattening and transforming datetime object to string</span>
+    <span class="n">todays_schedule</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">metadata</span> <span class="k">for</span> <span class="n">rx</span> <span class="ow">in</span> <span class="n">todays_schedule</span> <span class="k">for</span> <span class="n">metadata</span> <span class="ow">in</span> <span class="n">rx</span> <span class="k">if</span> <span class="n">metadata</span>
+    <span class="p">]</span>
+    <span class="k">for</span> <span class="n">schedule</span> <span class="ow">in</span> <span class="n">todays_schedule</span><span class="p">:</span>
+        <span class="n">schedule</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">schedule</span><span class="p">[</span><span class="s2">&quot;timestamp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">_%H:%M:%S&quot;</span><span class="p">)</span>
+        <span class="n">schedule</span><span class="p">[</span><span class="s2">&quot;firstname&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">firstname</span>
+
+    <span class="k">return</span> <span class="n">jsonify</span><span class="p">(</span><span class="n">todays_schedule</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Sparkle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../app.html">app</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Andy Cheon, Stephanie Jung, Collin Prather, Matt Sarmiento, Kevin Wong.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,160 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>app.models.forms &#8212; Sparkle 0.0.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <h1>Source code for app.models.forms</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Forms for registering doctors, patients, and prescriptions.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span> <span class="nn">flask_wtf</span> <span class="kn">import</span> <span class="n">FlaskForm</span>
+<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">IntegerField</span>
+<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">PasswordField</span>
+<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">StringField</span>
+<span class="kn">from</span> <span class="nn">wtforms</span> <span class="kn">import</span> <span class="n">SubmitField</span>
+<span class="kn">from</span> <span class="nn">wtforms.validators</span> <span class="kn">import</span> <span class="n">DataRequired</span>
+
+
+<div class="viewcode-block" id="InfoForm"><a class="viewcode-back" href="../../../app.models.html#app.models.forms.InfoForm">[docs]</a><span class="k">class</span> <span class="nc">InfoForm</span><span class="p">(</span><span class="n">FlaskForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for registering names and email.&quot;&quot;&quot;</span>
+
+    <span class="n">firstname</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s2">&quot;First name&quot;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
+    <span class="n">lastname</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s2">&quot;Last name&quot;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s2">&quot;Email&quot;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span></div>
+
+
+<div class="viewcode-block" id="UserForm"><a class="viewcode-back" href="../../../app.models.html#app.models.forms.UserForm">[docs]</a><span class="k">class</span> <span class="nc">UserForm</span><span class="p">(</span><span class="n">FlaskForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Base class for registering a username and password.&quot;&quot;&quot;</span>
+
+    <span class="n">username</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s2">&quot;Username&quot;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
+    <span class="n">password</span> <span class="o">=</span> <span class="n">PasswordField</span><span class="p">(</span><span class="s2">&quot;Password&quot;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span></div>
+
+
+<div class="viewcode-block" id="RegistrationForm"><a class="viewcode-back" href="../../../app.models.html#app.models.forms.RegistrationForm">[docs]</a><span class="k">class</span> <span class="nc">RegistrationForm</span><span class="p">(</span><span class="n">InfoForm</span><span class="p">,</span> <span class="n">UserForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Final class for registering new users (doctors).&quot;&quot;&quot;</span>
+
+    <span class="n">submit</span> <span class="o">=</span> <span class="n">SubmitField</span><span class="p">(</span><span class="s2">&quot;Submit&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LoginForm"><a class="viewcode-back" href="../../../app.models.html#app.models.forms.LoginForm">[docs]</a><span class="k">class</span> <span class="nc">LoginForm</span><span class="p">(</span><span class="n">UserForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Final class for logging in existing users (doctors).&quot;&quot;&quot;</span>
+
+    <span class="n">submit</span> <span class="o">=</span> <span class="n">SubmitField</span><span class="p">(</span><span class="s2">&quot;Login&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PatientForm"><a class="viewcode-back" href="../../../app.models.html#app.models.forms.PatientForm">[docs]</a><span class="k">class</span> <span class="nc">PatientForm</span><span class="p">(</span><span class="n">InfoForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Final class for registering new patients.&quot;&quot;&quot;</span>
+
+    <span class="n">age</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="s2">&quot;Age&quot;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span>
+    <span class="n">weight</span> <span class="o">=</span> <span class="n">IntegerField</span><span class="p">(</span><span class="s2">&quot;Weight&quot;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span></div>
+
+
+<div class="viewcode-block" id="PrescriptionForm"><a class="viewcode-back" href="../../../app.models.html#app.models.forms.PrescriptionForm">[docs]</a><span class="k">class</span> <span class="nc">PrescriptionForm</span><span class="p">(</span><span class="n">FlaskForm</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Form for creating new prescriptions.&quot;&quot;&quot;</span>
+
+    <span class="c1"># TODO: We technically don&#39;t need these wtf/Flask forms.</span>
+    <span class="c1">#       The only reason why we have them now is to provide the CSRF token</span>
+    <span class="c1">#       to the frontend/templates when rendering the form.</span>
+    <span class="c1">#       At least one field is needed for this FlaskForm so</span>
+    <span class="c1">#       that&#39;s why `drug` is still here.</span>
+    <span class="n">drug</span> <span class="o">=</span> <span class="n">StringField</span><span class="p">(</span><span class="s2">&quot;Drug name&quot;</span><span class="p">,</span> <span class="n">validators</span><span class="o">=</span><span class="p">[</span><span class="n">DataRequired</span><span class="p">()])</span></div>
+</pre></div>
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../../index.html">Sparkle</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">app</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../authors.html">Authors</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  <li><a href="../../app.html">app</a><ul>
+  </ul></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Andy Cheon, Stephanie Jung, Collin Prather, Matt Sarmiento, Kevin Wong.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>
