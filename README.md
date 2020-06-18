@@ -22,8 +22,8 @@ Our system joins patients and doctors in a single feedback loop in which:
 
 * Doctors upload patient medication information to our internal online portal, with end-to-end encryption of patient data.
 * Patient prescription schedules are automatically propagated to our mobile iOS and watchOS applications.
-* Patients receive automated notifications on their AppleWatch when it's time to take their medication. No configuration required.
-* Pill intakes are recorded via AppleWatch sensors and sent to our web API, where intakes are verified using a Gradient Boosted Tree model.
+* Patients are automatically notified on their AppleWatch when it's time to take their medication. No configuration required.
+* Pill intakes are recorded via AppleWatch sensors and sent to our web API, where intakes are verified and the number of pills remaining is estimated via a Gradient Boosted model.
 * Our online portal is updated with patient intakes. Doctors can view the adherence rates of individual patients and are immediately notified of any non-adhering patients so that they can intervene and help patients resume their prescribed course of treatment.
 
 
