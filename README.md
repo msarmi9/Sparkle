@@ -36,7 +36,7 @@ Sparkle provides a comprehensive medication monitoring system that is unlike any
 
 Want to learn more more about Sparkle? Watch the video below for a live demo of how our iOS, watchOS, and web applications work together, or visit [our website](https://www.sparklemed.com) to experience Sparkle firsthand.
 
-![Sparkle.ai](https://yt-embed.herokuapp.com/embed?v=3HuoyBIA94o)](https://www.youtube.com/watch?v=3HuoyBIA94o "")
+[![Sparkle.ai](https://yt-embed.herokuapp.com/embed?v=3HuoyBIA94o)](https://www.youtube.com/watch?v=3HuoyBIA94o "")
 
 
 ## About Sparkle
