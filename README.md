@@ -6,6 +6,7 @@
 
 # Introducing Sparkle: Mission Control For Medication Adherence
 
+Welcome to Sparkle ✨! To learn more about us, feel free to peruse the sections below. Or if you're eager to jump right in, you can visit our website [sparklemed.com](https://www.sparklemed.com) and experience Sparkle firsthand.
 
 ## What _Is_ Sparkle?
 
