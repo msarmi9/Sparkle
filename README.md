@@ -44,4 +44,5 @@ Want to learn more more about Sparkle? Watch the video below for a live demo of 
 Sparkle was created and developed with :heart: over the course of seven weeks as part of the Product Analytics class at the University of San Francisco's Masters in Data Science Program.
 
 Want to learn more about our team? Feel free to reach out using the links below!  
+
 [Andy Cheon](https://www.linkedin.com/in/acheon/) | [Stephanie Jung](https://www.linkedin.com/in/yeojujung/) | [Collin Prather](https://www.linkedin.com/in/collin-prather/) | [Matthew Sarmiento](https://www.linkedin.com/in/msarmi9/) | [Kevin Wong](https://www.linkedin.com/in/kevinbw/)
