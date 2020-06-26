@@ -4,7 +4,7 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
 
 
-# Introducing Sparkle: Mission Control For Medication Adherence
+# Sparkle: Mission Control For Medication Adherence
 
 Welcome to Sparkle ✨! To learn more about us, feel free to peruse the sections below. Or if you're eager to jump right in, you can visit our website [sparklemed.com](https://www.sparklemed.com) and experience Sparkle firsthand.
 
