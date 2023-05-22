@@ -9,6 +9,6 @@ pandas==1.0.3
 pickleshare==0.7.5
 plotly==4.6.0
 psycopg2-binary==2.8.5
-requests==2.23.0
+requests==2.31.0
 scikit-learn==0.22.1
 xgboost==0.90
